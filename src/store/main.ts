@@ -12,7 +12,7 @@ export interface MainState {
 }
 
 const initialState: MainState = {
-  tasks: loadItem('tasks'),
+  tasks: loadItem('tasks') || [],
   editedTaskId: null,
   editSheetOpened: false,
 }
