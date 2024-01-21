@@ -39,7 +39,7 @@ function TaskList() {
           <Icon
             icon='material-symbols:keyboard-arrow-down-rounded' 
             className={clsx('mr-1 -rotate-90 text-lg transition-transform', {
-              '!-rotate-180': showCompleted
+              '!rotate-0': showCompleted
             })} 
           />
           <span>Completed</span>
