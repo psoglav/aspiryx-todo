@@ -2,7 +2,7 @@
 import { useSelector } from 'react-redux'
 
 import type { RootState } from '@/store'
-import type { Task } from '@/types/task';
+import type { Task } from '@/types';
 
 import TaskItem from '@/components/task-item'
 import TaskGroup from '@/components/task-group';

@@ -1,6 +1,11 @@
+import {
+  RouterProvider,
+} from "react-router-dom";
+
+import {router} from '@/router'
+
 import { ThemeProvider } from "@/components/theme-provider"
 import Header from '@/components/header'
-import Home from './Home'
 
 import {
   ResizableHandle,
@@ -8,7 +13,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 
-function App() {
+export default function Root() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Header />
@@ -23,11 +28,9 @@ function App() {
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel defaultSize={100}>
-          <Home />
+          <RouterProvider router={router} />
         </ResizablePanel>
       </ResizablePanelGroup>
     </ThemeProvider>
   )
 }
-
-export default App

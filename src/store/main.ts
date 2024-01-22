@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { nanoid } from 'nanoid'
 
-import type { Task } from '@/types/task'
+import type { Task } from '@/types'
 import { saveItem, loadItem } from '@/helpers/localStorage'
 
 export interface MainState {

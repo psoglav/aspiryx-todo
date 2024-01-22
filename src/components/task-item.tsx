@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import type { Task } from '@/types/task'
+import type { Task } from '@/types'
 import { updateTask, removeTask, setEditedTaskId } from '../store/main'
 
 import {
