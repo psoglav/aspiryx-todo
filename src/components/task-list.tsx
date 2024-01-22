@@ -1,18 +1,14 @@
 
 import { useSelector } from 'react-redux'
-import { Icon } from '@iconify/react';
 
 import type { RootState } from '@/store'
+import type { Task } from '@/types/task';
 
 import TaskItem from '@/components/task-item'
-import { Button } from '@/components/ui/button'
-import { useState } from 'react';
-import clsx from 'clsx';
-import { Task } from '@/types/task';
+import TaskGroup from '@/components/task-group';
 
 function TaskList() {
   const tasks = useSelector((state: RootState) => state.main.tasks)
-  const [showCompleted, setShowCompleted] = useState(false)
 
   const completedTasks = tasks.filter(item => item.completed)
   const uncompletedTasks = tasks.filter(item => !item.completed)
@@ -34,21 +30,7 @@ function TaskList() {
       {
         renderTasks(uncompletedTasks)
       }
-      <div className="space-y-2">
-        <Button variant={showCompleted ? 'secondary' : 'ghost'} onClick={() => setShowCompleted(!showCompleted)}>
-          <Icon
-            icon='material-symbols:keyboard-arrow-down-rounded' 
-            className={clsx('mr-1 -rotate-90 text-lg transition-transform', {
-              '!rotate-0': showCompleted
-            })} 
-          />
-          <span>Completed</span>
-          {completedTasks.length ? <span className='px-2 text-muted-foreground'>{completedTasks.length}</span> : null}
-        </Button>
-        {
-          showCompleted ? renderTasks(completedTasks) : null
-        }
-      </div>
+      <TaskGroup tasks={completedTasks} title='Completed' />
     </div>
   )
 }
