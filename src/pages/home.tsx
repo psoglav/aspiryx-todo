@@ -1,3 +1,5 @@
+import { useParams } from "react-router-dom";
+
 import {
   ResizableHandle,
   ResizablePanel,
@@ -7,6 +9,8 @@ import { TaskList, CreateTask, TaskEditSheet } from '@/components/task'
 import Sidebar from '@/components/app-layout/sidebar'
 
 export default function Home() {
+  const { listId } = useParams()
+
   return <>
     <ResizablePanelGroup
       direction="horizontal"
@@ -22,9 +26,9 @@ export default function Home() {
       <ResizablePanel defaultSize={100}>
         <div className="grid h-screen grid-rows-[max-content_1fr_max-content]">
           <div className='p-2 py-4 pt-8 text-3xl lg:px-16'>
-        Tasks
+            Tasks
           </div>
-          <TaskList />
+          <TaskList id={listId} />
           <CreateTask />
           <TaskEditSheet />
         </div>

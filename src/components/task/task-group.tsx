@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { Icon } from '@iconify/react';
 
@@ -10,10 +10,15 @@ import TaskItem from './task-item'
 interface Props {
   title: string
   tasks: Task[]
+  defaultOpen?: boolean
 }
 
-export default function TaskGroup({ title, tasks }: Props) {
-  const [show, setShow] = useState(false)
+export default function TaskGroup({ title, tasks, defaultOpen = false }: Props) {
+  const [show, setShow] = useState(tasks.length ? defaultOpen : false)
+
+  useEffect(() => {
+    if(!show || !tasks.length) setShow(tasks.length ? defaultOpen : false)
+  }, [show, tasks, defaultOpen])
 
   const renderTasks = (arr: Task[]) => {
     return arr.length ?

@@ -1,6 +1,5 @@
 
 import { useSelector } from 'react-redux'
-import { useParams } from "react-router-dom";
 
 import type { RootState } from '@/store'
 import type { Task } from '@/types';
@@ -8,9 +7,12 @@ import type { Task } from '@/types';
 import TaskItem from './task-item'
 import TaskGroup from './task-group';
 
-function TaskList() {
-  const { listId } = useParams()
-  const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === listId))
+interface Props {
+  id?: string
+}
+
+function TaskList({ id }: Props) {
+  const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === id))
 
   const completedTasks = tasks.filter(item => item.completed)
   const uncompletedTasks = tasks.filter(item => !item.completed)
@@ -32,7 +34,7 @@ function TaskList() {
       {
         renderTasks(uncompletedTasks)
       }
-      <TaskGroup tasks={completedTasks} title='Completed' />
+      <TaskGroup tasks={completedTasks} title='Completed' defaultOpen={!uncompletedTasks.length} />
     </div>
   )
 }
