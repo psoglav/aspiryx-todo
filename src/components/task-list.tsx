@@ -30,7 +30,7 @@ function TaskList() {
   }
 
   return (
-    <div className="space-y-4 p-2 py-4 lg:px-16 lg:py-20">
+    <div className="space-y-4 p-2 py-4 lg:px-16">
       {
         renderTasks(uncompletedTasks)
       }
