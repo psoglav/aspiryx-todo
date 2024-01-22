@@ -2,7 +2,7 @@ export type Task = {
   id: string
   text: string
   completed: boolean
-  isFavorite: boolean
+  isImportant: boolean
   listId?: string
 }
 

@@ -28,7 +28,7 @@ export const mainSlice = createSlice({
         ...action.payload,
         id: nanoid(),
         completed: false,
-        isFavorite: false,
+        isImportant: false,
       })
       saveItem('tasks', state.tasks)
     },

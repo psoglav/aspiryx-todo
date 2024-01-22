@@ -34,7 +34,7 @@ function TaskItem({ value }: Props) {
     e.stopPropagation()
     dispatch(updateTask({
       ...value,
-      isFavorite: !value.isFavorite
+      isImportant: !value.isImportant
     }))
   }
 
@@ -92,9 +92,9 @@ function TaskItem({ value }: Props) {
         onClick={onFavoriteToggled}
       >
         <Icon 
-          icon={ value.isFavorite ? 'ic:round-star' : 'ic:round-star-border' } 
+          icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
           className={clsx('text-lg', { 
-            'text-yellow-400': value.isFavorite 
+            'text-yellow-400': value.isImportant 
           })} 
         />
       </Button>
