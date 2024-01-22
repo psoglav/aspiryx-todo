@@ -3,9 +3,9 @@ import { useState } from 'react';
 import clsx from 'clsx';
 import { Icon } from '@iconify/react';
 
-import TaskItem from '@/components/task-item'
 import { Button } from '@/components/ui/button'
 import { Task } from '@/types';
+import TaskItem from './task-item'
 
 interface Props {
   title: string

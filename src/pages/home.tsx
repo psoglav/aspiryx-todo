@@ -1,17 +1,34 @@
-import TaskList from '@/components/task-list'
-import CreateTask from '@/components/create-task'
-
-import TaskEditSheet from '@/components/task-edit-sheet';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
+import { TaskList, CreateTask, TaskEditSheet } from '@/components/task'
+import Sidebar from '@/components/app-layout/sidebar'
 
 export default function Home() {
   return <>
-    <div className="grid h-screen grid-rows-[max-content_1fr_max-content]">
-      <div className='p-2 py-4 pt-8 text-3xl lg:px-16'>
+    <ResizablePanelGroup
+      direction="horizontal"
+      autoSaveId='ui-layout'
+      className="h-screen"
+    >
+      <ResizablePanel defaultSize={20} maxSize={30} minSize={15}>
+        <div className="h-screen p-4">
+          <Sidebar />
+        </div>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={100}>
+        <div className="grid h-screen grid-rows-[max-content_1fr_max-content]">
+          <div className='p-2 py-4 pt-8 text-3xl lg:px-16'>
         Tasks
-      </div>
-      <TaskList />
-      <CreateTask />
-      <TaskEditSheet />
-    </div>
+          </div>
+          <TaskList />
+          <CreateTask />
+          <TaskEditSheet />
+        </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   </>
 }

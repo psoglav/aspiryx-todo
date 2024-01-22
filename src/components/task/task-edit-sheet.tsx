@@ -8,9 +8,9 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet"
 import { Button } from '@/components/ui/button'
-import TaskItem from "@/components/task-item"
 import { RootState } from "@/store"
 import { setEditedTaskId } from '@/store/main'
+import TaskItem from "./task-item"
 
 export default function TaskEditSheet() {
   const dispatch = useDispatch()

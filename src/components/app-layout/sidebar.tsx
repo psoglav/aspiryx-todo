@@ -1,0 +1,46 @@
+import { useSelector } from 'react-redux'
+import { useParams, Link } from "react-router-dom";
+import { Icon } from "@iconify/react"
+
+import type { RootState } from '@/store'
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { CreateList, ListItem } from '@/components/list'
+import { Separator } from '@/components/ui/separator'
+import clsx from 'clsx';
+
+export default function Sidebar() {
+  const lists = useSelector((state: RootState) => state.main.lists)
+  const { listId } = useParams()
+  const isToday = !listId
+
+  return (
+    <div className='grid h-full grid-rows-[max-content_1fr_max-content] space-y-4'>
+      <Button className="flex w-full gap-2 py-8 uppercase" variant='ghost'>
+        <Icon icon='ion:arrow-back-outline' />
+        <span className="text-lg font-bold">HUB</span>
+      </Button>
+      
+      <div className='space-y-4'>
+        <Input placeholder="Search" />
+
+
+        <div className='flex flex-col gap-2'>
+          <Link to='/'>
+            <Button variant={isToday ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
+              Today
+            </Button>
+          </Link>
+          <Separator />
+          {
+            lists.length ? lists.map(item => <ListItem key={item.id} value={item} />) : null
+          }
+        </div>
+      </div>
+
+      <CreateList />
+
+    </div>
+  )
+}

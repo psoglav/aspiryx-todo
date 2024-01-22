@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import type { Task } from '@/types'
-import { updateTask, removeTask, setEditedTaskId } from '../store/main'
+import { updateTask, deleteTaskById, setEditedTaskId } from '@/store/main'
 
 import {
   ContextMenu,
@@ -68,7 +68,7 @@ function TaskItem({ value }: Props) {
           </ContextMenuItem>
           <ContextMenuItem 
             className='cursor-pointer !text-red-500 hover:!bg-destructive/20'
-            onClick={() => dispatch(removeTask(value.id))}
+            onClick={() => dispatch(deleteTaskById(value.id))}
           >
             Delete
           </ContextMenuItem>

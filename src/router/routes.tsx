@@ -7,7 +7,7 @@ export default [
     element: <Home />,
     errorElement: <ErrorPage />,
     children: [{
-      path: '/:listId',
+      path: '/list/:listId',
       element: <Home />,
     }]
   },
