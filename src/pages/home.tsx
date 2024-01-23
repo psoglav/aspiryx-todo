@@ -1,7 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from 'react-redux'
-
-import type { RootState } from '@/store'
 
 import {
   ResizableHandle,
@@ -10,11 +7,11 @@ import {
 } from "@/components/ui/resizable"
 import { TaskList, CreateTask, TaskEditSheet } from '@/components/task'
 import Sidebar from '@/components/app-layout/sidebar'
+import { ListDropdownMenu, ListTitle } from "@/components/list";
+
 
 export default function Home() {
   const { listId } = useParams()
-  const currentList = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
-  const title = currentList ? currentList.name : 'Tasks'
 
   return (
     <ResizablePanelGroup
@@ -31,8 +28,10 @@ export default function Home() {
       <ResizablePanel>
         <div className="grid h-screen grid-rows-[1fr_max-content]">
           <div className="px-4 md:px-6 lg:px-16">
-            <div className='py-4 pt-8 text-2xl font-semibold'>
-              { title }
+            <div className="flex justify-between py-4 pt-8">
+              <ListTitle />
+
+              <ListDropdownMenu />
             </div>
             <TaskList id={listId} />
           </div>
