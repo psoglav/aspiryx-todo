@@ -33,7 +33,7 @@ export default function Sidebar() {
         <div className='flex flex-col gap-2'>
           <Link to='/'>
             <Button variant={isToday ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
-              Today
+              Tasks
             </Button>
           </Link>
           <Separator />
