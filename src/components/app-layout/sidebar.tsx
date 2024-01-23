@@ -28,7 +28,7 @@ export default function Sidebar() {
       </a>
       
       <div className='space-y-4'>
-        <Input placeholder="Search" />
+        <Input placeholder="Search" icon='material-symbols:search' />
 
         <div className='flex flex-col gap-2'>
           <Link to='/'>
