@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { DndContext } from '@dnd-kit/core';
+import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 
 import {
   ResizableHandle,
@@ -11,12 +12,11 @@ import Sidebar from '@/components/app-layout/sidebar'
 import { ListDropdownMenu, ListTitle } from "@/components/list";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-
 export default function Home() {
   const { listId } = useParams()
 
   return (
-    <DndContext>
+    <DndContext modifiers={[restrictToFirstScrollableAncestor]}>
       <ResizablePanelGroup
         direction="horizontal"
         autoSaveId='ui-layout'
