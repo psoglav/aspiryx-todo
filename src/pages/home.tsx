@@ -39,12 +39,12 @@ export default function Home() {
         autoSaveId='ui-layout'
         className="relative h-screen"
       >
-        <ResizablePanel defaultSize={20} maxSize={40} minSize={15}>
+        <ResizablePanel defaultSize={20} maxSize={40} minSize={15} className="hidden md:block">
           <div className="h-[100dvh] p-4">
             <Sidebar />
           </div>
         </ResizablePanel>
-        <ResizableHandle />
+        <ResizableHandle className="hidden md:block" />
         <ResizablePanel className="z-[1]" style={{overflow: 'none'}}>
           <div className="grid h-[100dvh] grid-rows-[max-content_1fr_max-content]">
             <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
