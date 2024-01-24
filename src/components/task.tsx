@@ -89,46 +89,6 @@ export function CreateTask() {
   )
 }
 
-interface TaskGroupProps {
-  title: string
-  tasks: Task[]
-  defaultOpen?: boolean
-}
-
-export function TaskGroup({ title, tasks, defaultOpen = false }: TaskGroupProps) {
-  const [show, setShow] = useState(tasks.length ? defaultOpen : false)
-
-  const renderTasks = (arr: Task[]) => {
-    return arr.length ?
-      <div className='flex flex-col gap-2'>
-        {
-          arr
-            .map(item => (
-              <TaskItem key={item.id} value={item} />
-            ))
-        }
-      </div> : null
-  }
-
-  return (
-    <div className="space-y-2">
-      <Button variant={show ? 'secondary' : 'ghost'} onClick={() => setShow(!show)}>
-        <Icon
-          icon='material-symbols:keyboard-arrow-down-rounded' 
-          className={clsx('mr-1 -rotate-90 text-lg transition-transform', {
-            '!rotate-0': show
-          })} 
-        />
-        <span>{ title }</span>
-        {tasks.length ? <span className='px-2 text-muted-foreground'>{tasks.length}</span> : null}
-      </Button>
-      {
-        show ? renderTasks(tasks) : null
-      }
-    </div>
-  )
-}
-
 type TaskItemProps = {
   value: Task
 }
@@ -223,16 +183,17 @@ export function TaskItem({ value }: TaskItemProps) {
   )
 }
 
-interface Props {
-  id?: string
+interface TaskGroupProps {
+  title?: string
+  items: Task[]
+  defaultCollapsed?: boolean
 }
 
-export function TaskList({ id }: Props) {
+export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
+  const [collapsed, setCollapsed] = useState(items.length ? defaultCollapsed : true)
   const dispatch = useDispatch()
-  const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === id))
 
-  const completedTasks = tasks.filter(item => item.completed)
-  const uncompletedTasks = tasks.filter(item => !item.completed)
+  const tasks = useSelector((state: RootState) => state.main.tasks)
 
   useDndMonitor({
     onDragEnd(event) {
@@ -249,26 +210,64 @@ export function TaskList({ id }: Props) {
     }
   });
 
+  return items.length ? (
+    <div className="space-y-2">
+      {
+        title ? (
+          <Button variant={collapsed ? 'ghost' : 'secondary'} onClick={() => setCollapsed(!collapsed)}>
+            <Icon
+              icon='material-symbols:keyboard-arrow-down-rounded' 
+              className={clsx('mr-1 rotate-0 text-lg transition-transform', {
+                '!-rotate-90': collapsed
+              })} 
+            />
+            <span>{ title }</span>
+            {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
+          </Button>
+        ) : null
+      }
 
+      {
+        !collapsed || !title ? (
+          <div className="flex flex-col gap-2">
+            <SortableContext 
+              items={items}
+              strategy={verticalListSortingStrategy}
+            >
+              {
+                items
+                  .map(item => (
+                    <Sortable key={item.id} id={item.id}>
+                      <TaskItem value={item} />
+                    </Sortable>
+                  ))
+              }
+            </SortableContext>
+          </div>
+        ) : null
+      }
+    </div>
+  ) : null
+}
+
+interface TaskListProps {
+  id?: string
+}
+
+export function TaskList({ id }: TaskListProps) {
+  const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === id))
+
+  const completedTasks = tasks.filter(item => item.completed)
+  const uncompletedTasks = tasks.filter(item => !item.completed)
+  
   return (
     <div className="flex flex-col gap-4 py-4">
-      <div className="flex flex-col gap-2">
-        <SortableContext 
-          items={uncompletedTasks}
-          strategy={verticalListSortingStrategy}
-        >
-          {
-            uncompletedTasks
-              .map(item => (
-                <Sortable key={item.id} id={item.id}>
-                  <TaskItem value={item} />
-                </Sortable>
-              ))
-          }
-        </SortableContext>
-      </div>
-
-      <TaskGroup tasks={completedTasks} title='Completed' defaultOpen={!uncompletedTasks.length} />
+      <TaskGroup items={uncompletedTasks} />
+      <TaskGroup 
+        items={completedTasks} 
+        title='Completed' 
+        defaultCollapsed={Boolean(uncompletedTasks.length)}
+      />
     </div>
   )
 }

@@ -43,6 +43,7 @@ export function Sortable(props: { id: string } & PropsWithChildren) {
     listeners,
     setNodeRef,
     transform,
+    transition,
     isDragging,
   } = useSortable({id: props.id});
 
@@ -50,7 +51,7 @@ export function Sortable(props: { id: string } & PropsWithChildren) {
     transform: CSS.Transform.toString(transform),
     position: 'relative',
     zIndex: isDragging ? 1 : 0,
-    transition: 'transform 200ms ease',
+    transition,
   };
   
   return (
