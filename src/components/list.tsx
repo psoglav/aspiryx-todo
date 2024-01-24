@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
-import type { KeyboardEvent, ChangeEvent } from 'react'
+import type { KeyboardEvent, ChangeEvent, PropsWithChildren } from 'react'
 import type { RootState } from '@/store'
 
-import { createList, setLists, } from '@/store/main'
+import { createList, deleteListById, setLists, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -15,6 +15,12 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
+import { 
+  ContextMenu, 
+  ContextMenuTrigger, 
+  ContextMenuContent, 
+  ContextMenuItem, 
+} from "@/components/ui/context-menu";
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button"
 import { List } from "@/types";
@@ -52,6 +58,24 @@ export const CreateList = () => {
   )
 }
 
+const ListItemContextMenu = ({ children, id }: PropsWithChildren & { id: string }) => {
+  const dispatch = useDispatch()
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger>{children}</ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem 
+          className='cursor-pointer !text-red-500 hover:!bg-destructive/20'
+          onClick={() => dispatch(deleteListById(id))}
+        >
+          Delete
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  )
+}
+
 interface ListItemProps {
   value: List
   disabled?: boolean
@@ -62,15 +86,17 @@ export const ListItem = ({ value, disabled }: ListItemProps) => {
   const isActive = listId === value.id
 
   return (
-    <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled })}>
-      <Button 
-        variant={isActive ? 'secondary' : 'ghost'} 
-        className={clsx('flex w-full justify-start gap-2', { 'text-muted-foreground': !isActive })}
-      >
-        <Icon icon='fluent:task-list-square-ltr-24-regular' className="text-xl" />
-        <span>{ value.name }</span>
-      </Button>
-    </Link>
+    <ListItemContextMenu id={value.id}>
+      <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled })}>
+        <Button 
+          variant={isActive ? 'secondary' : 'ghost'} 
+          className={clsx('flex w-full justify-start gap-2', { 'text-muted-foreground': !isActive })}
+        >
+          <Icon icon='fluent:task-list-square-ltr-24-regular' className="text-xl" />
+          <span>{ value.name }</span>
+        </Button>
+      </Link>
+    </ListItemContextMenu>
   )
 }
 
