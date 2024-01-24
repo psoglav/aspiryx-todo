@@ -9,6 +9,7 @@ import {
 import { TaskList, CreateTask, TaskEditSheet } from '@/components/task'
 import Sidebar from '@/components/app-layout/sidebar'
 import { ListDropdownMenu, ListTitle } from "@/components/list";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 
 export default function Home() {
@@ -28,14 +29,16 @@ export default function Home() {
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel className="z-[1]" style={{overflow: 'none'}}>
-          <div className="grid h-screen grid-rows-[1fr_max-content]">
-            <div className="px-4 md:px-6 lg:px-16">
-              <div className="flex justify-between py-4 pt-8">
-                <ListTitle />
-                <ListDropdownMenu />
-              </div>
-              <TaskList id={listId} />
+          <div className="grid h-screen grid-rows-[max-content_1fr_max-content]">
+            <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
+              <ListTitle />
+              <ListDropdownMenu />
             </div>
+            <ScrollArea className="size-full">
+              <div className="px-4 md:px-6 lg:px-16">
+                <TaskList id={listId} />
+              </div>
+            </ScrollArea>
             <CreateTask />
             <TaskEditSheet />
           </div>
