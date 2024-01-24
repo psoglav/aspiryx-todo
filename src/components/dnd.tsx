@@ -43,7 +43,6 @@ export function Sortable(props: { id: string } & PropsWithChildren) {
     listeners,
     setNodeRef,
     transform,
-    transition,
     isDragging,
   } = useSortable({id: props.id});
 
