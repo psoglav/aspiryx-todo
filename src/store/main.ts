@@ -41,6 +41,10 @@ export const mainSlice = createSlice({
       state.tasks.splice(index, 1)
       saveItem('tasks', state.tasks)
     },
+    setTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload
+      saveItem('tasks', action.payload)
+    },
     updateTask: (state, action: PayloadAction<Task>) => {
       const index = state.tasks.findIndex(item => item.id === action.payload.id)
       state.tasks.splice(index, 1, {
@@ -69,7 +73,8 @@ export const {
   updateTask, 
   setEditedTaskId, 
   createList,
-  deleteListById 
+  deleteListById,
+  setTasks
 } = mainSlice.actions
 
 export default mainSlice.reducer

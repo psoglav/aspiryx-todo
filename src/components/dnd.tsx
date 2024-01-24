@@ -1,4 +1,5 @@
 import { useDroppable, useDraggable } from '@dnd-kit/core';
+import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { PropsWithChildren } from 'react';
 
@@ -9,7 +10,6 @@ export function Droppable(props: PropsWithChildren & { id: string }) {
   const style = {
     color: isOver ? 'green !important' : undefined,
   };
-  
   
   return (
     <div ref={setNodeRef} style={style}>
@@ -32,6 +32,30 @@ export function Draggable(props: PropsWithChildren & { id: string }) {
 
   return (
     <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+      {props.children}
+    </div>
+  );
+}
+
+export function Sortable(props: { id: string } & PropsWithChildren) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({id: props.id});
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    position: 'relative',
+    zIndex: isDragging ? 1 : 0,
+    transition: 'transform 200ms ease',
+  };
+  
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {props.children}
     </div>
   );

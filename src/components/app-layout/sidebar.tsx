@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useSelector } from 'react-redux'
 import { useParams, Link } from "react-router-dom";
 import { Icon } from "@iconify/react"
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CreateList, ListItem } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
-import clsx from 'clsx';
+import { Droppable } from '@/components/dnd';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
@@ -38,7 +39,11 @@ export default function Sidebar() {
           </Link>
           <Separator />
           {
-            lists.length ? lists.map(item => <ListItem key={item.id} value={item} />) : null
+            lists.length ? lists.map(item => (
+              <Droppable key={item.id} id={item.id}>
+                <ListItem value={item} />
+              </Droppable>
+            )) : null
           }
         </div>
       </div>

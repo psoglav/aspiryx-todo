@@ -59,7 +59,10 @@ export const ListItem = ({ value }: ListItemProps) => {
 
   return (
     <Link to={`/list/${value.id}`}>
-      <Button variant={isActive ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isActive })}>
+      <Button 
+        variant={isActive ? 'secondary' : 'ghost'} 
+        className={clsx('w-full justify-start', { 'text-muted-foreground': !isActive })}
+      >
         { value.name }
       </Button>
     </Link>

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { DndContext } from '@dnd-kit/core';
-import { MouseSensor, TouchSensor, useSensor } from '@dnd-kit/core';
+import { MouseSensor, TouchSensor, KeyboardSensor, useSensor } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 
 import {
@@ -28,7 +28,8 @@ export default function Home() {
         delay: 250,
         tolerance: 5,
       },
-    })
+    }),
+    useSensor(KeyboardSensor)
   ]
 
   return (
@@ -39,13 +40,13 @@ export default function Home() {
         className="relative h-screen"
       >
         <ResizablePanel defaultSize={20} maxSize={40} minSize={15}>
-          <div className="h-screen p-4">
+          <div className="h-[100dvh] p-4">
             <Sidebar />
           </div>
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel className="z-[1]" style={{overflow: 'none'}}>
-          <div className="grid h-screen grid-rows-[max-content_1fr_max-content]">
+          <div className="grid h-[100dvh] grid-rows-[max-content_1fr_max-content]">
             <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
               <ListTitle />
               <ListDropdownMenu />
