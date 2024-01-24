@@ -61,9 +61,10 @@ export const ListItem = ({ value }: ListItemProps) => {
     <Link to={`/list/${value.id}`}>
       <Button 
         variant={isActive ? 'secondary' : 'ghost'} 
-        className={clsx('w-full justify-start', { 'text-muted-foreground': !isActive })}
+        className={clsx('flex w-full justify-start gap-2', { 'text-muted-foreground': !isActive })}
       >
-        { value.name }
+        <Icon icon='fluent:task-list-square-ltr-24-regular' className="text-xl" />
+        <span>{ value.name }</span>
       </Button>
     </Link>
   )
