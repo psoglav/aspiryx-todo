@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { DndContext } from '@dnd-kit/core';
-import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+import { MouseSensor, TouchSensor, useSensor } from '@dnd-kit/core';
+import { restrictToParentElement } from '@dnd-kit/modifiers';
 
 import {
   ResizableHandle,
@@ -15,8 +16,23 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export default function Home() {
   const { listId } = useParams()
 
+  const modifiers = [restrictToParentElement]
+  const sensors = [
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  ]
+
   return (
-    <DndContext modifiers={[restrictToFirstScrollableAncestor]}>
+    <DndContext modifiers={modifiers} sensors={sensors}>
       <ResizablePanelGroup
         direction="horizontal"
         autoSaveId='ui-layout'
