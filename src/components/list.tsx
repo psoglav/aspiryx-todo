@@ -81,7 +81,7 @@ export const ListTitle = () => {
 export const ListDropdownMenu = () => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button size='icon' variant='ghost'>
           <Icon icon='radix-icons:dots-horizontal' className="text-xl" />
         </Button>
