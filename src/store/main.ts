@@ -64,6 +64,10 @@ export const mainSlice = createSlice({
       state.lists.splice(index, 1)
       saveItem('lists', state.lists)
     },
+    setLists: (state, action: PayloadAction<List[]>) => {
+      state.lists = action.payload
+      saveItem('lists', action.payload)
+    },
   },
 })
 
@@ -74,7 +78,8 @@ export const {
   setEditedTaskId, 
   createList,
   deleteListById,
-  setTasks
+  setTasks,
+  setLists
 } = mainSlice.actions
 
 export default mainSlice.reducer

@@ -7,9 +7,8 @@ import type { RootState } from '@/store'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CreateList, ListItem } from '@/components/list'
+import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
-import { Droppable } from '@/components/dnd';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
@@ -37,13 +36,13 @@ export default function Sidebar() {
               Tasks
             </Button>
           </Link>
-          <Separator />
           {
-            lists.length ? lists.map(item => (
-              <Droppable key={item.id} id={item.id}>
-                <ListItem value={item} />
-              </Droppable>
-            )) : null
+            lists.length ? (
+              <>
+                <Separator />
+                <ListGroup items={lists} />
+              </>
+            ) : null
           }
         </div>
       </div>

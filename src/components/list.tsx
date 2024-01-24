@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import type { KeyboardEvent, ChangeEvent } from 'react'
 import type { RootState } from '@/store'
 
-import { createList, } from '@/store/main'
+import { createList, setLists, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -18,6 +18,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button"
 import { List } from "@/types";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { Sortable } from "./dnd";
+import { UniqueIdentifier, useDndMonitor } from "@dnd-kit/core";
 
 export const CreateList = () => {
   const [input, setInput] = useState('')
@@ -51,14 +54,15 @@ export const CreateList = () => {
 
 interface ListItemProps {
   value: List
+  disabled?: boolean
 }
 
-export const ListItem = ({ value }: ListItemProps) => {
+export const ListItem = ({ value, disabled }: ListItemProps) => {
   const { listId } = useParams()
   const isActive = listId === value.id
 
   return (
-    <Link to={`/list/${value.id}`}>
+    <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled })}>
       <Button 
         variant={isActive ? 'secondary' : 'ghost'} 
         className={clsx('flex w-full justify-start gap-2', { 'text-muted-foreground': !isActive })}
@@ -67,6 +71,59 @@ export const ListItem = ({ value }: ListItemProps) => {
         <span>{ value.name }</span>
       </Button>
     </Link>
+  )
+}
+
+interface ListGroupProps {
+  items: List[]
+}
+
+export const ListGroup = ({ items }: ListGroupProps) => {
+  const dispatch = useDispatch()
+  const [draggedItemId, setDraggedItemId] = useState<UniqueIdentifier | null>(null)
+
+  const lists = useSelector((state: RootState) => state.main.lists)
+
+  useDndMonitor({
+    onDragStart(event) {
+      const { active } = event
+      setDraggedItemId(active?.id)
+    },
+    onDragCancel() {
+      setDraggedItemId(null)
+    },
+    onDragEnd(event) {
+      const { active, over } = event;
+
+      setDraggedItemId(null)
+      
+      if (over && active.id !== over.id) {
+        const oldIndex = lists.findIndex(item => item.id === active.id);
+        const newIndex = lists.findIndex(item => item.id === over.id);
+          
+        const arr = arrayMove(lists, oldIndex, newIndex);
+  
+        dispatch(setLists(arr))
+      }
+    }
+  });
+
+  return (
+    <div className="flex flex-col gap-2">
+      <SortableContext 
+        items={items}
+        strategy={verticalListSortingStrategy}
+      >
+        {
+          items
+            .map(item => (
+              <Sortable key={item.id} id={item.id}>
+                <ListItem value={item} disabled={ draggedItemId === item.id } />
+              </Sortable>
+            ))
+        }
+      </SortableContext>
+    </div>
   )
 }
 
