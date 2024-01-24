@@ -3,10 +3,12 @@ import clsx from 'clsx'
 import { Icon } from '@iconify/react'
 import { useDispatch } from 'react-redux'
 
+import type { Task } from '@/types'
+
+import { updateTask, deleteTaskById, setEditedTaskId } from '@/store/main'
+import { Draggable } from '@/components/dnd'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import type { Task } from '@/types'
-import { updateTask, deleteTaskById, setEditedTaskId } from '@/store/main'
 
 import {
   ContextMenu,
@@ -77,28 +79,35 @@ function TaskItem({ value }: Props) {
     )
   }
 
-  return ContextMenuWrapper(
-    <Card className='flex cursor-pointer items-center p-2 transition-colors hover:bg-muted/50' onClick={() => dispatch(setEditedTaskId(value.id))}>
-      <CheckButton  /> 
-      <div className={clsx('w-0 grow truncate', {
-        'line-through text-muted-foreground': value.completed
-      })}>
-        {value.text}
-      </div>
-      <Button 
-        className='size-8' 
-        variant='ghost' 
-        size='icon' 
-        onClick={onFavoriteToggled}
-      >
-        <Icon 
-          icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
-          className={clsx('text-lg', { 
-            'text-yellow-400': value.isImportant 
-          })} 
-        />
-      </Button>
-    </Card>
+  return (
+    <Draggable id={value.id}>{
+      ContextMenuWrapper(
+        <Card 
+          className='flex cursor-pointer items-center p-2 text-left backdrop-blur-sm transition-colors hover:bg-muted/50' 
+          onClick={() => dispatch(setEditedTaskId(value.id))}
+        >
+          <CheckButton  /> 
+          <div className={clsx('w-0 grow truncate', {
+            'line-through text-muted-foreground': value.completed
+          })}>
+            {value.text}
+          </div>
+          <Button 
+            className='size-8' 
+            variant='ghost' 
+            size='icon' 
+            onClick={onFavoriteToggled}
+          >
+            <Icon 
+              icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
+              className={clsx('text-lg', { 
+                'text-yellow-400': value.isImportant 
+              })} 
+            />
+          </Button>
+        </Card>
+      )
+    }</Draggable>
   )
 }
 
