@@ -61,8 +61,10 @@ export const mainSlice = createSlice({
     },
     deleteListById: (state, action: PayloadAction<string>) => {
       const index = state.lists.findIndex(item => item.id === action.payload)
+      if (index === -1) return;
       state.lists.splice(index, 1)
       saveItem('lists', state.lists)
+      saveItem('tasks', state.tasks.filter(item => item.listId !== action.payload))
     },
     setLists: (state, action: PayloadAction<List[]>) => {
       state.lists = action.payload
