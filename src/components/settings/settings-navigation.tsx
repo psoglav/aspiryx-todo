@@ -36,7 +36,7 @@ export const SettingsNavigation = (props: SettingsNavigationProps) => {
     switch(item.type) {
     case 'group-label':
       return (
-        <div className="px-4 pb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground" key={i}>
+        <div className="px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground" key={i}>
           {item.text}
         </div>
       )
