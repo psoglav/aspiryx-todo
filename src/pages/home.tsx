@@ -20,9 +20,7 @@ export default function Home() {
       className="relative h-screen"
     >
       <ResizablePanel defaultSize={20} maxSize={40} minSize={15} className="hidden md:block">
-        <div className="h-[100dvh]">
-          <Sidebar />
-        </div>
+        <Sidebar />
       </ResizablePanel>
       <ResizableHandle className="hidden w-[10px] border-r border-border bg-zinc-600/5 transition-colors md:block" />
       <ResizablePanel className="z-[1]" style={{overflow: 'none'}}>

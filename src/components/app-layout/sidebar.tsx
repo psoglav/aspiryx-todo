@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
 import { setSettingsOpen } from "@/store/settings"
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
@@ -18,46 +19,52 @@ export default function Sidebar() {
   const dispatch = useDispatch()
 
   return (
-    <div className='relative grid h-full grid-rows-[max-content_1fr_max-content] space-y-4 p-4 pr-[7px]'>
-      <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
+    <div className='relative grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4 pr-[7px]'>
+      {/* <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div> */}
 
-      <div className="flex gap-2">
-        <a href="https://aspiryx.space" className='grow'>
-          <Button
-            variant='ghost'
-            className="flex size-full justify-start gap-2 uppercase" 
-          >
-            <Icon icon='ion:arrow-back-outline' />
-            <span className=" font-bold">HUB</span>
+      <div className='flex flex-col gap-4'>
+        <div className="flex gap-2">
+          <a href="https://aspiryx.space" className='grow'>
+            <Button
+              variant='ghost'
+              className="flex size-full justify-start gap-2 uppercase" 
+            >
+              <Icon icon='ion:arrow-back-outline' />
+              <span className=" font-bold">HUB</span>
+            </Button>
+          </a>
+          <Button variant='outline' size='icon' onClick={() => dispatch(setSettingsOpen(true))}>
+            <Icon icon='material-symbols:settings' className='text-xl' />
           </Button>
-        </a>
-        <Button variant='outline' size='icon' onClick={() => dispatch(setSettingsOpen(true))}>
-          <Icon icon='material-symbols:settings' className='text-xl' />
-        </Button>
-      </div>
-      
-      <div className='space-y-4'>
+        </div>
+
         <Input placeholder="Search" icon='material-symbols:search' />
 
-        <div className='space-y-2'>
-          <Link to='/'>
-            <Button variant={isToday ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
+        <Link to='/'>
+          <Button variant={isToday ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
               Tasks
-            </Button>
-          </Link>
-          {
-            lists.length ? (
-              <>
-                <Separator />
-                <ListGroup items={lists} />
-              </>
-            ) : null
-          }
-        </div>
+          </Button>
+        </Link>
+
+        <Separator />
       </div>
+
+      <ScrollArea>
+        <div className='h-full space-y-2'>
+          <ListGroup items={lists} />
+        </div>
+      </ScrollArea>
 
       <div className="space-y-2">
         <CreateList />
+
+        <div className='flex justify-center gap-2 py-3 text-center text-xs text-muted-foreground'>
+          <div>powered by</div> 
+          <a className='flex gap-1 hover:underline' href='https://aspiryx.space' target='_blank'>
+            <img src='https://aspiryx.space/logo.svg' className='size-4' />
+            <span>ASPIRYX</span>
+          </a>
+        </div>
       </div>
     </div>
   )
