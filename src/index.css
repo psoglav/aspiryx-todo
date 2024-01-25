@@ -82,10 +82,9 @@
   }
 }
 
+/* devices with touch support */
 @media (hover: none) {
-  html,
-  body {
-    /* user-select: none; */
-    background: yellow !important;
+  html {
+    user-select: none;
   }
 }
