@@ -9,6 +9,11 @@ export default [
     children: [{
       path: '/list/:listId',
       element: <Home />,
-    }]
+    }],
   },
+  {
+    path: '/settings',
+    element: <Home />,
+    errorElement: <ErrorPage />,
+  }
 ]

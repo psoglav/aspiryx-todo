@@ -63,7 +63,7 @@ export function CreateTask() {
   }
 
   return (
-    <div className='h-max w-full border-t border-border p-4 pt-3 md:px-6 lg:px-16'>
+    <div className='h-max w-full border-t border-border p-4 pb-6 pt-3 md:px-6 lg:px-16'>
       <div className="flex h-14 items-center rounded-lg border border-border bg-secondary transition-colors focus-within:!bg-background hover:bg-secondary/80">
         <div className="flex w-10 justify-center">
           {

@@ -5,11 +5,14 @@ import { Provider } from 'react-redux'
 import '@/index.css'
 import App from './App'
 import { store } from '@/store/index.ts'
+import { ThemeProvider } from "@/components/ui/theme-provider"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>,
 )

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from "react-router-dom";
 import { Icon } from "@iconify/react"
 
@@ -9,23 +9,32 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
+import { setSettingsOpen } from "@/store/settings"
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
   const { listId } = useParams()
   const isToday = !listId
+  const dispatch = useDispatch()
 
   return (
-    <div className='grid h-full grid-rows-[max-content_1fr_max-content] space-y-4 bg-zinc-600/5 p-4'>
-      <a href="https://aspiryx.space">
-        <Button
-          variant='ghost'
-          className="flex w-full gap-2 py-8 uppercase" 
-        >
-          <Icon icon='ion:arrow-back-outline' />
-          <span className="text-lg font-bold">HUB</span>
+    <div className='relative grid h-full grid-rows-[max-content_1fr_max-content] space-y-4 p-4'>
+      <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
+
+      <div className="flex gap-2">
+        <a href="https://aspiryx.space" className='grow'>
+          <Button
+            variant='ghost'
+            className="flex size-full justify-start gap-2 uppercase" 
+          >
+            <Icon icon='ion:arrow-back-outline' />
+            <span className=" font-bold">HUB</span>
+          </Button>
+        </a>
+        <Button variant='outline' size='icon' onClick={() => dispatch(setSettingsOpen(true))}>
+          <Icon icon='material-symbols:settings' className='text-xl' />
         </Button>
-      </a>
+      </div>
       
       <div className='space-y-4'>
         <Input placeholder="Search" icon='material-symbols:search' />
@@ -47,8 +56,9 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <CreateList />
-
+      <div className="space-y-2">
+        <CreateList />
+      </div>
     </div>
   )
 }
