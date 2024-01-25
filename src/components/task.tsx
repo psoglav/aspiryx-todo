@@ -255,8 +255,15 @@ export function TaskList({ id }: TaskListProps) {
   const modifiers = [restrictToParentElement]
   const sensors = [
     useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
     }),
     useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
     }),
     useSensor(KeyboardSensor)
   ]
@@ -264,6 +271,7 @@ export function TaskList({ id }: TaskListProps) {
   function onDragStart(event: DragStartEvent) {
     const task = tasks.find(item => item.id === event.active?.id)
     if (task) setDraggedItem(task)
+    console.log(event)
   }
 
   function onDragCancel() {
