@@ -19,7 +19,8 @@ export default function Home() {
       autoSaveId='ui-layout'
       className="relative h-screen"
     >
-      <ResizablePanel defaultSize={20} maxSize={40} minSize={15} className="hidden md:block">
+      <ResizablePanel defaultSize={20} maxSize={40} minSize={15} className="relative hidden md:block ">
+        <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
         <Sidebar />
       </ResizablePanel>
       <ResizableHandle className="hidden w-[10px] border-r border-border bg-zinc-600/5 transition-colors md:block" />

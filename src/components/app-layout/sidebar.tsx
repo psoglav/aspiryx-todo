@@ -19,9 +19,7 @@ export default function Sidebar() {
   const dispatch = useDispatch()
 
   return (
-    <div className='relative grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4 pr-[7px]'>
-      {/* <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div> */}
-
+    <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4 pr-[7px]'>
       <div className='flex flex-col gap-4'>
         <div className="flex gap-2">
           <a href="https://aspiryx.space" className='grow'>
