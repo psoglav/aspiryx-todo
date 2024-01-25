@@ -9,6 +9,7 @@ export type SettingsNavigationGroupLabel = {
 }
 
 export type SettingsNavigationTab = {
+  id: string | number
   type: 'tab'
   text: string
   icon?: string | IconifyIcon

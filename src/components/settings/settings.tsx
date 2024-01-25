@@ -16,12 +16,14 @@ import { RootState } from "@/store"
 const navigationItems: SettingsNavigationItem[] = [
   { type: 'group-label', text: 'App Settings' },
   {
+    id: 1,
     type: 'tab',
     text: 'General',
     icon: 'material-symbols:settings',
     content: SettingsGeneral
   },
   {
+    id: 2,
     type: 'tab',
     text: 'Appearance',
     icon: 'fluent:dark-theme-20-regular',
@@ -30,6 +32,7 @@ const navigationItems: SettingsNavigationItem[] = [
   null,
   { type: 'group-label', text: 'User Settings' },
   {
+    id: 3,
     type: 'tab',
     text: 'Account',
     icon: 'material-symbols:person',
@@ -79,12 +82,22 @@ export const Settings = () => {
               <div className="grid size-full grid-cols-[max-content_1fr_max-content] items-start py-20">
                 <SettingsNavigation items={navigationItems} onTabChanged={setActiveTabIndex} />
                 <div className="w-full space-y-5 px-10">
-                  {
-                    activeTab?.type === 'tab' && <>
-                      <div className="text-3xl font-semibold">{ activeTab.text }</div>
-                      { activeTab.content() }
-                    </>
-                  }
+                  <AnimatePresence mode="wait">
+                    {
+                      activeTab?.type === 'tab' && (
+                        <motion.div
+                          key={activeTab.id}
+                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 20 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <div className="text-3xl font-semibold">{ activeTab.text }</div>
+                          { activeTab.content() }
+                        </motion.div>
+                      )
+                    }
+                  </AnimatePresence>
                 </div>
                 <div className="px-5">
                   <Button onClick={handleClose} className="flex h-auto flex-col rounded-xl px-4 text-muted-foreground" variant='ghost'>
