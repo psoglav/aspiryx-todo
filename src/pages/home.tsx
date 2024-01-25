@@ -40,7 +40,7 @@ export default function Home() {
         className="relative h-screen"
       >
         <ResizablePanel defaultSize={20} maxSize={40} minSize={15} className="hidden md:block">
-          <div className="h-[100dvh] p-4">
+          <div className="h-[100dvh]">
             <Sidebar />
           </div>
         </ResizablePanel>

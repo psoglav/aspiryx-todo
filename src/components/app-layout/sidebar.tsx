@@ -16,7 +16,7 @@ export default function Sidebar() {
   const isToday = !listId
 
   return (
-    <div className='grid h-full grid-rows-[max-content_1fr_max-content] space-y-4'>
+    <div className='grid h-full grid-rows-[max-content_1fr_max-content] space-y-4 bg-zinc-600/5 p-4'>
       <a href="https://aspiryx.space">
         <Button
           variant='ghost'
