@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import type { KeyboardEvent, ChangeEvent, PropsWithChildren } from 'react'
 import type { RootState } from '@/store'
 
-import { createList, deleteListById, } from '@/store/main'
+import { createList, deleteListById, setLists, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -24,6 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button"
 import { List } from "@/types";
+import { Reorder, useDragControls, useMotionValue } from "framer-motion";
 
 export const CreateList = () => {
   const [input, setInput] = useState('')
@@ -81,19 +82,38 @@ interface ListItemProps {
 export const ListItem = ({ value, disabled }: ListItemProps) => {
   const { listId } = useParams()
   const isActive = listId === value.id
+  const [isDragging, setIsDragging] = useState(false)
+
+  const y = useMotionValue(0);
+  const dragControls = useDragControls();
 
   return (
-    <ListItemContextMenu id={value.id}>
-      <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled })}>
-        <Button 
-          variant={isActive ? 'secondary' : 'ghost'} 
-          className={clsx('flex w-full justify-start gap-2', { 'text-muted-foreground': !isActive })}
-        >
-          <Icon icon='fluent:task-list-square-ltr-24-regular' className="text-xl" />
-          <span>{ value.name }</span>
-        </Button>
-      </Link>
-    </ListItemContextMenu>
+    <Reorder.Item
+      value={value}
+      id={value.id}
+      style={{ y }}
+      dragControls={dragControls}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={() => setIsDragging(false)}
+      className="relative"
+    >
+      <ListItemContextMenu id={value.id}>
+        <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled || isDragging })} draggable="false">
+          <Button 
+            variant={isActive ? 'secondary' : 'ghost'} 
+            className={clsx(
+              'flex w-full justify-start gap-2 backdrop-blur-sm', 
+              { 
+                'text-muted-foreground': !isActive, 
+                'bg-accent/50': isDragging 
+              })}
+          >
+            <Icon icon='fluent:task-list-square-ltr-24-regular' className="text-xl" />
+            <span>{ value.name }</span>
+          </Button>
+        </Link>
+      </ListItemContextMenu>
+    </Reorder.Item>
   )
 }
 
@@ -102,10 +122,20 @@ interface ListGroupProps {
 }
 
 export const ListGroup = ({ items }: ListGroupProps) => {
+  const dispatch = useDispatch()
+
   return (
-    <div className="flex flex-col gap-2">
-      {items.map(item => <ListItem value={item} />)}
-    </div>
+    <Reorder.Group 
+      className="space-y-2"
+      values={items} 
+      axis="y" 
+      layoutScroll
+      onReorder={(items: List[]) => dispatch(setLists(items))} 
+    >
+      {items.map((item) => (
+        <ListItem key={item.id} value={item} />
+      ))}
+    </Reorder.Group>
   )
 }
 

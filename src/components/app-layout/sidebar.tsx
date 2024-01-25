@@ -39,7 +39,7 @@ export default function Sidebar() {
       <div className='space-y-4'>
         <Input placeholder="Search" icon='material-symbols:search' />
 
-        <div className='flex flex-col gap-2'>
+        <div className='space-y-2'>
           <Link to='/'>
             <Button variant={isToday ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
               Tasks
