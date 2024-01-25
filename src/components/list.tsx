@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import type { KeyboardEvent, ChangeEvent, PropsWithChildren } from 'react'
 import type { RootState } from '@/store'
 
-import { createList, deleteListById, setLists, } from '@/store/main'
+import { createList, deleteListById, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -24,9 +24,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button"
 import { List } from "@/types";
-import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { Sortable } from "./dnd";
-import { UniqueIdentifier, useDndMonitor } from "@dnd-kit/core";
 
 export const CreateList = () => {
   const [input, setInput] = useState('')
@@ -105,50 +102,9 @@ interface ListGroupProps {
 }
 
 export const ListGroup = ({ items }: ListGroupProps) => {
-  const dispatch = useDispatch()
-  const [draggedItemId, setDraggedItemId] = useState<UniqueIdentifier | null>(null)
-
-  const lists = useSelector((state: RootState) => state.main.lists)
-
-  useDndMonitor({
-    onDragStart(event) {
-      const { active } = event
-      setDraggedItemId(active?.id)
-    },
-    onDragCancel() {
-      setDraggedItemId(null)
-    },
-    onDragEnd(event) {
-      const { active, over } = event;
-
-      setDraggedItemId(null)
-      
-      if (over && active.id !== over.id) {
-        const oldIndex = lists.findIndex(item => item.id === active.id);
-        const newIndex = lists.findIndex(item => item.id === over.id);
-          
-        const arr = arrayMove(lists, oldIndex, newIndex);
-  
-        dispatch(setLists(arr))
-      }
-    }
-  });
-
   return (
     <div className="flex flex-col gap-2">
-      <SortableContext 
-        items={items}
-        strategy={verticalListSortingStrategy}
-      >
-        {
-          items
-            .map(item => (
-              <Sortable key={item.id} id={item.id}>
-                <ListItem value={item} disabled={ draggedItemId === item.id } />
-              </Sortable>
-            ))
-        }
-      </SortableContext>
+      {items.map(item => <ListItem value={item} />)}
     </div>
   )
 }

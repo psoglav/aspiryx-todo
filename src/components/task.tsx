@@ -3,7 +3,16 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
-import { useDndMonitor } from '@dnd-kit/core';
+import { 
+  DndContext, 
+  DragEndEvent, 
+  DragOverlay, 
+  DragStartEvent, 
+  KeyboardSensor, 
+  MouseSensor, 
+  TouchSensor, 
+  useSensor 
+} from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
@@ -39,6 +48,7 @@ import {
   createTask, 
   setTasks 
 } from '@/store/main'
+import { restrictToParentElement } from '@dnd-kit/modifiers';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -191,63 +201,41 @@ interface TaskGroupProps {
 
 export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
   const [collapsed, setCollapsed] = useState(items.length ? defaultCollapsed : true)
-  const dispatch = useDispatch()
 
-  const tasks = useSelector((state: RootState) => state.main.tasks)
+  return (
+    <>
+      <div className="space-y-2">
+        {
+          title ? (
+            <Button variant={collapsed ? 'ghost' : 'secondary'} onClick={() => setCollapsed(!collapsed)}>
+              <Icon
+                icon='material-symbols:keyboard-arrow-down-rounded' 
+                className={clsx('mr-1 rotate-0 text-lg transition-transform', {
+                  '!-rotate-90': collapsed
+                })} 
+              />
+              <span>{ title }</span>
+              {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
+            </Button>
+          ) : null
+        }
 
-  useDndMonitor({
-    onDragEnd(event) {
-      const { active, over } = event;
-      
-      if (over && active.id !== over.id) {
-        const oldIndex = tasks.findIndex(item => item.id === active.id);
-        const newIndex = tasks.findIndex(item => item.id === over.id);
-          
-        const arr = arrayMove(tasks, oldIndex, newIndex);
-  
-        dispatch(setTasks(arr))
-      }
-    }
-  });
-
-  return items.length ? (
-    <div className="space-y-2">
-      {
-        title ? (
-          <Button variant={collapsed ? 'ghost' : 'secondary'} onClick={() => setCollapsed(!collapsed)}>
-            <Icon
-              icon='material-symbols:keyboard-arrow-down-rounded' 
-              className={clsx('mr-1 rotate-0 text-lg transition-transform', {
-                '!-rotate-90': collapsed
-              })} 
-            />
-            <span>{ title }</span>
-            {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
-          </Button>
-        ) : null
-      }
-
-      {
-        !collapsed || !title ? (
-          <div className="flex flex-col gap-2">
-            <SortableContext 
-              items={items}
-              strategy={verticalListSortingStrategy}
-            >
-              {
-                items
-                  .map(item => (
-                    <Sortable key={item.id} id={item.id}>
-                      <TaskItem value={item} />
-                    </Sortable>
-                  ))
-              }
-            </SortableContext>
-          </div>
-        ) : null
-      }
-    </div>
-  ) : null
+        <SortableContext 
+          items={items}
+          strategy={verticalListSortingStrategy}
+        >
+          {
+            (!collapsed || !title) && items
+              .map(item => (
+                <Sortable key={item.id} id={item.id}>
+                  <TaskItem value={item} />
+                </Sortable>
+              ))
+          }
+        </SortableContext>
+      </div>
+    </>
+  )
 }
 
 interface TaskListProps {
@@ -256,19 +244,70 @@ interface TaskListProps {
 
 export function TaskList({ id }: TaskListProps) {
   const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === id))
+  const [draggedItem, setDraggedItem] = useState<Task | null>(null)
+  const dispatch = useDispatch()
+
+  const allTasks = useSelector((state: RootState) => state.main.tasks)
 
   const completedTasks = tasks.filter(item => item.completed)
   const uncompletedTasks = tasks.filter(item => !item.completed)
+
+  const modifiers = [restrictToParentElement]
+  const sensors = [
+    useSensor(MouseSensor, {
+    }),
+    useSensor(TouchSensor, {
+    }),
+    useSensor(KeyboardSensor)
+  ]
+
+  function onDragStart(event: DragStartEvent) {
+    const task = tasks.find(item => item.id === event.active?.id)
+    if (task) setDraggedItem(task)
+  }
+
+  function onDragCancel() {
+    setDraggedItem(null)
+  }
+
+  function onDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    setDraggedItem(null)
+
+    if (over && active.id !== over.id) {
+      const oldIndex = allTasks.findIndex(item => item.id === active.id);
+      const newIndex = allTasks.findIndex(item => item.id === over.id);
+        
+      const arr = arrayMove(allTasks, oldIndex, newIndex);
+
+      dispatch(setTasks(arr))
+    }
+  }
   
   return (
-    <div className="flex flex-col gap-4 py-4">
-      <TaskGroup items={uncompletedTasks} />
-      <TaskGroup 
-        items={completedTasks} 
-        title='Completed' 
-        defaultCollapsed={Boolean(uncompletedTasks.length)}
-      />
-    </div>
+    <DndContext 
+      modifiers={modifiers} 
+      sensors={sensors}
+      onDragStart={onDragStart}
+      onDragCancel={onDragCancel}
+      onDragEnd={onDragEnd}
+    >
+      <div className="flex flex-col gap-4 py-4">
+        <TaskGroup items={uncompletedTasks} />
+        <TaskGroup 
+          items={completedTasks} 
+          title='Completed' 
+          defaultCollapsed={Boolean(uncompletedTasks.length)}
+        />
+      </div>
+      <DragOverlay dropAnimation={{
+        duration: 500,
+        easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+      }}>
+        {draggedItem && <TaskItem value={draggedItem} key={draggedItem.id} />}
+      </DragOverlay>
+    </DndContext>
   )
 }
 

@@ -51,7 +51,8 @@ export function Sortable(props: { id: string } & PropsWithChildren) {
     transform: CSS.Transform.toString(transform),
     position: 'relative',
     zIndex: isDragging ? 1 : 0,
-    transition,
+    transition: transition ? 'all 250ms ease-out' : 'none',
+    opacity: isDragging ? '0' : '1'
   };
   
   return (
