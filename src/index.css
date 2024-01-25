@@ -74,11 +74,18 @@
   html,
   body {
     overscroll-behavior: none;
-    user-select: none;
     overflow: hidden;
   }
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@media (hover: none) {
+  html,
+  body {
+    /* user-select: none; */
+    background: yellow !important;
   }
 }
