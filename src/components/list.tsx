@@ -77,9 +77,10 @@ const ListItemContextMenu = ({ children, id }: PropsWithChildren & { id: string 
 interface ListItemProps {
   value: List
   disabled?: boolean
+  onDragEnd: () => void
 }
 
-export const ListItem = ({ value, disabled }: ListItemProps) => {
+export const ListItem = ({ value, disabled, onDragEnd }: ListItemProps) => {
   const { listId } = useParams()
   const isActive = listId === value.id
   const [isDragging, setIsDragging] = useState(false)
@@ -94,7 +95,10 @@ export const ListItem = ({ value, disabled }: ListItemProps) => {
       style={{ y }}
       dragControls={dragControls}
       onDragStart={() => setIsDragging(true)}
-      onDragEnd={() => setIsDragging(false)}
+      onDragEnd={() => { 
+        setIsDragging(false); 
+        onDragEnd(); 
+      }}
       className="relative"
     >
       <ListItemContextMenu id={value.id}>
@@ -121,19 +125,23 @@ interface ListGroupProps {
   items: List[]
 }
 
-export const ListGroup = ({ items }: ListGroupProps) => {
+export const ListGroup = (props: ListGroupProps) => {
+  const [lists, setItems] = useState(props.items)
   const dispatch = useDispatch()
+
+  function onReorderApplied(value: List[]) {
+    dispatch(setLists(value))
+  }
 
   return (
     <Reorder.Group 
       className="space-y-2"
-      values={items} 
+      values={lists} 
       axis="y" 
-      layoutScroll
-      onReorder={(items: List[]) => dispatch(setLists(items))} 
+      onReorder={(items: List[]) => setItems(items)} 
     >
-      {items.map((item) => (
-        <ListItem key={item.id} value={item} />
+      {lists.map((item) => (
+        <ListItem key={item.id} value={item} onDragEnd={() => onReorderApplied(lists)} />
       ))}
     </Reorder.Group>
   )
