@@ -48,7 +48,7 @@ import {
   createTask, 
   setTasks 
 } from '@/store/main'
-import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
