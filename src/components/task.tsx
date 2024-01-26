@@ -48,7 +48,7 @@ import {
   createTask, 
   setTasks 
 } from '@/store/main'
-import { restrictToParentElement } from '@dnd-kit/modifiers';
+import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -252,7 +252,7 @@ export function TaskList({ id }: TaskListProps) {
   const completedTasks = tasks.filter(item => item.completed)
   const uncompletedTasks = tasks.filter(item => !item.completed)
 
-  const modifiers = [restrictToParentElement]
+  const modifiers = [restrictToVerticalAxis]
   const sensors = [
     useSensor(MouseSensor, {
       activationConstraint: {
