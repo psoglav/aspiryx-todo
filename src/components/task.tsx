@@ -238,11 +238,11 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
   )
 }
 
-interface TaskListProps {
+interface TaskGroupListProps {
   id?: string
 }
 
-export function TaskList({ id }: TaskListProps) {
+export function TaskGroupList({ id }: TaskGroupListProps) {
   const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === id))
   const [draggedItem, setDraggedItem] = useState<Task | null>(null)
   const dispatch = useDispatch()
@@ -319,14 +319,22 @@ export function TaskList({ id }: TaskListProps) {
   )
 }
 
+export function TaskEdit() {
+  const tasks = useSelector((state: RootState) => state.main.tasks)
+  const taskId = useSelector((state: RootState) => state.main.editedTaskId)
+  const task = tasks.find(item => item.id === taskId)
+
+  return (
+    <div className='min-w-60 p-4'>
+      {task ? <TaskItem value={task} /> : null}
+    </div>
+  )
+}
+
 export function TaskEditSheet() {
   const dispatch = useDispatch()
   
-  const tasks = useSelector((state: RootState) => state.main.tasks)
-  const taskId = useSelector((state: RootState) => state.main.editedTaskId)
   const editSheetOpened = useSelector((state: RootState) => state.main.editSheetOpened)
-
-  const task = tasks.find(item => item.id === taskId)
 
   const onOpenChange = (open: boolean) => {
     if(!open) {
@@ -341,9 +349,7 @@ export function TaskEditSheet() {
           <SheetHeader>
             <SheetTitle>Edit</SheetTitle>
           </SheetHeader>
-          <div className='py-4'>
-            {task ? <TaskItem value={task} /> : null}
-          </div>
+          <TaskEdit />
           <SheetFooter>
             <SheetClose asChild>
               <Button type="submit">Save changes</Button>
@@ -351,7 +357,6 @@ export function TaskEditSheet() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
-
     </>
   )
 }
