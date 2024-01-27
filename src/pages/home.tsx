@@ -19,11 +19,11 @@ export default function Home() {
       autoSaveId='ui-layout'
       className="relative h-screen"
     >
-      <ResizablePanel defaultSize={20} maxSize={40} minSize={15} className="relative hidden md:block ">
+      <ResizablePanel defaultSize={20} maxSize={40} minSize={10} className="relative hidden md:block">
         <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
         <Sidebar />
       </ResizablePanel>
-      <ResizableHandle className="hidden w-[10px] border-r border-border bg-zinc-600/5 transition-colors md:block" />
+      <ResizableHandle className="hidden border-r border-border bg-zinc-600/5 transition-colors md:block" />
       <ResizablePanel className="z-[1]" style={{overflow: 'none'}}>
         <div className="grid h-[100dvh] grid-rows-[max-content_1fr_max-content]">
           <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
