@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
@@ -128,6 +128,10 @@ interface ListGroupProps {
 export const ListGroup = (props: ListGroupProps) => {
   const [lists, setItems] = useState(props.items)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    setItems(props.items)
+  }, [props.items])
 
   function onReorderApplied(value: List[]) {
     dispatch(setLists(value))
