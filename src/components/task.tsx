@@ -124,7 +124,7 @@ export function TaskItem({ value }: TaskItemProps) {
 
   const CheckButton = () => {
     return (
-      <div className='group p-3' onClick={onCheckButtonClick}>
+      <div className='group h-10 p-3' onClick={onCheckButtonClick}>
         <div 
           className={clsx(
             'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:bg-foreground/30 group-hover:ring-foreground group-active:ring-2', 
@@ -134,7 +134,7 @@ export function TaskItem({ value }: TaskItemProps) {
           )}
         >
           <div 
-            className={clsx('size-[8px] rounded-full transition-all', {
+            className={clsx('size-[10px] rounded-full transition-all', {
               'bg-foreground': value.completed
             })}></div>
         </div>
@@ -165,24 +165,26 @@ export function TaskItem({ value }: TaskItemProps) {
     <>{
       ContextMenuWrapper(
         <Card 
-          className='flex cursor-pointer items-center p-2 text-left backdrop-blur-sm transition-all hover:bg-muted/50'
+          className='flex cursor-pointer items-start p-2 text-left backdrop-blur-sm transition-all hover:bg-muted/50'
           onClick={() => dispatch(setEditedTaskId(value.id))}
         >
           <CheckButton  />
-          <div className={clsx('w-0 grow truncate', {
-            'line-through text-muted-foreground': value.completed
-          })}>
-            {value.text}
+          <div className="flex min-h-10 w-0 grow px-2">
+            <div className={clsx('self-center', {
+              'line-through text-muted-foreground': value.completed
+            })}>
+              {value.text}
+            </div>
           </div>
           <Button 
-            className='size-8' 
+            className='size-10' 
             variant='ghost' 
             size='icon' 
             onClick={onFavoriteToggled}
           >
             <Icon 
               icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
-              className={clsx('text-lg', { 
+              className={clsx('text-xl text-muted-foreground', { 
                 'text-yellow-400': value.isImportant 
               })} 
             />
