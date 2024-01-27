@@ -1,7 +1,14 @@
+import { SettingsTab } from ".."
+
 export function SettingsGeneral() {
   return (
-    <div className="">
-      general
-    </div>
+    <SettingsTab 
+      id={0}
+      title="General"
+    >
+      <div className="">
+        general settings go here
+      </div>
+    </SettingsTab>
   )
 }

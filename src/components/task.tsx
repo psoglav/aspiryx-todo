@@ -271,7 +271,6 @@ export function TaskGroupList({ id }: TaskGroupListProps) {
   function onDragStart(event: DragStartEvent) {
     const task = tasks.find(item => item.id === event.active?.id)
     if (task) setDraggedItem(task)
-    console.log(event)
   }
 
   function onDragCancel() {
@@ -325,7 +324,7 @@ export function TaskEdit() {
   const task = tasks.find(item => item.id === taskId)
 
   return (
-    <div className='min-w-60 p-4'>
+    <div className='min-w-60 py-4'>
       {task ? <TaskItem value={task} /> : null}
     </div>
   )

@@ -1,7 +1,14 @@
+import { SettingsTab } from ".."
+
 export function SettingsAccount() {
   return (
-    <div className="">
-      account
-    </div>
+    <SettingsTab 
+      id={2}
+      title="Account"
+    >
+      <div className="">
+        account settings go here
+      </div>
+    </SettingsTab>
   )
 }

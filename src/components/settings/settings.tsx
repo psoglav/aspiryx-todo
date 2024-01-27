@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react"
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
 import { AnimatePresence, motion  } from "framer-motion"
 import { Icon } from "@iconify/react"
 import { useDispatch, useSelector } from "react-redux"
 import { Button } from "@/components/ui/button"
 import { 
   SettingsNavigation, 
-  SettingsNavigationItem, 
   SettingsAccount, 
   SettingsAppearance, 
   SettingsGeneral 
@@ -14,41 +13,39 @@ import { setSettingsOpen } from "@/store/settings"
 import { RootState } from "@/store"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-const navigationItems: SettingsNavigationItem[] = [
-  { type: 'group-label', text: 'App Settings' },
-  {
-    id: 1,
-    type: 'tab',
-    text: 'General',
-    icon: 'material-symbols:settings',
-    content: SettingsGeneral
-  },
-  {
-    id: 2,
-    type: 'tab',
-    text: 'Appearance',
-    icon: 'fluent:dark-theme-20-regular',
-    content: SettingsAppearance
-  },
-  null,
-  { type: 'group-label', text: 'User Settings' },
-  {
-    id: 3,
-    type: 'tab',
-    text: 'Account',
-    icon: 'material-symbols:person',
-    content: SettingsAccount
-  },
-]
+type SettingsTabProps = {
+  id: string | number
+  title: string
+} & PropsWithChildren
+
+export const SettingsTab = ({ children, ...props }: SettingsTabProps) => {
+  const currentTabId = useContext(SettingsTabsContext)
+
+  return currentTabId === props.id && (
+    <motion.div
+      className="w-full space-y-5 px-10 py-20"
+      key={props.id}
+      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, scale: 0.98 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.25 }}
+    >
+      <div className="text-3xl font-semibold">{ props.title }</div>
+      {children}
+    </motion.div>
+  )
+}
+
+export const SettingsTabsContext = createContext<string | number>(0)
 
 export const Settings = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(1)
-  const activeTab = navigationItems[activeTabIndex]
+  const [activeTab, setActiveTab] = useState<string | number>(0)
   const isSettingsOpen = useSelector((state: RootState) => state.settings.open)
   const dispatch = useDispatch()
 
   function handleClose() {
     dispatch(setSettingsOpen(false))
+    setActiveTab(0)
   }
 
   function handleOpen() {
@@ -81,26 +78,18 @@ export const Settings = () => {
           >
             <div className="container h-full">
               <div className="grid size-full grid-cols-[max-content_1fr_max-content] items-start">
-                <SettingsNavigation items={navigationItems} onTabChanged={setActiveTabIndex} />
-                <ScrollArea className="h-[100dvh]">
-                  <AnimatePresence mode="wait">
-                    {
-                      activeTab?.type === 'tab' && (
-                        <motion.div
-                          className="w-full space-y-5 px-10 py-20"
-                          key={activeTab.id}
-                          animate={{ opacity: 1 }}
-                          initial={{ opacity: 0 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <div className="text-3xl font-semibold">{ activeTab.text }</div>
-                          { activeTab.content() }
-                        </motion.div>
-                      )
-                    }
-                  </AnimatePresence>
-                </ScrollArea>
+                <SettingsTabsContext.Provider value={activeTab}>
+                  <SettingsNavigation onTabChanged={setActiveTab} />
+
+                  <ScrollArea className="h-[100dvh]">
+                    <AnimatePresence mode="wait">
+                      <SettingsGeneral key={0}  />
+                      <SettingsAccount key={1}  />
+                      <SettingsAppearance key={2}  />
+                    </AnimatePresence>
+                  </ScrollArea>
+                </SettingsTabsContext.Provider>
+
                 <div className="px-5 py-20">
                   <Button onClick={handleClose} className="flex h-auto flex-col rounded-xl px-4 text-muted-foreground" variant='ghost'>
                     <Icon icon='material-symbols:cancel-outline-rounded' className="shrink-0 text-3xl" />
