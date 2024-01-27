@@ -56,24 +56,6 @@ export const CreateList = () => {
   )
 }
 
-const ListItemContextMenu = ({ children, id }: PropsWithChildren & { id: string }) => {
-  const dispatch = useDispatch()
-
-  return (
-    <ContextMenu>
-      <ContextMenuTrigger>{children}</ContextMenuTrigger>
-      <ContextMenuContent>
-        <ContextMenuItem 
-          className='cursor-pointer !text-red-500 hover:!bg-destructive/20'
-          onClick={() => dispatch(deleteListById(id))}
-        >
-          Delete
-        </ContextMenuItem>
-      </ContextMenuContent>
-    </ContextMenu>
-  )
-}
-
 interface ListItemProps {
   value: List
   disabled?: boolean
@@ -87,6 +69,24 @@ export const ListItem = ({ value, disabled, onDragEnd }: ListItemProps) => {
 
   const y = useMotionValue(0);
   const dragControls = useDragControls();
+
+  const ListItemContextMenu = ({ children, id }: PropsWithChildren & { id: string }) => {
+    const dispatch = useDispatch()
+  
+    return (
+      <ContextMenu>
+        <ContextMenuTrigger>{children}</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem 
+            className='cursor-pointer !text-red-500 hover:!bg-destructive/20'
+            onClick={() => dispatch(deleteListById(id))}
+          >
+            Delete
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    )
+  }
 
   return (
     <Reorder.Item
@@ -147,34 +147,32 @@ export const ListGroup = (props: ListGroupProps) => {
   )
 }
 
-export const ListTitle = () => {
+export const ListHeader = () => {
   const { listId } = useParams()
   const currentList = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
   const title = currentList ? currentList.name : 'Tasks'
 
   return (
-    <div className='text-2xl font-semibold'>
-      { title }
-    </div>
-  )
-}
+    <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
+      <div className='text-2xl font-semibold'>
+        { title }
+      </div>
 
-export const ListDropdownMenu = () => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button size='icon' variant='ghost'>
-          <Icon icon='radix-icons:dots-horizontal' className="text-xl" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>Import</DropdownMenuItem>
-        <DropdownMenuItem>Export</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className='cursor-pointer !text-red-500 hover:!bg-destructive/20'>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size='icon' variant='ghost'>
+            <Icon icon='radix-icons:dots-horizontal' className="text-xl" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Import</DropdownMenuItem>
+          <DropdownMenuItem>Export</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className='cursor-pointer !text-red-500 hover:!bg-destructive/20'>
            Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
