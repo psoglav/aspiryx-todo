@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Icon, type IconifyIcon } from "@iconify/react"
 import { Separator } from "@/components/ui/separator"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export type SettingsNavigationGroupLabel = {
   type: 'group-label'
@@ -59,9 +60,13 @@ export const SettingsNavigation = (props: SettingsNavigationProps) => {
   }
 
   return (
-    <div className="relative flex h-full w-[200px] flex-col gap-1 px-5">
+    <div className="relative">
       <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 border-r border-border bg-zinc-600/5"></div>
-      { props.items.map(renderItem) }
+      <ScrollArea className="h-[100dvh] w-[240px]">
+        <div className="flex flex-col gap-1 px-5 py-20">
+          { props.items.map(renderItem) }
+        </div>
+      </ScrollArea>
     </div>
   )
 }

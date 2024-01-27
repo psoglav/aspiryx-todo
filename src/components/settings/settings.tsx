@@ -12,6 +12,7 @@ import {
 } from "@/components/settings"
 import { setSettingsOpen } from "@/store/settings"
 import { RootState } from "@/store"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const navigationItems: SettingsNavigationItem[] = [
   { type: 'group-label', text: 'App Settings' },
@@ -79,17 +80,18 @@ export const Settings = () => {
             exit={{ scale: 1.05 }}
           >
             <div className="container h-full">
-              <div className="grid size-full grid-cols-[max-content_1fr_max-content] items-start py-20">
+              <div className="grid size-full grid-cols-[max-content_1fr_max-content] items-start">
                 <SettingsNavigation items={navigationItems} onTabChanged={setActiveTabIndex} />
-                <div className="w-full space-y-5 px-10">
+                <ScrollArea className="h-[100dvh]">
                   <AnimatePresence mode="wait">
                     {
                       activeTab?.type === 'tab' && (
                         <motion.div
+                          className="w-full space-y-5 px-10 py-20"
                           key={activeTab.id}
-                          animate={{ opacity: 1, y: 0 }}
-                          initial={{ opacity: 0, y: 20 }}
-                          exit={{ opacity: 0, y: -20 }}
+                          animate={{ opacity: 1 }}
+                          initial={{ opacity: 0 }}
+                          exit={{ opacity: 0 }}
                           transition={{ duration: 0.15 }}
                         >
                           <div className="text-3xl font-semibold">{ activeTab.text }</div>
@@ -98,8 +100,8 @@ export const Settings = () => {
                       )
                     }
                   </AnimatePresence>
-                </div>
-                <div className="px-5">
+                </ScrollArea>
+                <div className="px-5 py-20">
                   <Button onClick={handleClose} className="flex h-auto flex-col rounded-xl px-4 text-muted-foreground" variant='ghost'>
                     <Icon icon='material-symbols:cancel-outline-rounded' className="shrink-0 text-3xl" />
                     <div className="text-lg font-semibold">Esc</div>
