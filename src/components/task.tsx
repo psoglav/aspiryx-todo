@@ -127,15 +127,15 @@ export function TaskItem({ value }: TaskItemProps) {
       <div className='group p-3' onClick={onCheckButtonClick}>
         <div 
           className={clsx(
-            'grid size-4 place-content-center rounded-full ring-1 ring-white/50 transition-all group-hover:bg-white/30 group-hover:ring-white group-active:ring-2', 
+            'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:bg-foreground/30 group-hover:ring-foreground group-active:ring-2', 
             {
-              '!ring-white': value.completed
+              '!ring-foreground': value.completed
             }
           )}
         >
           <div 
-            className={clsx('size-3 rounded-full transition-all', {
-              'bg-white': value.completed
+            className={clsx('size-[8px] rounded-full transition-all', {
+              'bg-foreground': value.completed
             })}></div>
         </div>
       </div>
