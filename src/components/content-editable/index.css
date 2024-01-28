@@ -1,0 +1,5 @@
+[placeholder]:empty::before {
+  content: attr(placeholder);
+  top: 0;
+  color: hsl(var(--muted-foreground));
+}
