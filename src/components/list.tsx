@@ -78,7 +78,7 @@ export const ListItem = ({ value, disabled, onDragEnd }: ListItemProps) => {
         <ContextMenuTrigger>{children}</ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuItem 
-            className='cursor-pointer !text-red-500 hover:!bg-destructive/20'
+            className='!text-red-500 hover:!bg-destructive/20'
             onClick={() => dispatch(deleteListById(id))}
           >
             Delete
@@ -172,7 +172,7 @@ export const ListHeader = () => {
           <DropdownMenuItem>Import</DropdownMenuItem>
           <DropdownMenuItem>Export</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className='cursor-pointer !text-red-500 hover:!bg-destructive/20'>
+          <DropdownMenuItem className='!text-red-500 hover:!bg-destructive/20'>
            Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

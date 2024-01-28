@@ -27,6 +27,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import { Sortable } from '@/components/dnd';
@@ -113,7 +114,6 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
 
   const onFavoriteToggled: MouseEventHandler = (e) => {
     e.stopPropagation()
-
     dispatch(updateTask({
       ...value,
       isImportant: !value.isImportant
@@ -155,8 +155,9 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
           <ContextMenuItem>
             Select
           </ContextMenuItem>
+          <ContextMenuSeparator />
           <ContextMenuItem 
-            className='cursor-pointer !text-red-500 hover:!bg-destructive/20'
+            className='!text-red-500 hover:!bg-destructive/20'
             onClick={() => dispatch(deleteTaskById(value.id))}
           >
             Delete
