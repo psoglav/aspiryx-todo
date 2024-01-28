@@ -80,6 +80,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  ::selection {
+    color: hsl(var(--background));
+    background-color: hsl(var(--foreground));
+  }
 }
 
 /* devices with touch support */
