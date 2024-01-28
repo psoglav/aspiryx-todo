@@ -18,6 +18,7 @@ import { setEditedTaskId } from "@/store/main";
 
 export default function Home() {
   const { listId } = useParams()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [renderLeftSidebar, setRenderLeftSidebar] = useState(true)
   const [renderRightSidebar, setRenderRightSidebar] = useState(false)
   const editedTaskId = useSelector((state: RootState) => state.main.editedTaskId)
