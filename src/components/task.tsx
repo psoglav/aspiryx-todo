@@ -24,14 +24,6 @@ import type { RootState } from "@/store"
 import type { Task } from '@/types';
 
 import {
-  Sheet,
-  SheetTitle,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-} from "@/components/ui/sheet"
-import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
