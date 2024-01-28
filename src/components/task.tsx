@@ -320,7 +320,7 @@ export function TaskGroupList({ id }: TaskGroupListProps) {
   )
 }
 
-export function TaskEdit() {
+export function TaskDetailView() {
   const tasks = useSelector((state: RootState) => state.main.tasks)
   const taskId = useSelector((state: RootState) => state.main.editedTaskId)
   const task = tasks.find(item => item.id === taskId)
@@ -329,35 +329,5 @@ export function TaskEdit() {
     <div className='min-w-60 py-4'>
       {task ? <TaskItem value={task} /> : null}
     </div>
-  )
-}
-
-export function TaskEditSheet() {
-  const dispatch = useDispatch()
-  
-  const editSheetOpened = useSelector((state: RootState) => state.main.editSheetOpened)
-
-  const onOpenChange = (open: boolean) => {
-    if(!open) {
-      dispatch(setEditedTaskId(null))
-    }
-  }
-
-  return (
-    <>
-      <Sheet open={editSheetOpened} onOpenChange={onOpenChange}>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Edit</SheetTitle>
-          </SheetHeader>
-          <TaskEdit />
-          <SheetFooter>
-            <SheetClose asChild>
-              <Button type="submit">Save changes</Button>
-            </SheetClose>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
-    </>
   )
 }

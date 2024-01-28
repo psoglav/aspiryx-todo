@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/resizable"
 import Sidebar from '@/components/app-layout/sidebar'
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { TaskGroupList, CreateTask, TaskEdit } from '@/components/task'
+import { TaskGroupList, CreateTask, TaskDetailView } from '@/components/task'
 import { ListHeader } from "@/components/list";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { setEditedTaskId } from "@/store/main";
@@ -90,7 +90,7 @@ export default function Home() {
               className="relative hidden min-w-max p-4 md:block"
             >
               <div className="absolute left-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
-              <TaskEdit />
+              <TaskDetailView />
             </ResizablePanel>
           </>
         )}
@@ -99,7 +99,7 @@ export default function Home() {
       {!renderRightSidebar && (
         <Sheet open={editSheetOpened} onOpenChange={onOpenChange}>
           <SheetContent className="pt-8" style={{'animation': 'none'}}>
-            <TaskEdit />
+            <TaskDetailView />
           </SheetContent>
         </Sheet>
       )}
