@@ -82,6 +82,7 @@ export function CreateTask() {
           placeholder="Add a task"
           autoFocus
           value={input}
+          key={listId}
           onKeyDown={handleInputKeyDown}
           onChange={handleInputChange}  
           onFocus={() => setFocused(true)}
