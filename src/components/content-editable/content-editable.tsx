@@ -35,6 +35,7 @@ interface Props {
   value?: string
   disabled?: boolean
   placeholder?: string
+  changeOnBlur?: boolean
   onFocus?: React.FocusEventHandler<HTMLSpanElement>
   onBlur?: React.FocusEventHandler<HTMLSpanElement>
   onChange?: React.FormEventHandler<HTMLSpanElement>
@@ -42,7 +43,7 @@ interface Props {
   onKeyUp?: React.KeyboardEventHandler<HTMLSpanElement> 
 }
 
-export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '', disabled = false, ...props }, outerRef) => {
+export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '', disabled = false, changeOnBlur, ...props }, outerRef) => {
   const innerRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(outerRef, () => innerRef.current!, []);
@@ -53,21 +54,36 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
     }
   }, [value])
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (e) => {
+
+  const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLElement 
     const inputText = target?.innerText?.trim()
+
+    if (!props.onChange) return
+
+    props.onChange(Object.assign(e, {
+      target: {
+        value: inputText
+      }
+    }))
+  }
+
+  const onBlur: React.FocusEventHandler<HTMLSpanElement> = (e) => {
+    if (changeOnBlur) onChange(e)
+    if (props.onBlur) props.onBlur(e)
+  }
+
+  const onKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (e) => {
+    const target = e.target as HTMLElement 
 
     if (e.key === 'Enter' && props.onChange) {
       e.preventDefault()
       target.blur()
-      props.onChange(Object.assign(e, {
-        target: {
-          value: inputText
-        }
-      }))
     } else if (e.key === 'Escape') {
       target.blur()
     }
+
+    if (props.onKeyDown) props.onKeyDown(e)
   }
 
   return (
@@ -84,8 +100,9 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
       spellCheck="false"
       tabIndex={0}
       dangerouslySetInnerHTML={{__html: value}}
-      onKeyDown={onKeyDown}
       {...props}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
     />
   )
 })

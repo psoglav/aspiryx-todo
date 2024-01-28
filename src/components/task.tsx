@@ -208,6 +208,7 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
               onChange={onChange}
               ref={inputRef}
               placeholder='Do something...'
+              changeOnBlur
             />
           </div>
 
