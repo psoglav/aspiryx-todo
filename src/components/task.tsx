@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
@@ -19,7 +19,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
-import type { KeyboardEvent, ChangeEvent, ReactNode, MouseEventHandler } from 'react'
+import type { KeyboardEvent, ChangeEvent, ReactNode, MouseEventHandler, FormEventHandler } from 'react'
 import type { RootState } from "@/store"
 import type { Task } from '@/types';
 
@@ -41,6 +41,7 @@ import {
   setTasks 
 } from '@/store/main'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { ContentEditable } from './content-editable';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -93,9 +94,12 @@ export function CreateTask() {
 
 type TaskItemProps = {
   value: Task
+  editable?: boolean
 }
 
-export function TaskItem({ value }: TaskItemProps) {
+export function TaskItem({ value, editable = false }: TaskItemProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
 
   const onCheckButtonClick: MouseEventHandler = (e) => {
@@ -108,30 +112,38 @@ export function TaskItem({ value }: TaskItemProps) {
 
   const onFavoriteToggled: MouseEventHandler = (e) => {
     e.stopPropagation()
+
     dispatch(updateTask({
       ...value,
       isImportant: !value.isImportant
     }))
   }
 
-  const CheckButton = () => {
-    return (
-      <div className='group h-10 p-3' onClick={onCheckButtonClick}>
-        <div 
-          className={clsx(
-            'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:bg-foreground/30 group-hover:ring-foreground group-active:ring-2', 
-            {
-              '!ring-foreground': value.completed
-            }
-          )}
-        >
-          <div 
-            className={clsx('size-[10px] rounded-full transition-all', {
-              'bg-foreground': value.completed
-            })}></div>
-        </div>
-      </div>
-    )
+  const focusInput = () => {
+    setTimeout(() => {
+      inputRef.current?.focus()
+    })
+  }
+
+  const onTaskClick = () => {
+    if (editable) {
+      focusInput()
+    } else {
+      dispatch(setEditedTaskId(value.id))
+    }
+  }
+
+  const onChange: FormEventHandler<HTMLSpanElement> = (e) => {
+    const target = e.target as HTMLInputElement 
+    const text = target?.value
+
+    if (!text || text.length > 255)
+      return e.preventDefault()
+  
+    dispatch(updateTask({
+      ...value,
+      text
+    }))
   }
 
   const ContextMenuWrapper = (trigger: ReactNode): ReactNode => {
@@ -157,17 +169,48 @@ export function TaskItem({ value }: TaskItemProps) {
     <>{
       ContextMenuWrapper(
         <Card 
-          className='flex cursor-pointer items-start p-2 text-left backdrop-blur-sm transition-all hover:bg-muted/50'
-          onClick={() => dispatch(setEditedTaskId(value.id))}
+          className={clsx('flex items-start p-2 text-left backdrop-blur-sm transition-all', { 
+            '!bg-card border-muted-foreground/50 cursor-text': isEditing,
+            'cursor-pointer hover:bg-muted/50': !isEditing,
+          })}
+          onClick={onTaskClick}
         >
-          <CheckButton  />
-          <div className="flex min-h-10 w-0 grow px-2">
-            <div className={clsx('self-center', {
-              'line-through text-muted-foreground': value.completed
-            })}>
-              {value.text}
+          <div
+            className='group h-10 cursor-pointer p-3'
+            onClick={onCheckButtonClick}
+          >
+            <div 
+              className={clsx(
+                'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:bg-foreground/30 group-hover:ring-foreground group-active:ring-2', 
+                {
+                  '!ring-foreground': value.completed
+                }
+              )}
+            >
+              <div 
+                className={clsx('size-[10px] rounded-full transition-all', {
+                  'bg-foreground': value.completed
+                })}></div>
             </div>
           </div>
+
+          <div 
+            className="flex min-h-10 w-0 grow px-2"
+          >
+            <ContentEditable 
+              className={clsx('grow self-center outline-0', {
+                'line-through text-muted-foreground': value.completed && !isEditing,
+              })}
+              disabled={!isEditing}
+              value={value.text}
+              onFocus={() => editable && setIsEditing(true) }
+              onBlur={() => setIsEditing(false)}
+              onChange={onChange}
+              ref={inputRef}
+              placeholder='Do something...'
+            />
+          </div>
+
           <Button 
             className='size-10' 
             variant='ghost' 
@@ -319,7 +362,7 @@ export function TaskDetailView() {
 
   return (
     <div className='min-w-60 py-4'>
-      {task ? <TaskItem value={task} /> : null}
+      {task ? <TaskItem value={task} editable /> : null}
     </div>
   )
 }
