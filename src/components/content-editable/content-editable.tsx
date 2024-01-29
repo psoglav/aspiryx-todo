@@ -40,6 +40,7 @@ interface Props {
   onFocus?: React.FocusEventHandler<HTMLSpanElement>
   onBlur?: React.FocusEventHandler<HTMLSpanElement>
   onChange?: React.FormEventHandler<HTMLSpanElement>
+  onInput?: React.FormEventHandler<HTMLSpanElement>
   onKeyDown?: React.KeyboardEventHandler<HTMLSpanElement> 
   onKeyUp?: React.KeyboardEventHandler<HTMLSpanElement> 
 }
@@ -56,13 +57,18 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
     }
   }, [value])
 
-  const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
+  const emitChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLElement 
     const inputText = target?.innerText?.trim()
     if (!props.onChange) return
     const event: typeof e & { target: { value?: string } } = e
     event.target.value = inputText
     props.onChange(event)
+  }
+
+  const onInput: React.FormEventHandler<HTMLSpanElement> = (e) => {
+    if (!changeOnBlur) emitChange(e)
+    if (props.onInput) props.onInput(e)
   }
 
   const onFocus: React.FocusEventHandler<HTMLSpanElement> = (e) => {
@@ -72,7 +78,7 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
 
   const onBlur: React.FocusEventHandler<HTMLSpanElement> = (e) => {
     setIsEditing(false)
-    if (changeOnBlur) onChange(e)
+    if (changeOnBlur) emitChange(e)
     if (props.onBlur) props.onBlur(e)
   }
 
@@ -106,6 +112,7 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       onBlur={onBlur}
+      onInput={onInput}
     />
   )
 })
