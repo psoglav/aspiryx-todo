@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import type { KeyboardEvent, ChangeEvent, PropsWithChildren } from 'react'
 import type { RootState } from '@/store'
 
-import { createList, deleteListById, setLists, } from '@/store/main'
+import { createList, deleteListById, setLists, updateList, updateTask, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button"
 import { List } from "@/types";
 import { Reorder, useDragControls, useMotionValue } from "framer-motion";
+import { ContentEditable } from "./content-editable";
 
 export const CreateList = () => {
   const [input, setInput] = useState('')
@@ -155,12 +156,26 @@ export const ListHeader = () => {
   const { listId } = useParams()
   const currentList = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
   const title = currentList ? currentList.name : 'Tasks'
+  const dispatch = useDispatch()
+
+  const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
+    const target = e.target as HTMLInputElement 
+    const text = target?.value
+    if (!currentList || !text) return 
+    dispatch(updateList({
+      ...currentList,
+      name: text
+    }))
+  }
 
   return (
     <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
-      <div className='text-2xl font-semibold'>
-        { title }
-      </div>
+      <ContentEditable 
+        className='rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
+        value={title}
+        changeOnBlur
+        onChange={onChange}
+      />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

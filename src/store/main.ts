@@ -59,6 +59,13 @@ export const mainSlice = createSlice({
       })
       saveItem('lists', state.lists)
     },
+    updateList: (state, action: PayloadAction<List>) => {
+      const index = state.lists.findIndex(item => item.id === action.payload.id)
+      state.lists.splice(index, 1, {
+        ...action.payload
+      })
+      saveItem('lists', state.lists)
+    },
     deleteListById: (state, action: PayloadAction<string>) => {
       const index = state.lists.findIndex(item => item.id === action.payload)
       if (index === -1) return;
@@ -73,15 +80,16 @@ export const mainSlice = createSlice({
   },
 })
 
-export const { 
-  createTask, 
-  deleteTaskById, 
-  updateTask, 
-  setEditedTaskId, 
+export const {
+  createTask,
+  deleteTaskById,
+  updateTask,
+  setEditedTaskId,
   createList,
   deleteListById,
   setTasks,
-  setLists
+  setLists,
+  updateList
 } = mainSlice.actions
 
 export default mainSlice.reducer
