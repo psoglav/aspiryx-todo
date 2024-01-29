@@ -138,8 +138,13 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     const target = e.target as HTMLInputElement 
     const text = target?.value
 
-    if (!text || text.length > 255)
+    if (!text) {
+      target.innerHTML = value.text
       return e.preventDefault()
+    }
+    
+    // TODO: implement max length validation
+    if (text.length > 255) return
   
     dispatch(updateTask({
       ...value,

@@ -54,18 +54,17 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
     }
   }, [value])
 
-
   const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLElement 
     const inputText = target?.innerText?.trim()
 
     if (!props.onChange) return
 
-    props.onChange(Object.assign(e, {
-      target: {
-        value: inputText
-      }
-    }))
+    const event: typeof e & { target: { value?: string } } = e
+
+    event.target.value = inputText
+
+    props.onChange(event)
   }
 
   const onBlur: React.FocusEventHandler<HTMLSpanElement> = (e) => {
