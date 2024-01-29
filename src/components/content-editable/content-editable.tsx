@@ -4,6 +4,7 @@ import React, {
   useLayoutEffect, 
   useImperativeHandle, 
   useRef,
+  useState,
 } from "react";
 import './index.css'
 
@@ -44,6 +45,7 @@ interface Props {
 }
 
 export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '', disabled = false, changeOnBlur, ...props }, outerRef) => {
+  const [isEditing, setIsEditing] = useState(false)
   const innerRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(outerRef, () => innerRef.current!, []);
@@ -57,50 +59,52 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
   const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLElement 
     const inputText = target?.innerText?.trim()
-
     if (!props.onChange) return
-
     const event: typeof e & { target: { value?: string } } = e
-
     event.target.value = inputText
-
     props.onChange(event)
   }
 
+  const onFocus: React.FocusEventHandler<HTMLSpanElement> = (e) => {
+    if(!disabled) setIsEditing(true)
+    if (props.onFocus) props.onFocus(e)
+  }
+
   const onBlur: React.FocusEventHandler<HTMLSpanElement> = (e) => {
+    setIsEditing(false)
     if (changeOnBlur) onChange(e)
     if (props.onBlur) props.onBlur(e)
   }
 
   const onKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLElement 
-
     if (e.key === 'Enter' && props.onChange) {
       e.preventDefault()
       target.blur()
     } else if (e.key === 'Escape') {
       target.blur()
     }
-
     if (props.onKeyDown) props.onKeyDown(e)
   }
 
   return (
     <span
-      className={clsx(props.className, 'w-full overflow-hidden break-words align-top outline-none', {
+      className={clsx(props.className, 'w-full break-words align-top outline-none', {
         'cursor-text': !disabled
       })}
       style={{
-        whiteSpace: 'pre-line'
+        whiteSpace: 'pre-line',
+        overflow: 'hidden'
       }}
       ref={innerRef}
       suppressContentEditableWarning
-      contentEditable={disabled ? 'false' : 'plaintext-only'}
+      contentEditable={isEditing ? 'plaintext-only' : 'false'}
       spellCheck="false"
       tabIndex={0}
       dangerouslySetInnerHTML={{__html: value}}
       {...props}
       onKeyDown={onKeyDown}
+      onFocus={onFocus}
       onBlur={onBlur}
     />
   )

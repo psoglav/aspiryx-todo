@@ -100,7 +100,6 @@ type TaskItemProps = {
 }
 
 export function TaskItem({ value, editable = false }: TaskItemProps) {
-  const [isEditing, setIsEditing] = useState(false)
   const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
 
@@ -176,10 +175,7 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     <>{
       ContextMenuWrapper(
         <Card 
-          className={clsx('flex items-start p-2 text-left backdrop-blur-sm transition-all', { 
-            '!bg-card border-muted-foreground/50 cursor-text': isEditing,
-            'cursor-pointer hover:bg-muted/50': !isEditing,
-          })}
+          className='flex cursor-pointer items-start p-2 text-left backdrop-blur-sm transition-all focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card hover:bg-muted/50'
           onClick={onTaskClick}
         >
           <div
@@ -205,13 +201,11 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
             className="flex min-h-10 w-0 grow px-2"
           >
             <ContentEditable 
-              className={clsx('grow self-center outline-0', {
-                'line-through text-muted-foreground': value.completed && !isEditing,
+              className={clsx('self-center outline-0 focus:text-foreground focus:no-underline', {
+                'line-through text-muted-foreground': value.completed,
               })}
-              disabled={!isEditing}
+              disabled={!editable}
               value={value.text}
-              onFocus={() => editable && setIsEditing(true) }
-              onBlur={() => setIsEditing(false)}
               onChange={onChange}
               ref={inputRef}
               placeholder='Do something...'
