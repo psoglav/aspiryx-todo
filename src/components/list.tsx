@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import type { KeyboardEvent, ChangeEvent, PropsWithChildren } from 'react'
 import type { RootState } from '@/store'
 
-import { createList, deleteListById, setLists, updateList, updateTask, } from '@/store/main'
+import { createList, deleteListById, setLists, updateList, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
