@@ -45,7 +45,7 @@ interface Props {
   onKeyUp?: React.KeyboardEventHandler<HTMLSpanElement> 
 }
 
-export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '', disabled = false, changeOnBlur, ...props }, outerRef) => {
+export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '', disabled = false, changeOnBlur, className, ...props }, outerRef) => {
   const [isEditing, setIsEditing] = useState(false)
   const innerRef = useRef<HTMLDivElement>(null);
 
@@ -95,13 +95,10 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
 
   return (
     <span
-      className={clsx(props.className, 'w-full break-words align-top outline-none', {
-        'cursor-text': !disabled
+      className={clsx(className, 'w-full overflow-hidden whitespace-pre-line break-words align-top outline-none', {
+        'cursor-text': !disabled,
+        'select-none': !isEditing
       })}
-      style={{
-        whiteSpace: 'pre-line',
-        overflow: 'hidden'
-      }}
       ref={innerRef}
       suppressContentEditableWarning
       contentEditable={isEditing ? 'plaintext-only' : 'false'}
