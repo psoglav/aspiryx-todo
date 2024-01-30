@@ -203,7 +203,7 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
             className="flex min-h-10 w-0 grow px-2"
           >
             <ContentEditable 
-              className={clsx('self-center outline-0 focus:text-foreground focus:no-underline', {
+              className={clsx('self-center font-semibold outline-0 focus:text-foreground focus:no-underline', {
                 'line-through text-muted-foreground': value.completed,
               })}
               disabled={!editable}
