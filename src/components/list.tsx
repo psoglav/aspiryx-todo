@@ -180,7 +180,7 @@ export const ListHeader = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size='icon' variant='ghost'>
-            <Icon icon='radix-icons:dots-horizontal' className="text-xl" />
+            <Icon icon='radix-icons:dots-vertical' className="text-xl" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
