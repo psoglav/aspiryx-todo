@@ -11,8 +11,15 @@ import { createList, deleteListById, setLists, updateList, } from '@/store/main'
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
+  DropdownMenuGroup, 
   DropdownMenuItem, 
+  DropdownMenuPortal, 
+  DropdownMenuRadioGroup, 
+  DropdownMenuRadioItem, 
   DropdownMenuSeparator, 
+  DropdownMenuSub, 
+  DropdownMenuSubContent, 
+  DropdownMenuSubTrigger, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { 
@@ -168,6 +175,15 @@ export const ListHeader = () => {
     }))
   }
 
+  const onStyleChange = (value: string) => {
+    if (!currentList?.id) return;
+
+    dispatch(updateList({
+      ...currentList,
+      style: value || undefined
+    }))
+  }
+
   return (
     <div className="flex justify-between gap-2 p-4 pt-8 md:px-6 lg:px-16">
       <ContentEditable 
@@ -184,8 +200,30 @@ export const ListHeader = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Import</DropdownMenuItem>
-          <DropdownMenuItem>Export</DropdownMenuItem>
+          <DropdownMenuGroup>
+            <DropdownMenuItem>Import</DropdownMenuItem>
+            <DropdownMenuItem>Export</DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          {currentList?.id && (
+            <DropdownMenuGroup>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <span>Style</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup value={currentList.style} onValueChange={onStyleChange}>
+                      <DropdownMenuRadioItem value="">Default</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="aura">Aura</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="pearl">Pearl</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="swamp">Swamp</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+            </DropdownMenuGroup>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem className='!text-red-500 hover:!bg-destructive/20'>
            Delete

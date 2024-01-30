@@ -11,7 +11,6 @@ import {
 import Sidebar from '@/components/app-layout/sidebar'
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { setActiveTask } from "@/store/main";
-import { WhatameshGradient } from "@/components/whatamesh/gradient";
 import { ListView } from "@/views/ListView";
 import { TaskDetailView } from "@/views/TaskDetailView";
 
@@ -83,8 +82,6 @@ export default function Home() {
             </ResizablePanel>
           </>
         )}
-
-        <WhatameshGradient style="aura" />
       </ResizablePanelGroup>
     
       {!renderRightSidebar && (

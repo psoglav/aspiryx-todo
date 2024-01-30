@@ -1,6 +1,7 @@
 import type { Theme } from "@/components/ui/theme-provider"
+import { ListStyle } from "@/types"
 
-export const BgStyles: Record<string, string[] | Partial<Record<Theme, string[]>>> = {
+export const BgStyles: Record<ListStyle, string[] | Partial<Record<Theme, string[]>>> = {
   aura: {
     dark: ['#000000', '#111111', '#4800ff', '#000000'],
     light: ['#ffffff', '#eeeeee', '#4800ff', '#ffffff'],
@@ -11,7 +12,7 @@ export const BgStyles: Record<string, string[] | Partial<Record<Theme, string[]>
     '#eae2ff',
     '#b9beff',
   ],
-  swampgod: {
+  swamp: {
     dark: [
       '#53DF83',
       '#47D2E9',

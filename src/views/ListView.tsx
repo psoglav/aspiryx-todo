@@ -1,6 +1,7 @@
 import { ListHeader } from "@/components/list";
 import { CreateTask, TaskGroupList } from "@/components/task";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { WhatameshGradient } from "@/components/whatamesh/gradient";
 import { RootState } from "@/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSelector } from "react-redux";
@@ -8,6 +9,7 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function ListView() {
   const { listId } = useParams()
+  const list = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
   const location = useLocation()
 
   const tasks = useSelector((state: RootState) => {
@@ -37,6 +39,7 @@ export function ListView() {
             </div>
           </ScrollArea>
         </motion.div>
+        <WhatameshGradient style={list?.style} />
       </AnimatePresence>
       <CreateTask />
     </div>
