@@ -105,7 +105,7 @@ export const ListItem = ({ value, disabled, onDragEnd }: ListItemProps) => {
       <ListItemContextMenu id={value.id}>
         <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled || isDragging })} draggable="false">
           <Button 
-            variant={isActive ? 'secondary' : 'ghost'} 
+            variant={isActive ? 'ghost-active' : 'ghost'}
             className={clsx(
               'flex w-full justify-start gap-2 backdrop-blur-sm', 
               { 

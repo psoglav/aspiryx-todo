@@ -175,7 +175,7 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     <>{
       ContextMenuWrapper(
         <Card 
-          className={clsx('flex cursor-pointer items-start p-2 text-left transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900', {
+          className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
             'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable
           })}
           onClick={onTaskClick}
@@ -249,10 +249,7 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
         {
           title ? (
             <Button 
-              className={clsx('hover:bg-foreground/5', {
-                'bg-foreground/10 hover:bg-foreground/15': !collapsed,  
-              })} 
-              variant={'ghost'} 
+              variant={collapsed ? 'ghost' : 'ghost-active'} 
               onClick={() => setCollapsed(!collapsed)}
             >
               <Icon

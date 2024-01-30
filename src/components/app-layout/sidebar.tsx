@@ -31,7 +31,7 @@ export default function Sidebar() {
               <span className=" font-bold">HUB</span>
             </Button>
           </a>
-          <Button variant='outline' size='icon' onClick={() => dispatch(setSettingsOpen(true))}>
+          <Button variant='ghost' size='icon' onClick={() => dispatch(setSettingsOpen(true))}>
             <Icon icon='material-symbols:settings' className='text-xl' />
           </Button>
         </div>
@@ -39,7 +39,7 @@ export default function Sidebar() {
         <Input placeholder="Search" icon='material-symbols:search' />
 
         <Link to='/'>
-          <Button variant={isToday ? 'secondary' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
+          <Button variant={isToday ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
               Tasks
           </Button>
         </Link>
