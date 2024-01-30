@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux'
+import { useContext } from 'react';
+import { useSelector } from 'react-redux'
 import { useParams, Link } from "react-router-dom";
 import { Icon } from "@iconify/react"
 
@@ -9,14 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
-import { setSettingsOpen } from "@/store/settings"
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SettingsContext } from '@/components/settings';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
   const { listId } = useParams()
   const isToday = !listId
-  const dispatch = useDispatch()
+  const { setOpen } = useContext(SettingsContext)
 
   return (
     <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4'>
@@ -31,7 +32,7 @@ export default function Sidebar() {
               <span className=" font-bold">HUB</span>
             </Button>
           </a>
-          <Button variant='ghost' size='icon' onClick={() => dispatch(setSettingsOpen(true))}>
+          <Button variant='ghost' size='icon' onClick={() => setOpen(true)}>
             <Icon icon='material-symbols:settings' className='text-xl' />
           </Button>
         </div>

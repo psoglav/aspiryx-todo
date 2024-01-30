@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Icon, type IconifyIcon } from "@iconify/react"
 import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { SettingsTabsContext } from "."
+import { SettingsContext } from "."
 
 export type SettingsNavigationGroupLabel = {
   type: 'group-label'
@@ -43,16 +43,8 @@ const navigationItems: SettingsNavigationItem[] = [
   },
 ]
 
-interface SettingsNavigationProps {
-  onTabChanged: (id: string | number) => void
-}
-
-export const SettingsNavigation = (props: SettingsNavigationProps) => {
-  const currentTabId = useContext(SettingsTabsContext)
-
-  function handleTabClick(id: string | number) {
-    props.onTabChanged(id)
-  }
+export const SettingsNavigation = () => {
+  const ctx = useContext(SettingsContext)
 
   function renderItem(item: SettingsNavigationItem, i: number) {
     if (item === null) return <Separator className="my-1" key={i} />
@@ -69,8 +61,8 @@ export const SettingsNavigation = (props: SettingsNavigationProps) => {
         <Button 
           className="justify-start space-x-2"
           key={i} 
-          onClick={() => handleTabClick(item.id)}
-          variant={currentTabId === item.id ? 'secondary' : 'ghost'}
+          onClick={() => ctx.setActiveTab(item.id)}
+          variant={ctx.activeTab === item.id ? 'secondary' : 'ghost'}
         >
           {item.icon && <Icon icon={item.icon} />}
           <span>{item.text}</span>

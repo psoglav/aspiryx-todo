@@ -1,23 +1,21 @@
+import { useContext } from "react";
 import { RouterProvider } from "react-router-dom";
 import { motion, AnimatePresence  } from "framer-motion"
 
 import { router } from '@/router'
 
 import Header from '@/components/app-layout/header'
-import { Settings } from '@/components/settings'
-import { useSelector } from "react-redux";
-import { RootState } from "./store";
+import { Settings, SettingsContext } from '@/components/settings'
 
 export default function Root() {
-  const isSettingsOpen = useSelector((state: RootState) => state.settings.open)
-
+  const settings = useContext(SettingsContext)
 
   return (
     <>
       <Header />
       <Settings />
       <AnimatePresence>
-        {!isSettingsOpen && (
+        {!settings.open && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

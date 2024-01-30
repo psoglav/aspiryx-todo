@@ -1,7 +1,6 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react"
+import { PropsWithChildren, useContext, useEffect } from "react"
 import { AnimatePresence, motion  } from "framer-motion"
 import { Icon } from "@iconify/react"
-import { useDispatch, useSelector } from "react-redux"
 import { Button } from "@/components/ui/button"
 import { 
   SettingsNavigation, 
@@ -9,9 +8,8 @@ import {
   SettingsAppearance, 
   SettingsGeneral 
 } from "@/components/settings"
-import { setSettingsOpen } from "@/store/settings"
-import { RootState } from "@/store"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { SettingsContext } from "./settings-provider"
 
 type SettingsTabProps = {
   id: string | number
@@ -19,9 +17,9 @@ type SettingsTabProps = {
 } & PropsWithChildren
 
 export const SettingsTab = ({ children, ...props }: SettingsTabProps) => {
-  const currentTabId = useContext(SettingsTabsContext)
+  const ctx = useContext(SettingsContext)
 
-  return currentTabId === props.id && (
+  return ctx.activeTab === props.id && (
     <motion.div
       className="w-full space-y-5 px-10 py-20"
       key={props.id}
@@ -36,32 +34,28 @@ export const SettingsTab = ({ children, ...props }: SettingsTabProps) => {
   )
 }
 
-export const SettingsTabsContext = createContext<string | number>(0)
-
 export const Settings = () => {
-  const [activeTab, setActiveTab] = useState<string | number>(0)
-  const isSettingsOpen = useSelector((state: RootState) => state.settings.open)
-  const dispatch = useDispatch()
+  const { setOpen, setActiveTab, open } = useContext(SettingsContext)
 
   function handleClose() {
-    dispatch(setSettingsOpen(false))
+    setOpen(false)
     setActiveTab(0)
   }
 
   function handleOpen() {
-    dispatch(setSettingsOpen(true))
+    setOpen(true)
   }
 
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') handleClose()
-      if (e.key === ',' && e.ctrlKey) handleOpen()
+      if ([',', 'б'].includes(e.key) && e.ctrlKey) handleOpen()
     })
   }, [])
 
   return (
     <AnimatePresence>
-      {isSettingsOpen && (
+      {open && (
         <motion.div 
           className="fixed inset-0 z-10 h-[100dvh] w-[100dvw] bg-background" 
           initial={{ opacity: 0, }}
@@ -78,17 +72,15 @@ export const Settings = () => {
           >
             <div className="container h-full">
               <div className="grid size-full grid-cols-[max-content_1fr_max-content] items-start">
-                <SettingsTabsContext.Provider value={activeTab}>
-                  <SettingsNavigation onTabChanged={setActiveTab} />
+                <SettingsNavigation />
 
-                  <ScrollArea className="h-[100dvh]">
-                    <AnimatePresence mode="wait">
-                      <SettingsGeneral key={0}  />
-                      <SettingsAccount key={1}  />
-                      <SettingsAppearance key={2}  />
-                    </AnimatePresence>
-                  </ScrollArea>
-                </SettingsTabsContext.Provider>
+                <ScrollArea className="h-[100dvh]">
+                  <AnimatePresence mode="wait">
+                    <SettingsGeneral key={0}  />
+                    <SettingsAccount key={1}  />
+                    <SettingsAppearance key={2}  />
+                  </AnimatePresence>
+                </ScrollArea>
 
                 <div className="px-5 py-20">
                   <Button onClick={handleClose} className="flex h-auto flex-col rounded-xl px-4 text-muted-foreground" variant='ghost'>
