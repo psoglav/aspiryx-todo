@@ -33,6 +33,16 @@
     --ring: 240 10% 3.9%;
 
     --radius: 0.5rem;
+
+    /* --gradient-color-1: #c3e4ff;
+    --gradient-color-2: #6ec3f4;
+    --gradient-color-3: #eae2ff;
+    --gradient-color-4: #b9beff; */
+
+    --gradient-color-1: #53DF83;
+    --gradient-color-2: #47D2E9;
+    --gradient-color-3: #3F3F3F;
+    --gradient-color-4: #EEEEEE;
   }
 
   .dark {

@@ -67,7 +67,7 @@ export function CreateTask() {
   }
 
   return (
-    <div className='h-max w-full border-t border-border p-4 pb-6 pt-3 md:px-6 lg:px-16'>
+    <div className='h-max w-full border-t border-border bg-background p-4 pb-6 pt-3 md:px-6 lg:px-16'>
       <div className="flex h-14 items-center rounded-lg border border-border bg-secondary transition-colors focus-within:!bg-background hover:bg-secondary/80">
         <div className="flex w-10 justify-center">
           {
@@ -175,7 +175,9 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     <>{
       ContextMenuWrapper(
         <Card 
-          className='flex cursor-pointer items-start p-2 text-left backdrop-blur-sm transition-all focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card hover:bg-muted/50'
+          className={clsx('flex cursor-pointer items-start p-2 text-left transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900', {
+            'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable
+          })}
           onClick={onTaskClick}
         >
           <div

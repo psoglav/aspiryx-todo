@@ -15,6 +15,7 @@ import { TaskGroupList, CreateTask, TaskDetailView } from '@/components/task'
 import { ListHeader } from "@/components/list";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { setEditedTaskId } from "@/store/main";
+import { WhatameshGradient } from "@/components/whatamesh/gradient";
 
 export default function Home() {
   const { listId } = useParams()
@@ -57,7 +58,7 @@ export default function Home() {
               defaultSize={20} 
               maxSize={40} 
               minSize={10} 
-              className="relative hidden min-w-max md:block" 
+              className="relative hidden min-w-max bg-background md:block" 
               order={1}
             >
               <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
@@ -68,7 +69,7 @@ export default function Home() {
         )}
 
         <ResizablePanel className="min-w-max" style={{overflow: 'none'}} order={2}>
-          <div className="grid h-[100dvh] grid-rows-[max-content_1fr_max-content]">
+          <div className="relative grid h-[100dvh] grid-rows-[max-content_1fr_max-content] bg-background/60">
             <ListHeader />
             <ScrollArea className="size-full">
               <div className="px-4 md:px-6 lg:px-16">
@@ -76,6 +77,7 @@ export default function Home() {
               </div>
             </ScrollArea>
             <CreateTask />
+            <WhatameshGradient />
           </div>
         </ResizablePanel>
 
@@ -87,7 +89,7 @@ export default function Home() {
               maxSize={40} 
               minSize={10} 
               order={3}
-              className="relative hidden min-w-max p-4 md:block"
+              className="relative hidden min-w-max bg-background p-4 md:block"
             >
               <div className="absolute left-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
               <TaskDetailView />
