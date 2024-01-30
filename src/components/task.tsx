@@ -197,15 +197,15 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
           >
             <div 
               className={clsx(
-                'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:bg-foreground/30 group-hover:ring-foreground group-active:ring-2', 
+                'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:ring-foreground group-active:ring-2', 
                 {
                   '!ring-foreground': value.completed
                 }
               )}
             >
               <div 
-                className={clsx('size-[10px] rounded-full transition-all', {
-                  'bg-foreground': value.completed
+                className={clsx('size-[10px] rounded-full transition-all group-hover:bg-foreground/30', {
+                  '!bg-foreground': value.completed
                 })}></div>
             </div>
           </div>
