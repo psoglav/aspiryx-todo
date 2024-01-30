@@ -3,6 +3,8 @@ import { createRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
+import useSound from 'use-sound';
+
 import { 
   DndContext, 
   DragEndEvent, 
@@ -43,6 +45,9 @@ import {
 } from '@/store/main'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { ContentEditable } from './content-editable';
+
+import completeSfx from '@/assets/audio/complete.wav'
+import revertSfx from '@/assets/audio/revert.wav'
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -102,9 +107,15 @@ type TaskItemProps = {
 export function TaskItem({ value, editable = false }: TaskItemProps) {
   const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
+  const [playCompleteSfx] = useSound(completeSfx);
+  const [playRevertSfx] = useSound(revertSfx);
 
   const onCheckButtonClick: MouseEventHandler = (e) => {
     e.stopPropagation()
+
+    if (!value.completed) playCompleteSfx()
+    else playRevertSfx()
+
     dispatch(updateTask({
       ...value,
       completed: !value.completed

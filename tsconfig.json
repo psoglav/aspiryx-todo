@@ -17,6 +17,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
+    "types": [
+      "./src/types/modules.d.ts",
+    ],
     "paths": {
       "@/*": [
         "./src/*"
