@@ -204,25 +204,27 @@ export const ListHeader = () => {
             <DropdownMenuItem>Import</DropdownMenuItem>
             <DropdownMenuItem>Export</DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
           {currentList?.id && (
-            <DropdownMenuGroup>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <span>Style</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuRadioGroup value={currentList.style} onValueChange={onStyleChange}>
-                      <DropdownMenuRadioItem value="">Default</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="aura">Aura</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="pearl">Pearl</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="swamp">Swamp</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-            </DropdownMenuGroup>
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <span>Style</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuRadioGroup value={currentList.style} onValueChange={onStyleChange}>
+                        <DropdownMenuRadioItem value="">Default</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="aura">Aura</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="pearl">Pearl</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="swamp">Swamp</DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
+            </>
           )}
           <DropdownMenuSeparator />
           <DropdownMenuItem className='!text-red-500 hover:!bg-destructive/20'>
