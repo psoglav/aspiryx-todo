@@ -41,14 +41,14 @@ export default function Sidebar() {
         <Input placeholder="Search" icon='material-symbols:search' />
 
         <div className='flex flex-col gap-2'>
-          <Link to='/'>
-            <Button variant={isRootPath ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isRootPath })}>
-              Tasks
-            </Button>
-          </Link>
           <Link to='/important'>
             <Button variant={isImportant ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isImportant })}>
               Important
+            </Button>
+          </Link>
+          <Link to='/'>
+            <Button variant={isRootPath ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isRootPath })}>
+              Tasks
             </Button>
           </Link>
         </div>
