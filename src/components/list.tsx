@@ -169,9 +169,9 @@ export const ListHeader = () => {
   }
 
   return (
-    <div className="flex justify-between p-4 pt-8 md:px-6 lg:px-16">
+    <div className="flex justify-between gap-2 p-4 pt-8 md:px-6 lg:px-16">
       <ContentEditable 
-        className='rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
+        className='w-max rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
         value={title}
         changeOnBlur
         onChange={onChange}
