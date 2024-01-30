@@ -246,11 +246,17 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
       <div className="space-y-2">
         {
           title ? (
-            <Button variant={collapsed ? 'ghost' : 'secondary'} onClick={() => setCollapsed(!collapsed)}>
+            <Button 
+              className={clsx('hover:bg-foreground/5', {
+                'bg-foreground/10 hover:bg-foreground/15': !collapsed,  
+              })} 
+              variant={'ghost'} 
+              onClick={() => setCollapsed(!collapsed)}
+            >
               <Icon
                 icon='material-symbols:keyboard-arrow-down-rounded' 
                 className={clsx('mr-1 rotate-0 text-lg transition-transform', {
-                  '!-rotate-90': collapsed
+                  '!-rotate-90': collapsed,
                 })} 
               />
               <span>{ title }</span>
