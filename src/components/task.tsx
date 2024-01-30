@@ -285,11 +285,10 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
 }
 
 interface TaskGroupListProps {
-  id?: string
+  tasks: Task[]
 }
 
-export function TaskGroupList({ id }: TaskGroupListProps) {
-  const tasks = useSelector((state: RootState) => state.main.tasks.filter(item => item.listId === id))
+export function TaskGroupList({ tasks }: TaskGroupListProps) {
   const [draggedItem, setDraggedItem] = useState<Task | null>(null)
   const dispatch = useDispatch()
 

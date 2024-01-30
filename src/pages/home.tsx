@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 
 import type { RootState } from "@/store";
 
@@ -17,7 +16,6 @@ import { ListView } from "@/views/ListView";
 import { TaskDetailView } from "@/views/TaskDetailView";
 
 export default function Home() {
-  const { listId } = useParams()
   const [renderLeftSidebar] = useState(true)
   const [renderRightSidebar, setRenderRightSidebar] = useState(false)
   const activeTaskId = useSelector((state: RootState) => state.main.activeTaskId)
@@ -67,7 +65,7 @@ export default function Home() {
         )}
 
         <ResizablePanel style={{overflow: 'none'}} order={2}>
-          <ListView id={listId} />
+          <ListView />
         </ResizablePanel>
 
         {renderRightSidebar && editSheetOpened && (

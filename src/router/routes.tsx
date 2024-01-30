@@ -6,10 +6,16 @@ export default [
     path: "/",
     element: <Home />,
     errorElement: <ErrorPage />,
-    children: [{
-      path: '/list/:listId',
-      element: <Home />,
-    }],
+    children: [
+      {
+        path: '/list/:listId',
+        element: <Home />,
+      },
+      {
+        path: '/important',
+        element: <Home />,
+      },
+    ],
   },
   {
     path: '/settings',

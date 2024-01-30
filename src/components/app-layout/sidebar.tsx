@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useContext } from 'react';
 import { useSelector } from 'react-redux'
-import { useParams, Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react"
 
 import type { RootState } from '@/store'
@@ -15,8 +15,9 @@ import { SettingsContext } from '@/components/settings';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
-  const { listId } = useParams()
-  const isToday = !listId
+  const location = useLocation()
+  const isRootPath = location.pathname === '/'
+  const isImportant = location.pathname === '/important'
   const { setOpen } = useContext(SettingsContext)
 
   return (
@@ -39,11 +40,18 @@ export default function Sidebar() {
 
         <Input placeholder="Search" icon='material-symbols:search' />
 
-        <Link to='/'>
-          <Button variant={isToday ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isToday })}>
+        <div className='flex flex-col gap-2'>
+          <Link to='/'>
+            <Button variant={isRootPath ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isRootPath })}>
               Tasks
-          </Button>
-        </Link>
+            </Button>
+          </Link>
+          <Link to='/important'>
+            <Button variant={isImportant ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isImportant })}>
+              Important
+            </Button>
+          </Link>
+        </div>
 
         <Separator />
       </div>
