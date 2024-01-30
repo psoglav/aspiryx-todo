@@ -30,7 +30,7 @@ export function ListView() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.1 }}
           exit={{ scale: 0.99, opacity: 0 }} 
-          className="relative"
+          className="relative min-h-0"
           key={location.pathname}
         >
           <ScrollArea className="size-full">
