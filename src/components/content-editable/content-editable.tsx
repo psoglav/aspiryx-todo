@@ -106,7 +106,7 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
       suppressContentEditableWarning
       contentEditable={isEditing ? 'plaintext-only' : 'false'}
       spellCheck="false"
-      tabIndex={0}
+      tabIndex={disabled ? undefined : 0}
       dangerouslySetInnerHTML={{__html: value}}
       {...props}
       onKeyDown={onKeyDown}
