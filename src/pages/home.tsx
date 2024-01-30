@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import type { RootState } from "@/store";
 
@@ -10,17 +11,16 @@ import {
 } from "@/components/ui/resizable"
 import Sidebar from '@/components/app-layout/sidebar'
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { setEditedTaskId } from "@/store/main";
+import { setActiveTask } from "@/store/main";
 import { WhatameshGradient } from "@/components/whatamesh/gradient";
-import { TaskDetailView } from "@/components/task";
-import { useParams } from "react-router-dom";
 import { ListView } from "@/views/ListView";
+import { TaskDetailView } from "@/views/TaskDetailView";
 
 export default function Home() {
   const { listId } = useParams()
   const [renderLeftSidebar] = useState(true)
   const [renderRightSidebar, setRenderRightSidebar] = useState(false)
-  const editedTaskId = useSelector((state: RootState) => state.main.editedTaskId)
+  const activeTaskId = useSelector((state: RootState) => state.main.activeTaskId)
 
   useEffect(() => {
     setRenderRightSidebar(window.innerWidth > 800)
@@ -31,15 +31,15 @@ export default function Home() {
   }, [])
 
   useLayoutEffect(() => {
-    setRenderRightSidebar(Boolean(editedTaskId))
-  }, [editedTaskId])
+    setRenderRightSidebar(Boolean(activeTaskId))
+  }, [activeTaskId])
 
   const dispatch = useDispatch()
   const editSheetOpened = useSelector((state: RootState) => state.main.editSheetOpened)
 
   const onOpenChange = (open: boolean) => {
     if(!open) {
-      dispatch(setEditedTaskId(null))
+      dispatch(setActiveTask(null))
     }
   }
 
@@ -78,7 +78,7 @@ export default function Home() {
               maxSize={40} 
               minSize={10} 
               order={3}
-              className="relative hidden min-w-max bg-background/80 p-4 md:block"
+              className="relative hidden min-w-max bg-background/80 md:block"
             >
               <div className="absolute left-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
               <TaskDetailView />

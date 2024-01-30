@@ -37,7 +37,7 @@ import { Card } from '@/components/ui/card'
 import { 
   updateTask, 
   deleteTaskById, 
-  setEditedTaskId, 
+  setActiveTask, 
   createTask, 
   setTasks 
 } from '@/store/main'
@@ -129,7 +129,7 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     if (editable) {
       focusInput()
     } else {
-      dispatch(setEditedTaskId(value.id))
+      dispatch(setActiveTask(value.id))
     }
   }
 
@@ -154,7 +154,7 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
   const ContextMenuWrapper = (trigger: ReactNode): ReactNode => {
     return (
       <ContextMenu>
-        <ContextMenuTrigger>{trigger}</ContextMenuTrigger>
+        <ContextMenuTrigger className='grow'>{trigger}</ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuItem>
             Select
@@ -361,17 +361,5 @@ export function TaskGroupList({ id }: TaskGroupListProps) {
         {draggedItem && <TaskItem value={draggedItem} key={draggedItem.id} />}
       </DragOverlay>
     </DndContext>
-  )
-}
-
-export function TaskDetailView() {
-  const tasks = useSelector((state: RootState) => state.main.tasks)
-  const taskId = useSelector((state: RootState) => state.main.editedTaskId)
-  const task = tasks.find(item => item.id === taskId)
-
-  return (
-    <div className='min-w-60 py-4'>
-      {task ? <TaskItem value={task} editable /> : null}
-    </div>
   )
 }

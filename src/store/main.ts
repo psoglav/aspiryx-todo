@@ -8,14 +8,14 @@ import { saveItem, loadItem } from '@/helpers/localStorage'
 export interface MainState {
   lists: List[]
   tasks: Task[]
-  editedTaskId: string | null
+  activeTaskId: string | null
   editSheetOpened: boolean
 }
 
 const initialState: MainState = {
   lists: loadItem('lists') || [],
   tasks: loadItem('tasks') || [],
-  editedTaskId: null,
+  activeTaskId: null,
   editSheetOpened: false,
 }
 
@@ -32,8 +32,8 @@ export const mainSlice = createSlice({
       })
       saveItem('tasks', state.tasks)
     },
-    setEditedTaskId(state, action: PayloadAction<string | null>) {
-      state.editedTaskId = action.payload
+    setActiveTask(state, action: PayloadAction<string | null>) {
+      state.activeTaskId = action.payload
       state.editSheetOpened = Boolean(action.payload)
     },
     deleteTaskById: (state, action: PayloadAction<string>) => {
@@ -84,7 +84,7 @@ export const {
   createTask,
   deleteTaskById,
   updateTask,
-  setEditedTaskId,
+  setActiveTask,
   createList,
   deleteListById,
   setTasks,
