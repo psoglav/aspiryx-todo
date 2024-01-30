@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { createRef, useState } from 'react'
+import { createRef, useContext, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
@@ -48,6 +48,7 @@ import { ContentEditable } from './content-editable';
 
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
+import { SettingsContext } from './settings';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -107,14 +108,17 @@ type TaskItemProps = {
 export function TaskItem({ value, editable = false }: TaskItemProps) {
   const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
+  const { enableSoundEffects } = useContext(SettingsContext)
   const [playCompleteSfx] = useSound(completeSfx);
   const [playRevertSfx] = useSound(revertSfx);
 
   const onCheckButtonClick: MouseEventHandler = (e) => {
     e.stopPropagation()
 
-    if (!value.completed) playCompleteSfx()
-    else playRevertSfx()
+    if (enableSoundEffects) {
+      if (!value.completed) playCompleteSfx()
+      else playRevertSfx()
+    }
 
     dispatch(updateTask({
       ...value,
