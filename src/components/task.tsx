@@ -215,19 +215,21 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
             />
           </div>
 
-          <Button 
-            className='size-10' 
-            variant='ghost' 
-            size='icon' 
-            onClick={onFavoriteToggled}
-          >
-            <Icon 
-              icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
-              className={clsx('text-xl text-muted-foreground', { 
-                'text-yellow-400': value.isImportant 
-              })} 
-            />
-          </Button>
+          {!editable && (
+            <Button 
+              className='size-10' 
+              variant='ghost' 
+              size='icon' 
+              onClick={onFavoriteToggled}
+            >
+              <Icon 
+                icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
+                className={clsx('text-xl text-muted-foreground', { 
+                  'text-yellow-400': value.isImportant 
+                })} 
+              />
+            </Button>
+          )}
         </Card>
       )
     }</>
