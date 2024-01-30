@@ -6,12 +6,20 @@ export const BgStyles: Record<ListStyle, string[] | Partial<Record<Theme, string
     dark: ['#000000', '#111111', '#4800ff', '#000000'],
     light: ['#ffffff', '#eeeeee', '#4800ff', '#ffffff'],
   },
-  pearl: [
-    '#c3e4ff',
-    '#6ec3f4',
-    '#eae2ff',
-    '#b9beff',
-  ],
+  pearl: {
+    dark: [
+      '#000000',
+      '#111111',
+      '#4800ff',
+      '#47F2E9'
+    ],
+    light: [
+      '#c3e4ff',
+      '#6ec3f4',
+      '#eae2ff',
+      '#b9beff',
+    ],
+  },
   swamp: {
     dark: [
       '#53DF83',
