@@ -22,6 +22,6 @@ export function WhatameshGradient({ style = 'blue' }: Props) {
   }, [style])
 
   return (
-    <canvas id="gradient-canvas" ref={ref} className="absolute inset-0 z-[-1] size-full blur-xl" data-transition-in />
+    <canvas id="gradient-canvas" ref={ref} className="absolute inset-1/2 z-[-1] size-[120%] -translate-x-1/2 -translate-y-1/2 blur-xl" data-transition-in />
   )
 }
