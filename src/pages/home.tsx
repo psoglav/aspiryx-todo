@@ -39,7 +39,6 @@ export default function Home() {
   const editSheetOpened = useSelector((state: RootState) => state.main.editSheetOpened)
 
   const onOpenChange = (open: boolean) => {
-    console.log(open)
     if(!open) {
       dispatch(setEditedTaskId(null))
     }
@@ -77,7 +76,6 @@ export default function Home() {
               </div>
             </ScrollArea>
             <CreateTask />
-            <WhatameshGradient style="aura" />
           </div>
         </ResizablePanel>
 
@@ -96,6 +94,8 @@ export default function Home() {
             </ResizablePanel>
           </>
         )}
+
+        <WhatameshGradient style="aura" />
       </ResizablePanelGroup>
     
       {!renderRightSidebar && (
