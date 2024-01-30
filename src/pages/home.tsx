@@ -58,7 +58,7 @@ export default function Home() {
               defaultSize={20} 
               maxSize={40} 
               minSize={10} 
-              className="relative hidden min-w-max bg-background md:block" 
+              className="relative hidden min-w-max bg-background/80 md:block" 
               order={1}
             >
               <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
@@ -77,7 +77,7 @@ export default function Home() {
               </div>
             </ScrollArea>
             <CreateTask />
-            <WhatameshGradient />
+            <WhatameshGradient style="aura" />
           </div>
         </ResizablePanel>
 
@@ -89,7 +89,7 @@ export default function Home() {
               maxSize={40} 
               minSize={10} 
               order={3}
-              className="relative hidden min-w-max bg-background p-4 md:block"
+              className="relative hidden min-w-max bg-background/80 p-4 md:block"
             >
               <div className="absolute left-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
               <TaskDetailView />
