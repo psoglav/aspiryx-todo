@@ -243,6 +243,8 @@ interface TaskGroupProps {
 export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
   const [collapsed, setCollapsed] = useState(items.length ? defaultCollapsed : true)
 
+  if (items.length === 0) return null
+
   return (
     <>
       <div className="space-y-2">
