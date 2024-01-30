@@ -13,11 +13,22 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { setActiveTask } from "@/store/main";
 import { ListView } from "@/views/ListView";
 import { TaskDetailView } from "@/views/TaskDetailView";
+import { useSearchParams } from "react-router-dom";
+import { mockDemoData } from "@/mock/demo";
+import { saveItem } from "@/helpers/localStorage";
 
 export default function Home() {
   const [renderLeftSidebar] = useState(true)
   const [renderRightSidebar, setRenderRightSidebar] = useState(false)
   const activeTaskId = useSelector((state: RootState) => state.main.activeTaskId)
+  const [searchParams] = useSearchParams();
+
+  if (searchParams.get('demo')) {
+    saveItem('tasks', mockDemoData.tasks)
+    saveItem('lists', mockDemoData.lists)
+    saveItem('app:sfx', 'true')
+    window.location.href = '/'
+  }
 
   useEffect(() => {
     setRenderRightSidebar(window.innerWidth > 800)
