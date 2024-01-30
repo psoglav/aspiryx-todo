@@ -9,7 +9,7 @@ import { useLocation, useParams } from "react-router-dom";
 export function ListView() {
   const { listId } = useParams()
   const location = useLocation()
-  
+
   const tasks = useSelector((state: RootState) => {
     if (location.pathname === '/') return state.main.tasks.filter(item => !item.listId)
     if (location.pathname === '/important') return state.main.tasks.filter(item => item.isImportant)
@@ -29,7 +29,7 @@ export function ListView() {
           transition={{ duration: 0.1 }}
           exit={{ scale: 0.99, opacity: 0 }} 
           className="relative"
-          key={listId}
+          key={location.pathname}
         >
           <ScrollArea className="size-full">
             <div className="px-4 md:px-6 lg:px-16">
