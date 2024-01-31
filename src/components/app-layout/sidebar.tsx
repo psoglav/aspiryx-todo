@@ -7,7 +7,6 @@ import { Icon } from "@iconify/react"
 import type { RootState } from '@/store'
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area';
