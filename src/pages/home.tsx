@@ -61,7 +61,7 @@ export default function Home() {
         {renderLeftSidebar && (
           <>
             <ResizablePanel 
-              defaultSize={20} 
+              defaultSize={10} 
               maxSize={40} 
               minSize={10} 
               className="relative hidden min-w-max bg-background/80 md:block" 
