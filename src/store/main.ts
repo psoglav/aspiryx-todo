@@ -53,7 +53,7 @@ export const mainSlice = createSlice({
       saveItem('tasks', state.tasks)
     },
     createList: (state, action: PayloadAction<Pick<List, 'name'>>) => {
-      state.lists.push({
+      state.lists.unshift({
         ...action.payload,
         id: nanoid(),
       })
