@@ -187,8 +187,8 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
   }
 
   return (
-    <>{
-      ContextMenuWrapper(
+    <motion.div layout exit={{ opacity: 0 }}>
+      {ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
             'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable
@@ -246,8 +246,8 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
             </Button>
           )}
         </Card>
-      )
-    }</>
+      )}
+    </motion.div>
   )
 }
 
