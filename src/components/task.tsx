@@ -49,6 +49,7 @@ import { ContentEditable } from './content-editable';
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
 import { SettingsContext } from './settings';
+import { motion } from 'framer-motion';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
