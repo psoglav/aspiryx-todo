@@ -28,8 +28,8 @@ export const SettingsContext = createContext(initialState)
 export function SettingsProvider({children}: PropsWithChildren) {
   const [open, setOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<string | number>(0)
-  const [enableSoundEffects, setEnableSoundEffects] = useState(loadItem('app:sfx') || false)
-  const [enableFancyNoise, setEnableFancyNoise] = useState(loadItem('app:noise') || false)
+  const [enableSoundEffects, setEnableSoundEffects] = useState(loadItem('app:sfx') || true)
+  const [enableFancyNoise, setEnableFancyNoise] = useState(loadItem('app:noise') || true)
 
   const value = {
     open,
