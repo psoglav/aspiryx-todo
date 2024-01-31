@@ -15,8 +15,8 @@ export function SettingsGeneral() {
         <h3 className="text-lg font-medium">Audio</h3>
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
-            <Switch id="airplane-mode" checked={enableSoundEffects} onCheckedChange={setEnableSoundEffects} />
-            <Label htmlFor="airplane-mode">Sound effects</Label>
+            <Switch id="sound-effects" checked={enableSoundEffects} onCheckedChange={setEnableSoundEffects} />
+            <Label htmlFor="sound-effects">Sound effects</Label>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ export default function Root() {
           </motion.div>
         )}
       </AnimatePresence>
+      {settings.enableFancyNoise && <div id="bg-noise"></div>}
     </>
   )
 }

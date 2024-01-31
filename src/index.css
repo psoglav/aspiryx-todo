@@ -103,3 +103,16 @@
     user-select: none;
   }
 }
+
+#bg-noise {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+  mix-blend-mode: lighten;
+  background-image: url('/noise.png');
+  background-repeat: repeat;
+  opacity: 0.04;
+  width: 100vw;
+  height: 100vh;
+  inset: 0;
+}
