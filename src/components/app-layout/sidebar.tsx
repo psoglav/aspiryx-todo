@@ -38,8 +38,6 @@ export default function Sidebar() {
           </Button>
         </div>
 
-        <Input placeholder="Search" icon='material-symbols:search' />
-
         <div className='flex flex-col gap-2'>
           <Link to='/important'>
             <Button variant={isImportant ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isImportant })}>
