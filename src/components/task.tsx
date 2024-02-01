@@ -49,6 +49,7 @@ import { ContentEditable } from './content-editable';
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
 import { SettingsContext } from './settings';
+import { motion } from 'framer-motion';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -187,8 +188,8 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
   }
 
   return (
-    <>{
-      ContextMenuWrapper(
+    <motion.div layout exit={{ opacity: 0 }}>
+      {ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
             'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable
@@ -246,8 +247,8 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
             </Button>
           )}
         </Card>
-      )
-    }</>
+      )}
+    </motion.div>
   )
 }
 
@@ -371,8 +372,8 @@ export function TaskGroupList({ tasks }: TaskGroupListProps) {
         />
       </div>
       <DragOverlay dropAnimation={{
-        duration: 500,
-        easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+        duration: 600,
+        easing: 'ease',
       }}>
         {draggedItem && <TaskItem value={draggedItem} key={draggedItem.id} />}
       </DragOverlay>
