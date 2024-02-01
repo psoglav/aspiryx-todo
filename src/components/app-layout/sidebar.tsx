@@ -20,7 +20,7 @@ export default function Sidebar() {
   const { setOpen } = useContext(SettingsContext)
 
   return (
-    <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4'>
+    <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4 pr-1'>
       <div className='flex flex-col gap-4'>
         <div className="flex gap-2">
           <a href="https://aspiryx.space" className='grow'>
@@ -54,7 +54,7 @@ export default function Sidebar() {
       </div>
 
       <ScrollArea>
-        <div className='h-full space-y-4'>
+        <div className='relative h-full space-y-4 pr-3'>
           <CreateList />
           <ListGroup items={lists} />
         </div>

@@ -53,14 +53,16 @@ export const CreateList = () => {
   }
 
   return (
-    <Input
-      icon='material-symbols:add'
-      placeholder="New List"
-      autoFocus
-      value={input}
-      onKeyDown={handleInputKeyDown}
-      onChange={handleInputChange}  
-    />
+    <div className="sticky top-2 z-10">
+      <Input
+        icon='material-symbols:add'
+        placeholder="New List"
+        autoFocus
+        value={input}
+        onKeyDown={handleInputKeyDown}
+        onChange={handleInputChange}  
+      />
+    </div>
   )
 }
 
