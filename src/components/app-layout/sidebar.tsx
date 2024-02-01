@@ -11,6 +11,7 @@ import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SettingsContext } from '@/components/settings';
+import { PoweredBy } from '@/components/powered-by';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
@@ -61,13 +62,7 @@ export default function Sidebar() {
       </ScrollArea>
 
       <div className="space-y-2">
-        <div className='flex justify-center gap-2 py-3 text-center text-xs text-muted-foreground'>
-          <div>powered by</div> 
-          <a className='flex gap-1 hover:underline' href='https://aspiryx.space' target='_blank'>
-            <img src='https://aspiryx.space/logo.svg' className='size-4' />
-            <span>ASPIRYX</span>
-          </a>
-        </div>
+        <PoweredBy />
       </div>
     </div>
   )
