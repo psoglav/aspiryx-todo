@@ -31,7 +31,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from "@/components/ui/button"
 import { List } from "@/types";
-import { Reorder, useDragControls, useMotionValue } from "framer-motion";
+import { Reorder, motion, useDragControls, useMotionValue } from "framer-motion";
 import { ContentEditable } from "./content-editable";
 
 export const CreateList = () => {
@@ -185,7 +185,7 @@ export const ListHeader = () => {
   }
 
   return (
-    <div className="flex justify-between gap-2 p-4 pt-8 md:px-6 lg:px-16">
+    <div className="flex items-center justify-between gap-4 p-4 pt-8 md:px-6 lg:px-16">
       <ContentEditable 
         className='w-max rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
         value={title}
@@ -193,45 +193,53 @@ export const ListHeader = () => {
         onChange={onChange}
       />
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size='icon' variant='ghost'>
-            <Icon icon='radix-icons:dots-vertical' className="text-xl" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuGroup>
-            <DropdownMenuItem>Import</DropdownMenuItem>
-            <DropdownMenuItem>Export</DropdownMenuItem>
-          </DropdownMenuGroup>
-          {currentList?.id && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    <span>Style</span>
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuRadioGroup value={currentList.style} onValueChange={onStyleChange}>
-                        <DropdownMenuRadioItem value="">Default</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="aura">Aura</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="pearl">Pearl</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="swamp">Swamp</DropdownMenuRadioItem>
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-            </>
-          )}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className='!text-red-500 hover:!bg-destructive/20'>
+      <div className="flex grow justify-center">
+        <motion.div layout className="max-w-[480px] grow">
+          <Input icon="material-symbols:search-rounded" placeholder="Search (Ctrl + K)" />
+        </motion.div>
+      </div>
+
+      <div className="flex justify-end lg:max-w-48 lg:grow">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size='icon' variant='ghost'>
+              <Icon icon='radix-icons:dots-vertical' className="text-xl" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>Import</DropdownMenuItem>
+              <DropdownMenuItem>Export</DropdownMenuItem>
+            </DropdownMenuGroup>
+            {currentList?.id && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                      <span>Style</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuRadioGroup value={currentList.style} onValueChange={onStyleChange}>
+                          <DropdownMenuRadioItem value="">Default</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="aura">Aura</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="pearl">Pearl</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="swamp">Swamp</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                </DropdownMenuGroup>
+              </>
+            )}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className='!text-red-500 hover:!bg-destructive/20'>
            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   )
 }
