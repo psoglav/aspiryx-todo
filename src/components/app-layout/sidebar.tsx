@@ -22,7 +22,7 @@ export default function Sidebar() {
 
   return (
     <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-2 p-4 pr-1'>
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4 pr-3'>
         <div className="flex gap-2">
           <a href="https://aspiryx.space" className='grow'>
             <Button
@@ -60,7 +60,7 @@ export default function Sidebar() {
         </div>
       </ScrollArea>
 
-      <div className="space-y-2">
+      <div className="space-y-2 pr-3">
         <PoweredBy />
       </div>
     </div>
