@@ -54,14 +54,13 @@ export default function Sidebar() {
       </div>
 
       <ScrollArea>
-        <div className='h-full space-y-2'>
+        <div className='h-full space-y-4'>
+          <CreateList />
           <ListGroup items={lists} />
         </div>
       </ScrollArea>
 
       <div className="space-y-2">
-        <CreateList />
-
         <div className='flex justify-center gap-2 py-3 text-center text-xs text-muted-foreground'>
           <div>powered by</div> 
           <a className='flex gap-1 hover:underline' href='https://aspiryx.space' target='_blank'>
