@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { createRef, useContext, useState } from 'react'
+import { createRef, useContext, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
@@ -41,7 +41,8 @@ import {
   deleteTaskById, 
   setActiveTask, 
   createTask, 
-  setTasks 
+  setTasks, 
+  deleteManyTasksById
 } from '@/store/main'
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ContentEditable } from './content-editable';
@@ -49,6 +50,7 @@ import { ContentEditable } from './content-editable';
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
 import { SettingsContext } from './settings';
+import { SelectionProvider, useSelection } from './selection-context';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -112,6 +114,8 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
   const [playCompleteSfx] = useSound(completeSfx);
   const [playRevertSfx] = useSound(revertSfx);
 
+  const selection = useSelection()
+
   const onCheckButtonClick: MouseEventHandler = (e) => {
     e.stopPropagation()
 
@@ -166,18 +170,34 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     }))
   }
 
+  const onDelete = () => {
+    if (selection.selected.length) {
+      dispatch(deleteManyTasksById(selection.selected))
+      selection.clear()
+    } else {
+      dispatch(deleteTaskById(value.id))
+    }
+  }
+
+
   const ContextMenuWrapper = (trigger: ReactNode): ReactNode => {
     return (
       <ContextMenu>
         <ContextMenuTrigger className='grow'>{trigger}</ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem>
+          {!selection.selected.includes(value.id) ? (
+            <ContextMenuItem onClick={() => selection.select(value.id)}>
             Select
-          </ContextMenuItem>
+            </ContextMenuItem>
+          ) : (
+            <ContextMenuItem onClick={() => selection.deselect(value.id)}>
+            Deselect
+            </ContextMenuItem>
+          )}
           <ContextMenuSeparator />
           <ContextMenuItem 
             className='!text-red-500 hover:!bg-destructive/20'
-            onClick={() => dispatch(deleteTaskById(value.id))}
+            onClick={onDelete}
           >
             Delete
           </ContextMenuItem>
@@ -191,7 +211,8 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
       ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
-            'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable
+            'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
+            '!bg-zinc-300/50 dark:!bg-zinc-700/50': selection.selected.includes(value.id)
           })}
           onClick={onTaskClick}
         >
@@ -363,12 +384,14 @@ export function TaskGroupList({ tasks }: TaskGroupListProps) {
       onDragEnd={onDragEnd}
     >
       <div className="flex flex-col gap-4 py-4">
-        <TaskGroup items={uncompletedTasks} />
-        <TaskGroup 
-          items={completedTasks} 
-          title='Completed' 
-          defaultCollapsed={Boolean(uncompletedTasks.length)}
-        />
+        <SelectionProvider>
+          <TaskGroup items={uncompletedTasks} />
+          <TaskGroup 
+            items={completedTasks} 
+            title='Completed' 
+            defaultCollapsed={Boolean(uncompletedTasks.length)}
+          />
+        </SelectionProvider>
       </div>
       <DragOverlay dropAnimation={{
         duration: 500,
