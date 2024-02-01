@@ -43,7 +43,7 @@ import {
   createTask, 
   setTasks 
 } from '@/store/main'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ContentEditable } from './content-editable';
 
 import completeSfx from '@/assets/audio/complete.wav'
@@ -314,16 +314,16 @@ export function TaskGroupList({ tasks }: TaskGroupListProps) {
   const completedTasks = tasks.filter(item => item.completed)
   const uncompletedTasks = tasks.filter(item => !item.completed)
 
-  const modifiers = [restrictToVerticalAxis]
+  const modifiers = [restrictToParentElement]
   const sensors = [
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 10,
+        distance: 1,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
+        delay: 150,
         tolerance: 5,
       },
     }),
