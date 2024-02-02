@@ -258,8 +258,13 @@ export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   }
 
   return (
-    <motion.div layout exit={{ opacity: 0 }} whileTap={{scale: !selection.selected.length ? 1 : 0.98}} transition={{type: 'spring', duration: 0.15}}>{
-      ContextMenuWrapper(
+    <motion.div 
+      layout 
+      exit={{ opacity: 0 }} 
+      whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
+      transition={{ scale: { type: 'spring', duration: 0.15 } }}
+    >
+      {ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
             'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
