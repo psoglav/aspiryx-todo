@@ -197,11 +197,11 @@ export const ListHeader = () => {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size='icon' variant='ghost'>
+          <Button size='icon' variant='ghost' className="data-[state=open]:bg-foreground/5">
             <Icon icon='radix-icons:dots-vertical' className="text-xl" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent side="left" align="start">
           <DropdownMenuGroup>
             <DropdownMenuItem>Import</DropdownMenuItem>
             <DropdownMenuItem>Export</DropdownMenuItem>
