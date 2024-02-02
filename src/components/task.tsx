@@ -1,25 +1,9 @@
 import clsx from 'clsx';
-import React, { createRef, useContext, useRef, useState } from 'react'
+import React, { createRef, useContext, useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
 import useSound from 'use-sound';
-
-import { 
-  DndContext, 
-  DragEndEvent, 
-  DragOverlay, 
-  DragStartEvent, 
-  KeyboardSensor, 
-  MouseSensor, 
-  TouchSensor, 
-  useSensor 
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
 
 import type { KeyboardEvent, ChangeEvent, ReactNode, MouseEventHandler, FormEventHandler } from 'react'
 import type { RootState } from "@/store"
@@ -32,7 +16,6 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
-import { Sortable } from '@/components/dnd';
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
@@ -44,14 +27,13 @@ import {
   setTasks, 
   deleteManyTasksById
 } from '@/store/main'
-import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ContentEditable } from './content-editable';
 
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
 import { SettingsContext } from './settings';
 import { SelectionProvider, useSelection } from '@/components/selection-context';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, Reorder, motion } from 'framer-motion';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -137,9 +119,10 @@ type TaskItemProps = {
   value: Task
   tasks?: Task[]
   editable?: boolean
+  isDragging?: boolean
 }
 
-export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
+export function TaskItem({ value, tasks, editable = false, isDragging }: TaskItemProps) {
   const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
   const { enableSoundEffects } = useContext(SettingsContext)
@@ -194,6 +177,8 @@ export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   }
 
   const onTaskClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (isDragging) return
+      
     if (selection.selected.length) {
       onSelect(e)
     } else if (editable) {
@@ -258,11 +243,10 @@ export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   }
 
   return (
-    <motion.div 
-      layout 
+    <motion.div
       exit={{ opacity: 0 }} 
       whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
-      transition={{ scale: { type: 'spring', duration: 0.15 } }}
+      transition={{ scale: { type: 'spring', duration: 0.15 }, duration: 0.2 }}
     >
       {ContextMenuWrapper(
         <Card 
@@ -336,45 +320,57 @@ interface TaskGroupProps {
 
 export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
   const [collapsed, setCollapsed] = useState(items.length ? defaultCollapsed : true)
+  const [draggedItem, setDraggedItem] = useState<Task | null>(null)
+  const dispatch = useDispatch()
+  const allTasks = useSelector((state: RootState) => state.main.tasks)
+  const [groupTasks, setGroupTasks] = useState<Task[]>(items)
+
+  useEffect(() => {
+    setGroupTasks(items)
+  }, [items])
 
   if (items.length === 0) return null
 
-  return (
-    <>
-      <div className="space-y-2">
-        {
-          title ? (
-            <Button 
-              variant={collapsed ? 'ghost' : 'ghost-active'} 
-              onClick={() => setCollapsed(!collapsed)}
-            >
-              <Icon
-                icon='material-symbols:keyboard-arrow-down-rounded' 
-                className={clsx('mr-1 rotate-0 text-lg transition-transform', {
-                  '!-rotate-90': collapsed,
-                })} 
-              />
-              <span>{ title }</span>
-              {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
-            </Button>
-          ) : null
-        }
+  function onDragEnd() {
+    const fullList = allTasks.filter(({id}) => !groupTasks.find((el) => el.id === id))
+    dispatch(setTasks([...fullList, ...groupTasks]))
+  }
 
-        <SortableContext 
-          items={items}
-          strategy={verticalListSortingStrategy}
-        >
-          {
-            (!collapsed || !title) && items
-              .map(item => (
-                <Sortable key={item.id} id={item.id}>
-                  <TaskItem value={item} tasks={items} />
-                </Sortable>
-              ))
-          }
-        </SortableContext>
-      </div>
-    </>
+  return (
+    <div className="space-y-2">
+      {
+        title ? (
+          <Button 
+            variant={collapsed ? 'ghost' : 'ghost-active'} 
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <Icon
+              icon='material-symbols:keyboard-arrow-down-rounded' 
+              className={clsx('mr-1 rotate-0 text-lg transition-transform', {
+                '!-rotate-90': collapsed,
+              })} 
+            />
+            <span>{ title }</span>
+            {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
+          </Button>
+        ) : null
+      }
+      <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
+        <div className="space-y-2">
+          {(!collapsed || !title) && groupTasks
+            .map(item => (
+              <Reorder.Item 
+                key={item.id} 
+                value={item} 
+                onDragStart={() => setDraggedItem(item)} 
+                onDragEnd={onDragEnd}
+              >
+                <TaskItem value={item} tasks={items} isDragging={draggedItem?.id === item.id} />
+              </Reorder.Item>
+            ))}
+        </div>
+      </Reorder.Group>
+    </div>
   )
 }
 
@@ -383,79 +379,19 @@ interface TaskGroupListProps {
 }
 
 export function TaskGroupList({ tasks }: TaskGroupListProps) {
-  const [draggedItem, setDraggedItem] = useState<Task | null>(null)
-  const dispatch = useDispatch()
-
-  const allTasks = useSelector((state: RootState) => state.main.tasks)
-
   const completedTasks = tasks.filter(item => item.completed)
   const uncompletedTasks = tasks.filter(item => !item.completed)
 
-  const modifiers = [restrictToParentElement]
-  const sensors = [
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 1,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 150,
-        tolerance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor)
-  ]
-
-  function onDragStart(event: DragStartEvent) {
-    console.log(event)
-    const task = tasks.find(item => item.id === event.active?.id)
-    if (task) setDraggedItem(task)
-  }
-
-  function onDragCancel() {
-    setDraggedItem(null)
-  }
-
-  function onDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-
-    setDraggedItem(null)
-
-    if (over && active.id !== over.id) {
-      const oldIndex = allTasks.findIndex(item => item.id === active.id);
-      const newIndex = allTasks.findIndex(item => item.id === over.id);
-        
-      const arr = arrayMove(allTasks, oldIndex, newIndex);
-
-      dispatch(setTasks(arr))
-    }
-  }
-  
   return (
-    <DndContext 
-      modifiers={modifiers} 
-      sensors={sensors}
-      onDragStart={onDragStart}
-      onDragCancel={onDragCancel}
-      onDragEnd={onDragEnd}
-    >
-      <div className="flex flex-col gap-4 py-4">
-        <SelectionProvider>
-          <TaskGroup items={uncompletedTasks} />
-          <TaskGroup 
-            items={completedTasks} 
-            title='Completed' 
-            defaultCollapsed={Boolean(uncompletedTasks.length)}
-          />
-        </SelectionProvider>
-      </div>
-      <DragOverlay dropAnimation={{
-        duration: 600,
-        easing: 'ease',
-      }}>
-        {draggedItem && <TaskItem value={draggedItem} key={draggedItem.id} />}
-      </DragOverlay>
-    </DndContext>
+    <div className="flex flex-col gap-4 py-4">
+      <SelectionProvider>
+        <TaskGroup items={uncompletedTasks} />
+        <TaskGroup 
+          items={completedTasks} 
+          title='Completed' 
+          defaultCollapsed={Boolean(uncompletedTasks.length)}
+        />
+      </SelectionProvider>
+    </div>
   )
 }
