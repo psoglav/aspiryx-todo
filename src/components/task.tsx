@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { createRef, useContext, useState } from 'react'
+import React, { createRef, useContext, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
@@ -104,10 +104,11 @@ export function CreateTask() {
 
 type TaskItemProps = {
   value: Task
+  tasks?: Task[]
   editable?: boolean
 }
 
-export function TaskItem({ value, editable = false }: TaskItemProps) {
+export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
   const { enableSoundEffects } = useContext(SettingsContext)
@@ -144,8 +145,27 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     })
   }
 
-  const onTaskClick = () => {
-    if (editable) {
+  const onSelect: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (e.shiftKey && selection.lastSelected && tasks) {
+      const start = tasks.findIndex(item => item.id === selection.lastSelected)
+      const end = tasks.findIndex(item => item.id === value.id)
+      if (start >= 0) {
+        selection.select(tasks.map(({id}) => id).slice(Math.min(start, end), Math.max(start, end) + 1))
+      }
+      e.preventDefault()
+      return
+    }
+
+    if(selection.selected.includes(value.id))
+      return selection.deselect(value.id)
+
+    selection.select(value.id)
+  }
+
+  const onTaskClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (selection.selected.length) {
+      onSelect(e)
+    } else if (editable) {
       focusInput()
     } else {
       dispatch(setActiveTask(value.id))
@@ -312,7 +332,7 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
             (!collapsed || !title) && items
               .map(item => (
                 <Sortable key={item.id} id={item.id}>
-                  <TaskItem value={item} />
+                  <TaskItem value={item} tasks={items} />
                 </Sortable>
               ))
           }
