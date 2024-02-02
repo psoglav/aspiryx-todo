@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { createRef, useContext, useState } from 'react'
+import React, { createRef, useContext, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
@@ -49,17 +49,27 @@ import { ContentEditable } from './content-editable';
 
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
-import { SettingsContext } from '@/components/settings';
+import { SettingsContext } from './settings';
 import { SelectionProvider, useSelection } from '@/components/selection-context';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
   const [focused, setFocused] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
   
   const dispatch = useDispatch()
 
   const { listId } = useParams()
+
+  function submit() {
+    if (!input || input.length > 255) return;
+    dispatch(createTask({
+      text: input,
+      listId
+    }))
+    setInput('')
+  }
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value)
@@ -67,17 +77,21 @@ export function CreateTask() {
 
   function handleInputKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter') {
-      dispatch(createTask({
-        text: input,
-        listId
-      }))
-      setInput('')
+      submit()
     }
   }
 
+  const onBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
+    const input = event.target as HTMLElement
+    const potentialChild = event.relatedTarget as HTMLElement
+    if (input.parentNode?.contains(potentialChild) && inputRef.current)
+      return inputRef.current.focus()
+    setFocused(false)
+  }
+
   return (
-    <div className='h-max w-full border-t border-border bg-background/40 p-4 pb-6 pt-3 md:px-6 lg:px-16'>
-      <div className="flex h-14 items-center rounded-lg border border-border bg-secondary transition-colors focus-within:!bg-background hover:bg-secondary/80">
+    <div className='h-max w-full p-4 pb-6 pt-3 md:px-6 lg:px-16'>
+      <div className="relative flex h-14 items-center rounded-lg border border-border bg-background/40 transition-colors focus-within:!bg-background hover:bg-zinc-100 dark:hover:bg-zinc-900">
         <div className="flex w-10 justify-center">
           {
             focused
@@ -91,13 +105,29 @@ export function CreateTask() {
           className='h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
           placeholder="Add a task"
           autoFocus
+          ref={inputRef}
           value={input}
           key={listId}
           onKeyDown={handleInputKeyDown}
           onChange={handleInputChange}  
           onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
+          onBlur={onBlur}
         />
+        <AnimatePresence mode='wait'>
+          {focused && (
+            <motion.div layout 
+              initial={{opacity: 0, scale: 0.9}} 
+              animate={{opacity: 1, scale: 1}} 
+              exit={{opacity: -0.1, scale: 0.9}} 
+              transition={{type: 'spring'}}
+              className='flex items-center px-2'
+            >
+              <Button onClick={submit}>
+                Create
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
@@ -228,8 +258,13 @@ export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   }
 
   return (
-    <motion.div layout exit={{ opacity: 0 }} whileTap={{scale: !selection.selected.length ? 1 : 0.98}} transition={{type: 'spring', duration: 0.15}}>{
-      ContextMenuWrapper(
+    <motion.div 
+      layout 
+      exit={{ opacity: 0 }} 
+      whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
+      transition={{ scale: { type: 'spring', duration: 0.15 } }}
+    >
+      {ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
             'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
