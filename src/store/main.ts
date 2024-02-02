@@ -41,6 +41,10 @@ export const mainSlice = createSlice({
       state.tasks.splice(index, 1)
       saveItem('tasks', state.tasks)
     },
+    deleteManyTasksById: (state, action: PayloadAction<string[]>) => {
+      state.tasks = state.tasks.filter(item => !action.payload.includes(item.id))
+      saveItem('tasks', state.tasks)
+    },
     setTasks: (state, action: PayloadAction<Task[]>) => {
       state.tasks = action.payload
       saveItem('tasks', action.payload)
@@ -83,6 +87,7 @@ export const mainSlice = createSlice({
 export const {
   createTask,
   deleteTaskById,
+  deleteManyTasksById,
   updateTask,
   setActiveTask,
   createList,

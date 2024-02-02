@@ -53,14 +53,16 @@ export const CreateList = () => {
   }
 
   return (
-    <Input
-      icon='material-symbols:add'
-      placeholder="New List"
-      autoFocus
-      value={input}
-      onKeyDown={handleInputKeyDown}
-      onChange={handleInputChange}  
-    />
+    <div className="sticky top-2 z-10">
+      <Input
+        icon='material-symbols:add'
+        placeholder="New List"
+        autoFocus
+        value={input}
+        onKeyDown={handleInputKeyDown}
+        onChange={handleInputChange}  
+      />
+    </div>
   )
 }
 
@@ -100,14 +102,14 @@ export const ListItem = ({ value, disabled, onDragEnd }: ListItemProps) => {
     <Reorder.Item
       value={value}
       id={value.id}
-      style={{ y }}
+      style={{ y, contain: 'strict' }}
       dragControls={dragControls}
       onDragStart={() => setIsDragging(true)}
       onDragEnd={() => { 
         setIsDragging(false); 
         onDragEnd(); 
       }}
-      className="relative"
+      className="relative h-10"
     >
       <ListItemContextMenu id={value.id}>
         <Link to={`/list/${value.id}`} className={clsx({ 'pointer-events-none': disabled || isDragging })} draggable="false">
@@ -120,8 +122,8 @@ export const ListItem = ({ value, disabled, onDragEnd }: ListItemProps) => {
                 'bg-accent/50': isDragging 
               })}
           >
-            <Icon icon='fluent:task-list-square-ltr-24-regular' className="text-xl" />
-            <span>{ value.name }</span>
+            <Icon icon='fluent:task-list-square-ltr-24-regular' className="shrink-0 text-xl" />
+            <span className="block min-w-0 truncate">{ value.name }</span>
           </Button>
         </Link>
       </ListItemContextMenu>

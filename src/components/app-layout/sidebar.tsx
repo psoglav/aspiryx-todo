@@ -11,6 +11,7 @@ import { CreateList, ListGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SettingsContext } from '@/components/settings';
+import { PoweredBy } from '@/components/powered-by';
 
 export default function Sidebar() {
   const lists = useSelector((state: RootState) => state.main.lists)
@@ -20,8 +21,8 @@ export default function Sidebar() {
   const { setOpen } = useContext(SettingsContext)
 
   return (
-    <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-4 p-4'>
-      <div className='flex flex-col gap-4'>
+    <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-2 p-4 pr-1'>
+      <div className='flex flex-col gap-4 pr-3'>
         <div className="flex gap-2">
           <a href="https://aspiryx.space" className='grow'>
             <Button
@@ -49,26 +50,18 @@ export default function Sidebar() {
             </Button>
           </Link>
         </div>
-
         <Separator />
       </div>
 
       <ScrollArea>
-        <div className='h-full space-y-2'>
+        <div className='relative h-full space-y-6 pr-3'>
+          <CreateList />
           <ListGroup items={lists} />
         </div>
       </ScrollArea>
 
-      <div className="space-y-2">
-        <CreateList />
-
-        <div className='flex justify-center gap-2 py-3 text-center text-xs text-muted-foreground'>
-          <div>powered by</div> 
-          <a className='flex gap-1 hover:underline' href='https://aspiryx.space' target='_blank'>
-            <img src='https://aspiryx.space/logo.svg' className='size-4' />
-            <span>ASPIRYX</span>
-          </a>
-        </div>
+      <div className="space-y-2 pr-3">
+        <PoweredBy />
       </div>
     </div>
   )
