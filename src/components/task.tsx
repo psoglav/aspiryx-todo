@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { createRef, useContext, useState } from 'react'
+import React, { createRef, useContext, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 import { Icon } from '@iconify/react'
@@ -41,14 +41,16 @@ import {
   deleteTaskById, 
   setActiveTask, 
   createTask, 
-  setTasks 
+  setTasks, 
+  deleteManyTasksById
 } from '@/store/main'
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ContentEditable } from './content-editable';
 
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
-import { SettingsContext } from './settings';
+import { SettingsContext } from '@/components/settings';
+import { SelectionProvider, useSelection } from '@/components/selection-context';
 import { motion } from 'framer-motion';
 
 export function CreateTask() {
@@ -103,15 +105,18 @@ export function CreateTask() {
 
 type TaskItemProps = {
   value: Task
+  tasks?: Task[]
   editable?: boolean
 }
 
-export function TaskItem({ value, editable = false }: TaskItemProps) {
+export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   const inputRef = createRef<HTMLSpanElement>()
   const dispatch = useDispatch()
   const { enableSoundEffects } = useContext(SettingsContext)
   const [playCompleteSfx] = useSound(completeSfx);
   const [playRevertSfx] = useSound(revertSfx);
+
+  const selection = useSelection()
 
   const onCheckButtonClick: MouseEventHandler = (e) => {
     e.stopPropagation()
@@ -141,8 +146,27 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     })
   }
 
-  const onTaskClick = () => {
-    if (editable) {
+  const onSelect: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (e.shiftKey && selection.lastSelected && tasks) {
+      const start = tasks.findIndex(item => item.id === selection.lastSelected)
+      const end = tasks.findIndex(item => item.id === value.id)
+      if (start >= 0) {
+        selection.select(tasks.map(({id}) => id).slice(Math.min(start, end), Math.max(start, end) + 1))
+      }
+      e.preventDefault()
+      return
+    }
+
+    if(selection.selected.includes(value.id))
+      return selection.deselect(value.id)
+
+    selection.select(value.id)
+  }
+
+  const onTaskClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (selection.selected.length) {
+      onSelect(e)
+    } else if (editable) {
       focusInput()
     } else {
       dispatch(setActiveTask(value.id))
@@ -167,18 +191,34 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
     }))
   }
 
+  const onDelete = () => {
+    if (selection.selected.length) {
+      dispatch(deleteManyTasksById(selection.selected))
+      selection.clear()
+    } else {
+      dispatch(deleteTaskById(value.id))
+    }
+  }
+
+
   const ContextMenuWrapper = (trigger: ReactNode): ReactNode => {
     return (
       <ContextMenu>
         <ContextMenuTrigger className='grow'>{trigger}</ContextMenuTrigger>
         <ContextMenuContent>
-          <ContextMenuItem>
+          {!selection.selected.includes(value.id) ? (
+            <ContextMenuItem onClick={() => selection.select(value.id)}>
             Select
-          </ContextMenuItem>
+            </ContextMenuItem>
+          ) : (
+            <ContextMenuItem onClick={() => selection.deselect(value.id)}>
+            Deselect
+            </ContextMenuItem>
+          )}
           <ContextMenuSeparator />
           <ContextMenuItem 
             className='!text-red-500 hover:!bg-destructive/20'
-            onClick={() => dispatch(deleteTaskById(value.id))}
+            onClick={onDelete}
           >
             Delete
           </ContextMenuItem>
@@ -188,11 +228,12 @@ export function TaskItem({ value, editable = false }: TaskItemProps) {
   }
 
   return (
-    <motion.div layout exit={{ opacity: 0 }}>
-      {ContextMenuWrapper(
+    <motion.div layout exit={{ opacity: 0 }} whileTap={{scale: !selection.selected.length ? 1 : 0.98}} transition={{type: 'spring', duration: 0.15}}>{
+      ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
-            'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable
+            'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
+            '!bg-zinc-300/50 dark:!bg-zinc-700/50 border-zinc-500/50': selection.selected.includes(value.id)
           })}
           onClick={onTaskClick}
         >
@@ -292,7 +333,7 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
             (!collapsed || !title) && items
               .map(item => (
                 <Sortable key={item.id} id={item.id}>
-                  <TaskItem value={item} />
+                  <TaskItem value={item} tasks={items} />
                 </Sortable>
               ))
           }
@@ -332,6 +373,7 @@ export function TaskGroupList({ tasks }: TaskGroupListProps) {
   ]
 
   function onDragStart(event: DragStartEvent) {
+    console.log(event)
     const task = tasks.find(item => item.id === event.active?.id)
     if (task) setDraggedItem(task)
   }
@@ -364,12 +406,14 @@ export function TaskGroupList({ tasks }: TaskGroupListProps) {
       onDragEnd={onDragEnd}
     >
       <div className="flex flex-col gap-4 py-4">
-        <TaskGroup items={uncompletedTasks} />
-        <TaskGroup 
-          items={completedTasks} 
-          title='Completed' 
-          defaultCollapsed={Boolean(uncompletedTasks.length)}
-        />
+        <SelectionProvider>
+          <TaskGroup items={uncompletedTasks} />
+          <TaskGroup 
+            items={completedTasks} 
+            title='Completed' 
+            defaultCollapsed={Boolean(uncompletedTasks.length)}
+          />
+        </SelectionProvider>
       </div>
       <DragOverlay dropAnimation={{
         duration: 600,
