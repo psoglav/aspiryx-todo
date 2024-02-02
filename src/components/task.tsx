@@ -61,6 +61,7 @@ export function CreateTask() {
   const { listId } = useParams()
 
   function submit() {
+    if (!input || input.length > 255) return;
     dispatch(createTask({
       text: input,
       listId
