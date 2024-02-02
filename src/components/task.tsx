@@ -51,7 +51,7 @@ import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
 import { SettingsContext } from './settings';
 import { SelectionProvider, useSelection } from '@/components/selection-context';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 
 export function CreateTask() {
   const [input, setInput] = useState('')
@@ -90,46 +90,65 @@ export function CreateTask() {
   }
 
   return (
-    <div className='h-max w-full p-4 pb-6 pt-3 md:px-6 lg:px-16'>
-      <div className="relative flex h-14 items-center rounded-lg border border-border bg-background/40 transition-colors focus-within:!bg-background hover:bg-zinc-100 dark:hover:bg-zinc-900">
-        <div className="flex w-10 justify-center">
-          {
-            focused
-              ? <div 
-                className='size-4 rounded-full ring-1 ring-muted-foreground'
-              ></div>
-              : <Icon icon='material-symbols:add' className='text-lg' />
-          }
-        </div>
-        <input 
-          className='h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
-          placeholder="Add a task"
-          autoFocus
-          ref={inputRef}
-          value={input}
-          key={listId}
-          onKeyDown={handleInputKeyDown}
-          onChange={handleInputChange}  
-          onFocus={() => setFocused(true)}
-          onBlur={onBlur}
-        />
-        <AnimatePresence mode='wait'>
-          {focused && (
-            <motion.div layout 
-              initial={{opacity: 0, scale: 0.9}} 
-              animate={{opacity: 1, scale: 1}} 
-              exit={{opacity: -0.1, scale: 0.9}} 
-              transition={{type: 'spring'}}
-              className='flex items-center px-2'
-            >
-              <Button onClick={submit}>
+    <MotionConfig transition={{ scale: {type: 'spring'}, duration: 0.2 }}>
+      <div className='h-max w-full p-4 pb-6 pt-3 md:px-6 lg:px-16'>
+        <div className="relative flex h-14 items-center gap-2 rounded-xl border border-border bg-background/40 px-2 transition-colors focus-within:!bg-background hover:bg-zinc-100 dark:hover:bg-zinc-900">
+          <div className="relative flex w-10 justify-center">
+            <AnimatePresence>
+              <motion.div 
+                layout 
+                exit={{opacity: 0, scale: 0.5}} 
+                initial={{opacity: 0, scale: 0.5}} 
+                animate={{opacity: 1, scale: 1}}
+                className={clsx({
+                  'size-4 rounded-full ring-1 ring-muted-foreground': focused
+                })}
+              >
+                {!focused && (
+                  <motion.div 
+                    layout 
+                    exit={{opacity: 0, scale: 0.5}} 
+                    initial={{opacity: 0, scale: 0.5}} 
+                    animate={{opacity: 1, scale: 1}}
+                    className={clsx({
+                      'size-4 rounded-full ring-1 ring-muted-foreground': focused
+                    })}
+                  >
+                    <Icon icon='material-symbols:add' className='text-lg' />
+                  </motion.div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <input 
+            className='h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
+            placeholder="Add a task"
+            autoFocus
+            ref={inputRef}
+            value={input}
+            key={listId}
+            onKeyDown={handleInputKeyDown}
+            onChange={handleInputChange}  
+            onFocus={() => setFocused(true)}
+            onBlur={onBlur}
+          />
+          <AnimatePresence mode='wait'>
+            {focused && (
+              <motion.div layout 
+                initial={{opacity: 0, scale: 0.9}} 
+                animate={{opacity: 1, scale: 1}} 
+                exit={{opacity: -0.1, scale: 0.9}} 
+                className='flex items-center px-2'
+              >
+                <Button onClick={submit}>
                 Create
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </MotionConfig>
   )
 }
 
