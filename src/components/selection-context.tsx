@@ -2,8 +2,8 @@ import { PropsWithChildren, createContext, useContext, useState } from "react"
 
 type SelectionContextState = {
   selected: string[]
-  select: (item: string) => void
-  deselect: (item: string) => void
+  select: (item: string | string[]) => void
+  deselect: (item: string | string[]) => void
   clear: () => void
 }
 
@@ -21,14 +21,20 @@ export function SelectionProvider({children}: PropsWithChildren) {
 
   const value: SelectionContextState = {
     selected,
-    select(item) {
-      if (selected.includes(item)) return;
-      selected.push(item)
+    select(value) {
+      if (!Array.isArray(value)) value = [value]
+
+      for (const item of value) {
+        if (selected.includes(item)) continue;
+        selected.push(item)
+      }
+
       setSelected(selected.slice())
     },
-    deselect(item) {
-      if (!selected.includes(item)) return;
-      setSelected(selected.filter(el => el !== item))
+    deselect(value) {
+      setSelected(selected.filter(el => {
+        return Array.isArray(value) ? !value.includes(el) : el !== value
+      }))
     },
     clear() {
       setSelected([])
