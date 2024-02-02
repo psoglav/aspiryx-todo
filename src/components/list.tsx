@@ -197,7 +197,7 @@ export const ListHeader = () => {
 
       <div className="flex grow justify-center">
         <motion.div layout className="max-w-[480px] grow">
-          <Input icon="material-symbols:search-rounded" placeholder="Search (Ctrl + K)" />
+          <Input icon="material-symbols:search-rounded" placeholder="Search (Ctrl + K)" className="border-foreground/10 bg-foreground/5 focus-within:!bg-foreground/10 hover:!bg-foreground/10" />
         </motion.div>
       </div>
 
