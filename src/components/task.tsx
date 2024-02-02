@@ -49,8 +49,8 @@ import { ContentEditable } from './content-editable';
 
 import completeSfx from '@/assets/audio/complete.wav'
 import revertSfx from '@/assets/audio/revert.wav'
-import { SettingsContext } from './settings';
-import { SelectionProvider, useSelection } from './selection-context';
+import { SettingsContext } from '@/components/settings';
+import { SelectionProvider, useSelection } from '@/components/selection-context';
 import { motion } from 'framer-motion';
 
 export function CreateTask() {
@@ -228,7 +228,7 @@ export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
   }
 
   return (
-    <motion.div whileTap={{scale: !selection.selected.length ? 1 : 0.98}} transition={{type: 'spring', duration: 0.15}}>{
+    <motion.div layout exit={{ opacity: 0 }} whileTap={{scale: !selection.selected.length ? 1 : 0.98}} transition={{type: 'spring', duration: 0.15}}>{
       ContextMenuWrapper(
         <Card 
           className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
@@ -288,8 +288,8 @@ export function TaskItem({ value, tasks, editable = false }: TaskItemProps) {
             </Button>
           )}
         </Card>
-      )
-    }</motion.div>
+      )}
+    </motion.div>
   )
 }
 
@@ -416,8 +416,8 @@ export function TaskGroupList({ tasks }: TaskGroupListProps) {
         </SelectionProvider>
       </div>
       <DragOverlay dropAnimation={{
-        duration: 500,
-        easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+        duration: 600,
+        easing: 'ease',
       }}>
         {draggedItem && <TaskItem value={draggedItem} key={draggedItem.id} />}
       </DragOverlay>
