@@ -19,13 +19,19 @@ import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
+import { useEffect, useState } from "react"
 
-export const ListHeader = () => {
+interface Props {
+  onSearch?: (query: string) => void
+}
+
+export const ListHeader = ({ onSearch }: Props) => {
   const { listId } = useParams()
   const currentList = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
   const title = currentList ? currentList.name : 'Tasks'
+  const [search, setSearch] = useState('')
   const dispatch = useDispatch()
 
   const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
@@ -47,18 +53,41 @@ export const ListHeader = () => {
     }))
   }
 
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(search)
+    }
+  }, [search, onSearch])
+
   return (
     <div className="flex items-center justify-between gap-4 p-4 pt-8 md:px-6 lg:px-16">
-      <ContentEditable 
-        className='w-max min-w-20 rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
-        value={title}
-        changeOnBlur
-        onChange={onChange}
-      />
+      <AnimatePresence mode="popLayout">
+        {!search && (
+          <motion.div
+            layout
+            key={listId}
+            layoutId={listId}
+            exit={{ opacity: 0 }} 
+          >
+            <ContentEditable 
+              className='w-max min-w-20 shrink-0 whitespace-nowrap rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
+              value={title}
+              changeOnBlur
+              onChange={onChange}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="flex grow justify-center">
         <motion.div layout className="max-w-[480px] grow">
-          <Input icon="material-symbols:search-rounded" placeholder="Search (Ctrl + K)" className="border-foreground/10 bg-foreground/5 focus-within:!bg-foreground/10 hover:!bg-foreground/10" />
+          <Input 
+            icon="material-symbols:search-rounded" 
+            placeholder="Search (Ctrl + K)" className="border-foreground/10 bg-foreground/5 focus-within:!bg-foreground/10 hover:!bg-foreground/10" 
+            onChange={e => {
+              if (onSearch) setSearch(e.target.value)
+            }}
+          />
         </motion.div>
       </div>
 
