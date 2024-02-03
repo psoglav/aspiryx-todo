@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react"
 import type { RootState } from '@/store'
 
 import { Button } from "@/components/ui/button"
-import { CreateList, ListGroup } from '@/components/list'
+import { CreateList, ListNavGroup } from '@/components/list'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SettingsContext } from '@/components/settings';
@@ -56,7 +56,7 @@ export default function Sidebar() {
       <ScrollArea>
         <div className='relative h-full space-y-6 pr-3'>
           <CreateList />
-          <ListGroup items={lists} />
+          <ListNavGroup items={lists} />
         </div>
       </ScrollArea>
 
