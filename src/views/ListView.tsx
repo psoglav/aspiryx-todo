@@ -1,5 +1,5 @@
 import { ListHeader } from "@/components/list";
-import { CreateTask, TaskGroups } from "@/components/task";
+import { CreateTask, TaskList } from "@/components/task";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { WhatameshGradient } from "@/components/whatamesh/gradient";
 import { RootState } from "@/store";
@@ -36,8 +36,8 @@ export function ListView() {
               key={location.pathname}
             >
               <ScrollArea className="size-full">
-                <div className="px-4 md:px-6 lg:px-16">
-                  <TaskGroups tasks={tasks} />
+                <div className="p-4 md:px-6 lg:px-16">
+                  <TaskList tasks={tasks} />
                 </div>
               </ScrollArea>
             </motion.div>

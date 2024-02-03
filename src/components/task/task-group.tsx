@@ -8,6 +8,7 @@ import { Reorder } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { TaskItem } from "./task-item"
+import { Collapsible } from "../collapsible"
 
 interface TaskGroupProps {
   title?: string
@@ -16,7 +17,6 @@ interface TaskGroupProps {
 }
 
 export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
-  const [collapsed, setCollapsed] = useState(items.length ? defaultCollapsed : true)
   const [draggedItem, setDraggedItem] = useState<Task | null>(null)
   const dispatch = useDispatch()
   const allTasks = useSelector((state: RootState) => state.main.tasks)
@@ -34,27 +34,10 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
   }
 
   return (
-    <div className="space-y-2">
-      {
-        title ? (
-          <Button 
-            variant={collapsed ? 'ghost' : 'ghost-active'} 
-            onClick={() => setCollapsed(!collapsed)}
-          >
-            <Icon
-              icon='material-symbols:keyboard-arrow-down-rounded' 
-              className={clsx('mr-1 rotate-0 text-lg transition-transform', {
-                '!-rotate-90': collapsed,
-              })} 
-            />
-            <span>{ title }</span>
-            {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
-          </Button>
-        ) : null
-      }
+    <Collapsible title={title} defaultCollapsed={defaultCollapsed}>
       <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
         <div className="space-y-2">
-          {(!collapsed || !title) && groupTasks
+          {groupTasks
             .map(item => (
               <Reorder.Item 
                 key={item.id} 
@@ -67,6 +50,6 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
             ))}
         </div>
       </Reorder.Group>
-    </div>
+    </Collapsible>
   )
 }
