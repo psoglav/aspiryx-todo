@@ -1,14 +1,5 @@
 import type { Task } from '@/types';
 import { SelectionProvider } from '@/components/selection-context';
-import { 
-  AlertDialog, 
-  AlertDialogAction, 
-  AlertDialogCancel, 
-  AlertDialogContent, 
-  AlertDialogDescription, 
-  AlertDialogFooter, 
-  AlertDialogHeader, 
-  AlertDialogTitle} from '@/components/ui/alert-dialog';
 import { TaskGroup } from './task-group';
 
 interface TaskGroupsProps {
@@ -28,21 +19,6 @@ export function TaskGroups({ tasks }: TaskGroupsProps) {
           title='Completed' 
           defaultCollapsed={Boolean(uncompletedTasks.length)}
         />
-        <AlertDialog open={true}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </SelectionProvider>
     </div>
   )
