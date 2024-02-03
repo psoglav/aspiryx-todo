@@ -1,22 +1,20 @@
 import { RootState } from "@/store"
 import { setTasks } from "@/store/main"
 import { Task } from "@/types"
-import { Icon } from "@iconify/react"
-import { Button } from "@/components/ui/button"
-import clsx from "clsx"
-import { Reorder } from "framer-motion"
+import { Reorder, motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { TaskItem } from "./task-item"
 import { Collapsible } from "../collapsible"
 
 interface TaskGroupProps {
+  id?: string | number
   title?: string
   items: Task[]
   defaultCollapsed?: boolean
 }
 
-export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
+export function TaskGroup({ title, items, defaultCollapsed = false, ...props }: TaskGroupProps) {
   const [draggedItem, setDraggedItem] = useState<Task | null>(null)
   const dispatch = useDispatch()
   const allTasks = useSelector((state: RootState) => state.main.tasks)
@@ -34,22 +32,30 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
   }
 
   return (
-    <Collapsible title={title} defaultCollapsed={defaultCollapsed}>
-      <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
-        <div className="space-y-2">
-          {groupTasks
-            .map(item => (
-              <Reorder.Item 
-                key={item.id} 
-                value={item} 
-                onDragStart={() => setDraggedItem(item)} 
-                onDragEnd={onDragEnd}
-              >
-                <TaskItem value={item} tasks={items} isDragging={draggedItem?.id === item.id} />
-              </Reorder.Item>
-            ))}
-        </div>
-      </Reorder.Group>
-    </Collapsible>
+    <motion.div
+      key={props.id}
+      exit={{ opacity: 0 }} 
+      transition={{
+        opacity: { ease: 'easeInOut', duration: 0.2 }, 
+      }}
+    >
+      <Collapsible id={props.id} title={title} defaultCollapsed={defaultCollapsed}>
+        <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
+          <div className="space-y-2">
+            {groupTasks
+              .map(item => (
+                <Reorder.Item 
+                  key={item.id} 
+                  value={item} 
+                  onDragStart={() => setDraggedItem(item)} 
+                  onDragEnd={onDragEnd}
+                >
+                  <TaskItem value={item} tasks={items} isDragging={draggedItem?.id === item.id} />
+                </Reorder.Item>
+              ))}
+          </div>
+        </Reorder.Group>
+      </Collapsible>
+    </motion.div>
   )
 }

@@ -5,46 +5,61 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
 interface CollapsibleProps {
+  id?: string | number
   title?: string
   titleSize?: 'md' | 'lg'
   defaultCollapsed?: boolean
 }
 
-export function Collapsible({ title, titleSize = 'md', children, defaultCollapsed }: CollapsibleProps & PropsWithChildren) {
+export function Collapsible({ title, titleSize = 'md', children, defaultCollapsed, ...props }: CollapsibleProps & PropsWithChildren) {
   const [collapsed, setCollapsed] = useState<boolean>(defaultCollapsed ?? true)
 
   if (!title) return children
 
   return (
     <div className="flex flex-col gap-4">
-      <Button 
-        className={clsx('flex max-w-max items-center gap-1 px-2 py-1', {
-          'px-2 py-1': titleSize === 'lg'
-        })}
-        variant={collapsed ? 'ghost' : 'ghost-active'} 
-        onClick={() => setCollapsed(!collapsed)}
+      <motion.div
+        layout
+        key={props.id}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }} 
       >
-        <Icon
-          icon='material-symbols:keyboard-arrow-down-rounded' 
-          className={clsx('rotate-0 text-2xl transition-transform', {
-            '!-rotate-90': collapsed,
-          })} 
-        />
-        <span 
-          className={clsx('font-semibold', {
-            'text-2xl': titleSize === 'lg'
+        <Button 
+          className={clsx('flex max-w-max items-center gap-1 px-2 py-1', {
+            'px-2 py-1': titleSize === 'lg'
           })}
-        >{ title }</span>
-      </Button>
-      <div className='overflow-hidden'>
+          variant={collapsed ? 'ghost' : 'ghost-active'} 
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <Icon
+            icon='material-symbols:keyboard-arrow-down-rounded' 
+            className={clsx('rotate-0 text-2xl transition-transform', {
+              '!-rotate-90': collapsed,
+            })} 
+          />
+          <span 
+            className={clsx('font-semibold', {
+              'text-2xl': titleSize === 'lg'
+            })}
+          >
+            { title }
+          </span>
+        </Button>
+      </motion.div>
+      <div className="overflow-hidden">
         <AnimatePresence mode='wait'>
           {!collapsed && (
             <motion.div
-              key={title}
-              layout
+              key={props.id + 'wrapper'}
+              layoutRoot
               initial={{ opacity: 0, translateY: '-50%' }}
               animate={{ opacity: 1, translateY: '0%' }}
-              transition={{ duration: 0.3, type: 'spring' }}
+              transition={{
+                opacity: { duration: .35, ease: 'circInOut' },
+                duration: 0.3,
+                type: 'spring'
+              }}
               exit={{ opacity: 0, translateY: '-50%' }}
             >
               {children}

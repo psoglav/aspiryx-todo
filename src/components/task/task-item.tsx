@@ -144,9 +144,15 @@ export function TaskItem({ value, tasks, editable = false, isDragging }: TaskIte
 
   return (
     <motion.div
+      layout
+      layoutId={value.id}
+      key={value.id}
       exit={{ opacity: 0 }} 
       whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
-      transition={{ scale: { type: 'spring', duration: 0.15 }, duration: 0.2 }}
+      transition={{
+        scale: { type: 'spring', duration: 0.15 }, 
+        opacity: { ease: 'easeInOut', duration: 0.2 }, 
+      }}
     >
       {ContextMenuWrapper(
         <Card 
