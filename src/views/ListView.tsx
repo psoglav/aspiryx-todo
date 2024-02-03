@@ -1,5 +1,5 @@
 import { ListHeader } from "@/components/list";
-import { CreateTask, TaskGroupList } from "@/components/task";
+import { CreateTask, TaskGroups } from "@/components/task";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { WhatameshGradient } from "@/components/whatamesh/gradient";
 import { RootState } from "@/store";
@@ -9,8 +9,8 @@ import { useLocation, useParams } from "react-router-dom";
 
 export function ListView() {
   const { listId } = useParams()
-  const list = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
   const location = useLocation()
+  const list = useSelector((state: RootState) => state.main.lists.find(item => item.id === listId))
 
   const tasks = useSelector((state: RootState) => {
     if (location.pathname === '/') return state.main.tasks.filter(item => !item.listId)
@@ -20,28 +20,32 @@ export function ListView() {
 
 
   return (
-    <div 
-      className="grid h-[100dvh] min-w-max grid-rows-[max-content_1fr_max-content] bg-background/60" 
-    >
-      <ListHeader />
-      <AnimatePresence mode="wait">
-        <motion.div 
-          initial={{ scale: 0.99, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.1 }}
-          exit={{ scale: 0.99, opacity: 0 }} 
-          className="relative min-h-0"
-          key={location.pathname}
+    <div className="h-[100dvh] bg-background p-2 pl-0">
+      <div className="relative h-full overflow-hidden rounded-2xl border border-border">
+        <div 
+          className="relative z-[1] grid h-full min-w-max grid-rows-[max-content_1fr_max-content] bg-background/60" 
         >
-          <ScrollArea className="size-full">
-            <div className="px-4 md:px-6 lg:px-16">
-              <TaskGroupList tasks={tasks} />
-            </div>
-          </ScrollArea>
-        </motion.div>
+          <ListHeader />
+          <AnimatePresence mode="wait">
+            <motion.div 
+              initial={{ scale: 0.99, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.1 }}
+              exit={{ scale: 0.99, opacity: 0 }} 
+              className="relative min-h-0"
+              key={location.pathname}
+            >
+              <ScrollArea className="size-full">
+                <div className="px-4 md:px-6 lg:px-16">
+                  <TaskGroups tasks={tasks} />
+                </div>
+              </ScrollArea>
+            </motion.div>
+          </AnimatePresence>
+          <CreateTask />
+        </div>
         <WhatameshGradient style={list?.style} />
-      </AnimatePresence>
-      <CreateTask />
+      </div>
     </div>
   )
 }
