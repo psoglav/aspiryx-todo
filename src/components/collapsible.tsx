@@ -7,11 +7,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 interface CollapsibleProps {
   id?: string | number
   title?: string
+  subtitle?: string
   titleSize?: 'md' | 'lg'
   defaultCollapsed?: boolean
 }
 
-export function Collapsible({ title, titleSize = 'md', children, defaultCollapsed, ...props }: CollapsibleProps & PropsWithChildren) {
+export function Collapsible({ title, subtitle, titleSize = 'md', children, defaultCollapsed, ...props }: CollapsibleProps & PropsWithChildren) {
   const [collapsed, setCollapsed] = useState<boolean>(defaultCollapsed ?? true)
 
   if (!title) return children
@@ -44,6 +45,13 @@ export function Collapsible({ title, titleSize = 'md', children, defaultCollapse
             })}
           >
             { title }
+          </span>
+          <span 
+            className={clsx('px-1 font-semibold text-muted-foreground', {
+              'text-2xl': titleSize === 'lg'
+            })}
+          >
+            { subtitle }
           </span>
         </Button>
       </motion.div>

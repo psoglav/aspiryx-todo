@@ -22,7 +22,8 @@ export function TaskList({ list, tasks }: TaskListProps) {
             <TaskGroup 
               id="uncompleted"
               items={completedTasks} 
-              title='Completed' 
+              title='Completed'
+              subtitle={completedTasks.length.toString() || ''}
               defaultCollapsed={Boolean(uncompletedTasks.length)}
             />
           </AnimatePresence>

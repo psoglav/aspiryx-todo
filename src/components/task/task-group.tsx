@@ -10,11 +10,12 @@ import { Collapsible } from "../collapsible"
 interface TaskGroupProps {
   id?: string | number
   title?: string
+  subtitle?: string
   items: Task[]
   defaultCollapsed?: boolean
 }
 
-export function TaskGroup({ title, items, defaultCollapsed = false, ...props }: TaskGroupProps) {
+export function TaskGroup({ title, subtitle, items, defaultCollapsed = false, ...props }: TaskGroupProps) {
   const [draggedItem, setDraggedItem] = useState<Task | null>(null)
   const dispatch = useDispatch()
   const allTasks = useSelector((state: RootState) => state.main.tasks)
@@ -39,7 +40,7 @@ export function TaskGroup({ title, items, defaultCollapsed = false, ...props }: 
         opacity: { ease: 'easeInOut', duration: 0.2 }, 
       }}
     >
-      <Collapsible id={props.id} title={title} defaultCollapsed={defaultCollapsed}>
+      <Collapsible id={props.id} title={title} subtitle={subtitle} defaultCollapsed={defaultCollapsed}>
         <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
           <div className="space-y-2">
             {groupTasks
