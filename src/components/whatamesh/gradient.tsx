@@ -41,7 +41,7 @@ export function WhatameshGradient({ style }: Props) {
       key={location.pathname} 
       id="gradient-canvas" 
       ref={ref} 
-      className="absolute inset-1/2 z-[-1] size-[120%] -translate-x-1/2 -translate-y-1/2 blur-xl" 
+      className="absolute inset-1/2 size-[120%] -translate-x-1/2 -translate-y-1/2 blur-xl" 
       data-transition-in 
     />
   )

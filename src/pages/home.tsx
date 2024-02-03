@@ -70,7 +70,7 @@ export default function Home() {
               <div className="absolute right-0 top-1/2 -z-10 h-[100vh] w-[100vw] -translate-y-1/2 bg-zinc-600/5"></div>
               <Sidebar />
             </ResizablePanel>
-            <ResizableHandle className="hidden after:w-4 md:block" />
+            <ResizableHandle className="hidden bg-transparent after:w-4 md:block" />
           </>
         )}
 
