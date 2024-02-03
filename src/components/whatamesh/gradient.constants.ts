@@ -10,8 +10,8 @@ export const BgStyles: Record<ListStyle, string[] | Partial<Record<Theme, string
     dark: [
       '#000000',
       '#111111',
-      '#4800ff',
-      '#47F2E9'
+      '#ffffff',
+      '#000000'
     ],
     light: [
       '#c3e4ff',
