@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react"
+import clsx from "clsx"
 
 interface Props {
   onSearch?: (query: string) => void
@@ -70,7 +71,7 @@ export const ListHeader = ({ onSearch }: Props) => {
             exit={{ opacity: 0 }} 
           >
             <ContentEditable 
-              className='w-max min-w-20 shrink-0 whitespace-nowrap rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
+              className='w-max min-w-20 max-w-96 shrink-0 truncate !whitespace-nowrap rounded-lg px-2 py-1 text-2xl font-semibold outline-none transition-colors hover:bg-foreground/10 focus:bg-foreground/10'
               value={title}
               changeOnBlur
               onChange={onChange}
@@ -80,7 +81,9 @@ export const ListHeader = ({ onSearch }: Props) => {
       </AnimatePresence>
 
       <div className="flex grow justify-center">
-        <motion.div layout className="max-w-[480px] grow">
+        <motion.div layout className={clsx("min-w-[200px] grow", {
+          'max-w-[480px]': !search
+        })}>
           <Input 
             icon="material-symbols:search-rounded" 
             placeholder="Search (Ctrl + K)" className="border-foreground/10 bg-foreground/5 focus-within:!bg-foreground/10 hover:!bg-foreground/10" 

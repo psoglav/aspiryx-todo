@@ -3,7 +3,7 @@ import { CreateTask, TaskList } from "@/components/task";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { WhatameshGradient } from "@/components/whatamesh/gradient";
 import { RootState } from "@/store";
-import { List, Task } from "@/types";
+import { List } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -55,11 +55,11 @@ export function ListView() {
             >
               <ScrollArea className="size-full">
                 <div className="space-y-8 p-4 md:px-6 lg:px-16">
-                  {
-                    search ? (
-                      filteredLists.map(item => <TaskList tasks={allTasks.filter(({listId}) => item.id === listId)} filter={search} list={item} />)
-                    ) : <TaskList tasks={tasks} filter={search} />
-                  }
+                  <AnimatePresence mode="sync">
+                    {search ? (
+                      filteredLists.map(item => <TaskList tasks={allTasks.filter((el) => item.id === el.listId)} filter={search} list={item} key={item.id} />)
+                    ) : <TaskList tasks={tasks} filter={search} />}
+                  </AnimatePresence>
                 </div>
               </ScrollArea>
             </motion.div>
