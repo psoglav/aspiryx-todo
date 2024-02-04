@@ -81,16 +81,27 @@ export const ListHeader = ({ onSearch }: Props) => {
       </AnimatePresence>
 
       <div className="flex grow justify-center">
-        <motion.div layout className={clsx("min-w-[200px] grow", {
+        <motion.div layout className={clsx("relative min-w-[200px] grow", {
           'max-w-[480px]': !search
         })}>
           <Input 
             icon="material-symbols:search-rounded" 
             placeholder="Search (Ctrl + K)" className="border-foreground/10 bg-foreground/5 focus-within:!bg-foreground/10 hover:!bg-foreground/10" 
+            value={search}
             onChange={e => {
               if (onSearch) setSearch(e.target.value)
             }}
           />
+          {search && (
+            <Button 
+              variant='ghost' 
+              size='icon' 
+              className="absolute right-1 top-1/2 size-8 -translate-y-1/2"
+              onClick={() => setSearch('')}
+            >
+              <Icon icon="material-symbols:close-small-outline-rounded" className="text-3xl text-muted-foreground" />
+            </Button>
+          )}
         </motion.div>
       </div>
 
