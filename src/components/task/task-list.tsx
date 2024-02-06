@@ -17,7 +17,6 @@ export function TaskList({ list, tasks, filter }: TaskListProps) {
   const uncompletedTasks = items.filter(item => !item.completed)
 
   useEffect(() => {
-    console.log([filter])
     setItems(filter ? tasks.filter(({text}) => text.includes(filter)) : tasks)
   }, [filter, tasks])
 
