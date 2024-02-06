@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import clsx from "clsx"
 
 interface Props {
@@ -34,6 +34,7 @@ export const ListHeader = ({ onSearch }: Props) => {
   const title = currentList ? currentList.name : 'Tasks'
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const onChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLInputElement 
@@ -59,6 +60,19 @@ export const ListHeader = ({ onSearch }: Props) => {
       onSearch(search)
     }
   }, [search, onSearch])
+
+  useEffect(() => {
+    window.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'k' && event.ctrlKey) {
+        event.preventDefault()
+        event.stopPropagation()
+        searchRef.current?.focus()
+      }
+      if (event.key === 'Escape') {
+        searchRef.current?.blur()
+      }
+    })
+  }, [])
 
   return (
     <div className="flex items-center justify-between gap-4 p-4 pt-8 md:px-6 lg:px-16">
@@ -88,6 +102,7 @@ export const ListHeader = ({ onSearch }: Props) => {
             icon="material-symbols:search-rounded" 
             placeholder="Search (Ctrl + K)" className="border-foreground/10 bg-foreground/5 focus-within:!bg-foreground/10 hover:!bg-foreground/10" 
             value={search}
+            ref={searchRef}
             onChange={e => {
               if (onSearch) setSearch(e.target.value)
             }}
