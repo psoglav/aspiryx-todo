@@ -78,6 +78,7 @@ export const ListHeader = () => {
                       <DropdownMenuRadioGroup value={currentList.style} onValueChange={onStyleChange}>
                         <DropdownMenuRadioItem value="">Default</DropdownMenuRadioItem>
                         <DropdownMenuRadioItem value="aura">Aura</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="black-swan">Black Swan</DropdownMenuRadioItem>
                         <DropdownMenuRadioItem value="pearl">Pearl</DropdownMenuRadioItem>
                         <DropdownMenuRadioItem value="swamp">Swamp</DropdownMenuRadioItem>
                       </DropdownMenuRadioGroup>
