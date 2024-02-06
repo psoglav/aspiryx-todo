@@ -4,7 +4,6 @@ import { Icon } from "@iconify/react"
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu"
 import clsx from "clsx"
 import useSound from 'use-sound';
-import { motion } from "framer-motion"
 import { createRef, useContext, MouseEventHandler, FormEventHandler, ReactNode } from "react"
 import { useDispatch } from "react-redux"
 import { ContentEditable } from "@/components/content-editable"
