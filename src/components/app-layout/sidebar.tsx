@@ -24,15 +24,17 @@ export default function Sidebar() {
     <div className='app-drag grid h-full grid-rows-[max-content_1fr_max-content] space-y-2 p-4 pr-1'>
       <div className='flex flex-col gap-4 pr-3'>
         <div className="app-no-drag flex gap-2">
-          <a href="https://aspiryx.space" className='grow'>
-            <Button
-              variant='ghost'
-              className="flex size-full justify-start gap-2 uppercase" 
-            >
-              <Icon icon='ion:arrow-back-outline' />
-              <span className=" font-bold">HUB</span>
-            </Button>
-          </a>
+          {!window.isElectronApp && (
+            <a href="https://aspiryx.space" className='grow'>
+              <Button
+                variant='ghost'
+                className="flex size-full justify-start gap-2 uppercase" 
+              >
+                <Icon icon='ion:arrow-back-outline' />
+                <span className=" font-bold">HUB</span>
+              </Button>
+            </a>
+          )}
           <Button variant='ghost' size='icon' onClick={() => setOpen(true)}>
             <Icon icon='material-symbols:settings' className='text-xl' />
           </Button>
