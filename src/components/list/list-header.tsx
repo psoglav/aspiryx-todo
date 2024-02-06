@@ -63,12 +63,12 @@ export const ListHeader = ({ onSearch }: Props) => {
 
   useEffect(() => {
     window.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key === 'k' && event.ctrlKey) {
+      if (event.code === 'KeyK' && event.ctrlKey) {
         event.preventDefault()
         event.stopPropagation()
         searchRef.current?.focus()
       }
-      if (event.key === 'Escape') {
+      if (event.code === 'Escape') {
         searchRef.current?.blur()
       }
     })

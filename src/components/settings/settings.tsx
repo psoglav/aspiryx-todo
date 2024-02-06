@@ -48,8 +48,8 @@ export const Settings = () => {
 
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') handleClose()
-      if ([',', 'б'].includes(e.key) && e.ctrlKey) handleOpen()
+      if (e.code === 'Escape') handleClose()
+      if (e.code === 'Comma' && e.ctrlKey) handleOpen()
     })
   }, [])
 
