@@ -27,7 +27,9 @@ export interface InputProps
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, icon, ...props }, ref) => {
     return (
-      <div className="flex h-10 items-center rounded-lg border border-border bg-background/40 backdrop-blur-lg transition-colors focus-within:!bg-background hover:bg-zinc-100 dark:hover:bg-zinc-900">
+      <div className={cn(
+        "flex h-10 items-center rounded-lg border border-border bg-background/40 backdrop-blur-lg transition-colors focus-within:!bg-background hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        , className)}>
         {
           icon ? (
             <div className="flex min-w-10 justify-center">
@@ -39,7 +41,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           className={cn(
             "text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text",
-            className,
             {
               'pl-3': !icon
             }

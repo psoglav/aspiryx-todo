@@ -1,26 +1,28 @@
 import { RootState } from "@/store"
 import { setTasks } from "@/store/main"
 import { Task } from "@/types"
-import { Icon } from "@iconify/react"
-import { Button } from "@/components/ui/button"
-import clsx from "clsx"
-import { Reorder } from "framer-motion"
+import { Collapsible } from "@/components/collapsible"
+import { useSelection } from "@/components/selection-context"
+import { Reorder, motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { TaskItem } from "./task-item"
 
 interface TaskGroupProps {
+  id?: string | number
   title?: string
+  subtitle?: string
   items: Task[]
   defaultCollapsed?: boolean
 }
 
-export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupProps) {
-  const [collapsed, setCollapsed] = useState(items.length ? defaultCollapsed : true)
+export function TaskGroup({ title, subtitle, items, defaultCollapsed = false, ...props }: TaskGroupProps) {
   const [draggedItem, setDraggedItem] = useState<Task | null>(null)
   const dispatch = useDispatch()
   const allTasks = useSelector((state: RootState) => state.main.tasks)
   const [groupTasks, setGroupTasks] = useState<Task[]>(items)
+
+  const selection = useSelection()
 
   useEffect(() => {
     setGroupTasks(items)
@@ -34,39 +36,39 @@ export function TaskGroup({ title, items, defaultCollapsed = false }: TaskGroupP
   }
 
   return (
-    <div className="space-y-2">
-      {
-        title ? (
-          <Button 
-            variant={collapsed ? 'ghost' : 'ghost-active'} 
-            onClick={() => setCollapsed(!collapsed)}
-          >
-            <Icon
-              icon='material-symbols:keyboard-arrow-down-rounded' 
-              className={clsx('mr-1 rotate-0 text-lg transition-transform', {
-                '!-rotate-90': collapsed,
-              })} 
-            />
-            <span>{ title }</span>
-            {items.length ? <span className='px-2 text-muted-foreground'>{items.length}</span> : null}
-          </Button>
-        ) : null
-      }
-      <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
-        <div className="space-y-2">
-          {(!collapsed || !title) && groupTasks
-            .map(item => (
-              <Reorder.Item 
-                key={item.id} 
-                value={item} 
-                onDragStart={() => setDraggedItem(item)} 
-                onDragEnd={onDragEnd}
-              >
-                <TaskItem value={item} tasks={items} isDragging={draggedItem?.id === item.id} />
-              </Reorder.Item>
-            ))}
-        </div>
-      </Reorder.Group>
-    </div>
+    <motion.div
+      key={props.id}
+      exit={{ opacity: 0 }} 
+      transition={{
+        opacity: { ease: 'easeInOut', duration: 0.2 }, 
+      }}
+    >
+      <Collapsible id={props.id} title={title} subtitle={subtitle} defaultCollapsed={defaultCollapsed}>
+        <Reorder.Group values={groupTasks} onReorder={setGroupTasks}>
+          <div className="space-y-2">
+            {groupTasks
+              .map(item => (
+                <Reorder.Item 
+                  value={item} 
+                  onDragStart={() => setDraggedItem(item)} 
+                  onDragEnd={onDragEnd}
+                  layout
+                  layoutId={item.id}
+                  key={item.id}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }} 
+                  whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
+                  transition={{
+                    scale: { type: 'spring', duration: 0.15 }, 
+                    opacity: { ease: 'easeInOut', duration: 0.2 }, 
+                  }}
+                >
+                  <TaskItem value={item} tasks={items} isDragging={draggedItem?.id === item.id} />
+                </Reorder.Item>
+              ))}
+          </div>
+        </Reorder.Group>
+      </Collapsible>
+    </motion.div>
   )
 }
