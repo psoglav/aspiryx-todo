@@ -21,7 +21,14 @@ declare namespace NodeJS {
   }
 }
 
+type AppEvent = "minimize-app" | "maximize-app" | "close-app";
+type AppEventHandler = (channel: AppEvent, args?: unknown[]) => void
+
 // Used in Renderer process, expose in `preload.ts`
 interface Window {
-  ipcRenderer: import('electron').IpcRenderer
+  app?: {
+    emit: AppEventHandler
+    ipcRenderer: Electron.IpcRenderer
+  }
+  isElectronApp?: boolean
 }
