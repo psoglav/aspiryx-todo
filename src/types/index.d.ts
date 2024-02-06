@@ -6,7 +6,7 @@ export type Task = {
   listId?: string
 }
 
-export type ListStyle = 'aura' | 'pearl' | 'swamp'
+export type ListStyle = 'aura' | 'pearl' | 'swamp' | 'black-swan'
 
 export type List = {
   id: string
