@@ -21,9 +21,9 @@ export default function Sidebar() {
   const { setOpen } = useContext(SettingsContext)
 
   return (
-    <div className='grid h-[100dvh] grid-rows-[max-content_1fr_max-content] space-y-2 p-4 pr-1'>
+    <div className='app-drag grid h-full grid-rows-[max-content_1fr_max-content] space-y-2 p-4 pr-1'>
       <div className='flex flex-col gap-4 pr-3'>
-        <div className="flex gap-2">
+        <div className="app-no-drag flex gap-2">
           <a href="https://aspiryx.space" className='grow'>
             <Button
               variant='ghost'
@@ -38,7 +38,7 @@ export default function Sidebar() {
           </Button>
         </div>
 
-        <div className='flex flex-col gap-2'>
+        <div className='app-no-drag flex flex-col gap-2'>
           <Link to='/important'>
             <Button variant={isImportant ? 'ghost-active' : 'ghost'} className={clsx('w-full justify-start', { 'text-muted-foreground': !isImportant })}>
               Important
@@ -55,13 +55,13 @@ export default function Sidebar() {
 
       <ScrollArea>
         <div className='relative h-full space-y-6 pr-3'>
-          <CreateList />
           <ListNavGroup items={lists} />
         </div>
       </ScrollArea>
 
       <div className="space-y-2 pr-3">
-        <PoweredBy />
+        <CreateList />
+        {!window.isElectronApp && <PoweredBy />}
       </div>
     </div>
   )

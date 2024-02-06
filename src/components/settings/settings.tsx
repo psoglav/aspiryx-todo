@@ -57,7 +57,7 @@ export const Settings = () => {
     <AnimatePresence>
       {open && (
         <motion.div 
-          className="fixed inset-0 z-10 h-[100dvh] w-[100dvw] bg-background" 
+          className="fixed inset-0 z-10 size-full bg-background" 
           initial={{ opacity: 0, }}
           animate={{ opacity: 1, }}
           transition={{ duration: 0.15 }}
@@ -70,7 +70,7 @@ export const Settings = () => {
             transition={{ duration: 0.15 }}
             exit={{ scale: 1.05 }}
           >
-            <div className="container h-full">
+            <div className="size-full lg:container">
               <div className="grid size-full grid-cols-[max-content_1fr_max-content] items-start">
                 <SettingsNavigation />
 

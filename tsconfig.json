@@ -32,7 +32,8 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src",
+    "electron"
   ],
   "references": [
     {

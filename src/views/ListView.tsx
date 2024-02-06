@@ -38,10 +38,10 @@ export function ListView() {
 
 
   return (
-    <div className="h-[100dvh] bg-background p-2 pl-0">
-      <div className="relative h-full overflow-hidden rounded-2xl border border-border">
+    <div className="h-full bg-background pl-0 md:p-2">
+      <div className="relative h-full overflow-hidden rounded-lg border border-border">
         <div 
-          className="relative z-[1] grid h-full min-w-max grid-rows-[max-content_1fr_max-content] bg-background/60" 
+          className="relative z-[1] grid h-full min-w-max grid-rows-[max-content_1fr_max-content] bg-background/60 pt-8" 
         >
           <ListHeader onSearch={setSearch} />
           <AnimatePresence mode="wait">

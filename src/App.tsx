@@ -4,15 +4,16 @@ import { motion, AnimatePresence  } from "framer-motion"
 
 import { router } from '@/router'
 
-import Header from '@/components/app-layout/header'
 import { Settings, SettingsContext } from '@/components/settings'
+import Titlebar from "@/components/app-layout/titlebar/titlebar";
+import clsx from "clsx";
 
 export default function Root() {
   const settings = useContext(SettingsContext)
 
   return (
     <>
-      <Header />
+      {window.isElectronApp && <Titlebar />}
       <Settings />
       <AnimatePresence>
         {!settings.open && (
@@ -21,6 +22,7 @@ export default function Root() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.15 }}
             exit={{ opacity: 0, scale: 0.95 }}
+            className={clsx("h-[100dvh]", { "md:h-[calc(100dvh-2rem)]": window.isElectronApp })}
           >
             <RouterProvider router={router} />
           </motion.div>

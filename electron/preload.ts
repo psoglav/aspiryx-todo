@@ -1,7 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
-contextBridge.exposeInMainWorld('ipcRenderer', withPrototype(ipcRenderer))
+contextBridge.exposeInMainWorld('app', {
+  emit(event: AppEvent, args: unknown[]) {
+    ipcRenderer.send(event, args);
+  },
+  ipcRenderer: withPrototype(ipcRenderer),
+})
+
+contextBridge.exposeInMainWorld('isElectronApp', true)
 
 // `exposeInMainWorld` can't detect attributes and methods of `prototype`, manually patching it.
 function withPrototype(obj: Record<string, any>) {
