@@ -4,6 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { WhatameshGradient } from "@/components/whatamesh/gradient";
 import { RootState } from "@/store";
 import { List } from "@/types";
+import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -38,8 +39,12 @@ export function ListView() {
 
 
   return (
-    <div className="h-full bg-background pl-0 md:p-2">
-      <div className="relative h-full overflow-hidden rounded-lg border border-border">
+    <div 
+      className={clsx("h-full bg-background md:p-2", {
+        '!pt-0': window.isElectronApp
+      })}
+    >
+      <div className="relative h-full overflow-hidden rounded-lg border border-border/50">
         <div 
           className="relative z-[1] grid h-full min-w-max grid-rows-[max-content_1fr_max-content] bg-background/60 pt-8" 
         >
