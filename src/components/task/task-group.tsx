@@ -1,11 +1,12 @@
 import { RootState } from "@/store"
 import { setTasks } from "@/store/main"
 import { Task } from "@/types"
+import { Collapsible } from "@/components/collapsible"
+import { useSelection } from "@/components/selection-context"
 import { Reorder, motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { TaskItem } from "./task-item"
-import { Collapsible } from "../collapsible"
 
 interface TaskGroupProps {
   id?: string | number
@@ -20,6 +21,8 @@ export function TaskGroup({ title, subtitle, items, defaultCollapsed = false, ..
   const dispatch = useDispatch()
   const allTasks = useSelector((state: RootState) => state.main.tasks)
   const [groupTasks, setGroupTasks] = useState<Task[]>(items)
+
+  const selection = useSelection()
 
   useEffect(() => {
     setGroupTasks(items)
@@ -46,10 +49,19 @@ export function TaskGroup({ title, subtitle, items, defaultCollapsed = false, ..
             {groupTasks
               .map(item => (
                 <Reorder.Item 
-                  key={item.id} 
                   value={item} 
                   onDragStart={() => setDraggedItem(item)} 
                   onDragEnd={onDragEnd}
+                  layout
+                  layoutId={item.id}
+                  key={item.id}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }} 
+                  whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
+                  transition={{
+                    scale: { type: 'spring', duration: 0.15 }, 
+                    opacity: { ease: 'easeInOut', duration: 0.2 }, 
+                  }}
                 >
                   <TaskItem value={item} tasks={items} isDragging={draggedItem?.id === item.id} />
                 </Reorder.Item>

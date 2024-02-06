@@ -143,77 +143,65 @@ export function TaskItem({ value, tasks, editable = false, isDragging }: TaskIte
   }
 
   return (
-    <motion.div
-      layout
-      layoutId={value.id}
-      key={value.id}
-      exit={{ opacity: 0 }} 
-      whileTap={{scale: !selection.selected.length ? 1 : 0.98}} 
-      transition={{
-        scale: { type: 'spring', duration: 0.15 }, 
-        opacity: { ease: 'easeInOut', duration: 0.2 }, 
-      }}
-    >
-      {ContextMenuWrapper(
-        <Card 
-          className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
-            'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
-            '!bg-zinc-300/50 dark:!bg-zinc-700/50 border-zinc-500/50': selection.selected.includes(value.id)
-          })}
-          onClick={onTaskClick}
+    ContextMenuWrapper(
+      <Card 
+        className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
+          'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
+          '!bg-zinc-300/50 dark:!bg-zinc-700/50 border-zinc-500/50': selection.selected.includes(value.id)
+        })}
+        onClick={onTaskClick}
+      >
+        <div
+          className='group h-10 cursor-pointer p-3'
+          onClick={onCheckButtonClick}
         >
-          <div
-            className='group h-10 cursor-pointer p-3'
-            onClick={onCheckButtonClick}
+          <div 
+            className={clsx(
+              'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:ring-foreground group-active:ring-2', 
+              {
+                '!ring-foreground': value.completed
+              }
+            )}
           >
             <div 
-              className={clsx(
-                'grid size-4 place-content-center rounded-full ring-1 ring-foreground/50 transition-all group-hover:ring-foreground group-active:ring-2', 
-                {
-                  '!ring-foreground': value.completed
-                }
-              )}
-            >
-              <div 
-                className={clsx('size-[10px] rounded-full transition-all group-hover:bg-foreground/30', {
-                  '!bg-foreground': value.completed
-                })}></div>
-            </div>
+              className={clsx('size-[10px] rounded-full transition-all group-hover:bg-foreground/30', {
+                '!bg-foreground': value.completed
+              })}></div>
           </div>
+        </div>
 
-          <div 
-            className="flex min-h-10 w-0 grow px-2"
+        <div 
+          className="flex min-h-10 w-0 grow px-2"
+        >
+          <ContentEditable 
+            className={clsx('self-center font-semibold outline-0 focus:text-foreground focus:no-underline', {
+              'line-through text-muted-foreground': value.completed,
+            })}
+            disabled={!editable}
+            value={value.text}
+            onChange={onChange}
+            ref={inputRef}
+            placeholder='Do something...'
+            changeOnBlur
+          />
+        </div>
+
+        {!editable && (
+          <Button 
+            className='size-10' 
+            variant='ghost' 
+            size='icon' 
+            onClick={onFavoriteToggled}
           >
-            <ContentEditable 
-              className={clsx('self-center font-semibold outline-0 focus:text-foreground focus:no-underline', {
-                'line-through text-muted-foreground': value.completed,
-              })}
-              disabled={!editable}
-              value={value.text}
-              onChange={onChange}
-              ref={inputRef}
-              placeholder='Do something...'
-              changeOnBlur
+            <Icon 
+              icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
+              className={clsx('text-xl text-muted-foreground', { 
+                'text-yellow-400': value.isImportant 
+              })} 
             />
-          </div>
-
-          {!editable && (
-            <Button 
-              className='size-10' 
-              variant='ghost' 
-              size='icon' 
-              onClick={onFavoriteToggled}
-            >
-              <Icon 
-                icon={ value.isImportant ? 'ic:round-star' : 'ic:round-star-border' } 
-                className={clsx('text-xl text-muted-foreground', { 
-                  'text-yellow-400': value.isImportant 
-                })} 
-              />
-            </Button>
-          )}
-        </Card>
-      )}
-    </motion.div>
+          </Button>
+        )}
+      </Card>
+    )
   )
 }
