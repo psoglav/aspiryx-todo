@@ -44,7 +44,7 @@ export function ListView() {
         '!pt-0': window.isElectronApp
       })}
     >
-      <div className="relative h-full overflow-hidden rounded-lg border border-border/40">
+      <div className="relative h-full overflow-hidden rounded-xl border border-border/40">
         <div 
           className={clsx("relative z-[1] grid h-full min-w-max grid-rows-[max-content_1fr_max-content] pt-4 lg:pt-8", {
             'bg-background/30': list?.style,
