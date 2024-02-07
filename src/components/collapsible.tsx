@@ -58,7 +58,6 @@ export function Collapsible({ title, subtitle, titleSize = 'md', children, defau
       <div className="overflow-hidden">
         {!collapsed && (
           <motion.div
-            key={props.id + 'wrapper'}
             initial={{ opacity: 0, y: '-50%' }}
             animate={{ opacity: 1, y: 0 }}
             transition={{

@@ -75,7 +75,7 @@ export function CreateTask() {
             </AnimatePresence>
           </div>
           <input 
-            className='h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
+            className='h-full w-0 grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
             placeholder="Add a task"
             autoFocus
             ref={inputRef}
