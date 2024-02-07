@@ -94,7 +94,7 @@ export const ListHeader = ({ onSearch }: Props) => {
         )}
       </AnimatePresence>
 
-      <div className="flex grow justify-center">
+      <div className="hidden grow justify-center md:flex">
         <motion.div layout className={clsx("relative min-w-[200px] grow", {
           'max-w-[480px]': !search
         })}>

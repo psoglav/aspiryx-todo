@@ -23,7 +23,7 @@ export const ListNavGroup = (props: ListNavGroupProps) => {
 
   return (
     <Reorder.Group 
-      className="space-y-2"
+      className="app-no-drag space-y-2"
       values={lists} 
       axis="y" 
       onReorder={(items: List[]) => setItems(items)} 

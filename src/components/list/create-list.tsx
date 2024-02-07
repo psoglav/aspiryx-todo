@@ -22,7 +22,7 @@ export const CreateList = () => {
   }
 
   return (
-    <div className="sticky top-2 z-10">
+    <div className="app-no-drag sticky top-2 z-10">
       <Input
         icon='material-symbols:add'
         placeholder="New List"

@@ -45,7 +45,7 @@ export function CreateTask() {
 
   return (
     <MotionConfig transition={{ scale: {type: 'spring'}, duration: 0.2 }}>
-      <div className='h-max w-full p-4 pb-6 pt-3 md:px-6 lg:px-16'>
+      <div className='h-max w-full p-4 pt-3 md:px-6 md:pb-6 lg:px-16'>
         <div className="relative flex h-14 items-center rounded-xl border border-border bg-background/40 transition-colors focus-within:!bg-background hover:bg-zinc-100 dark:hover:bg-zinc-900">
           <div className="relative flex w-14 justify-center">
             <AnimatePresence>
@@ -75,7 +75,7 @@ export function CreateTask() {
             </AnimatePresence>
           </div>
           <input 
-            className='h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
+            className='h-full w-0 grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text'
             placeholder="Add a task"
             autoFocus
             ref={inputRef}

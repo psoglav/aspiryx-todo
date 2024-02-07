@@ -56,7 +56,7 @@ export default function Home() {
       <ResizablePanelGroup
         direction="horizontal"
         autoSaveId='ui-layout'
-        className="relative h-screen"
+        className="relative"
       >
         {renderLeftSidebar && (
           <>
