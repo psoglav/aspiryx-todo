@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-// --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('app', {
   emit(event: AppEvent, args: unknown[]) {
     ipcRenderer.send(event, args);
@@ -29,19 +28,16 @@ function withPrototype(obj: Record<string, any>) {
   return obj
 }
 
-// --------- Preload scripts loading ---------
-function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
-  return new Promise(resolve => {
-    if (condition.includes(document.readyState)) {
-      resolve(true)
-    } else {
-      document.addEventListener('readystatechange', () => {
-        if (condition.includes(document.readyState)) {
-          resolve(true)
-        }
-      })
-    }
-  })
-}
-
-domReady()
+// function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
+//   return new Promise(resolve => {
+//     if (condition.includes(document.readyState)) {
+//       resolve(true)
+//     } else {
+//       document.addEventListener('readystatechange', () => {
+//         if (condition.includes(document.readyState)) {
+//           resolve(true)
+//         }
+//       })
+//     }
+//   })
+// }
