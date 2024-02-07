@@ -144,7 +144,7 @@ export function TaskItem({ value, tasks, editable = false, isDragging }: TaskIte
   return (
     ContextMenuWrapper(
       <Card 
-        className={clsx('flex cursor-pointer items-start bg-card/50 p-2 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50', {
+        className={clsx('flex cursor-pointer items-start bg-card/50 p-1 text-left backdrop-blur-lg transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50 md:p-2', {
           'focus-within:cursor-text focus-within:border-muted-foreground/50 focus-within:!bg-card': editable,
           '!bg-zinc-300/50 dark:!bg-zinc-700/50 border-zinc-500/50': selection.selected.includes(value.id)
         })}
@@ -173,7 +173,7 @@ export function TaskItem({ value, tasks, editable = false, isDragging }: TaskIte
           className="flex min-h-10 w-0 grow px-2"
         >
           <ContentEditable 
-            className={clsx('self-center font-semibold outline-0 focus:text-foreground focus:no-underline', {
+            className={clsx('self-center text-sm font-semibold outline-0 focus:text-foreground focus:no-underline md:text-base', {
               'line-through text-muted-foreground': value.completed,
             })}
             disabled={!editable}
