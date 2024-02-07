@@ -12,14 +12,13 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(__dirname, '../electron/icons/icon.png'),
     minWidth: 320,
     minHeight: 480,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
-    ...(!app.isPackaged ? { icon: path.join(__dirname, '../electron/resources/icon.png') } : {}),
+    ...(!app.isPackaged ? { icon: path.join(__dirname, '../electron/resources/icons/colorful/icon.png') } : {}),
   })
 
   if (VITE_DEV_SERVER_URL) {
