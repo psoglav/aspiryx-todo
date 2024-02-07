@@ -40,12 +40,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input 
           type={type}
           className={cn(
-            "text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text",
+            "placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 h-full grow cursor-pointer border-transparent bg-transparent outline-none focus:cursor-text",
             {
               'pl-3': !icon
             }
           )}
           ref={ref}
+          spellCheck={false}
           {...props}
         />
       </div>

@@ -173,7 +173,7 @@ export function TaskItem({ value, tasks, editable = false, isDragging }: TaskIte
           className="flex min-h-10 w-0 grow px-2"
         >
           <ContentEditable 
-            className={clsx('self-center text-sm font-semibold outline-0 focus:text-foreground focus:no-underline md:text-base', {
+            className={clsx('self-center font-semibold outline-0 focus:text-foreground focus:no-underline', {
               'line-through text-muted-foreground': value.completed,
             })}
             disabled={!editable}

@@ -23,7 +23,7 @@ export default function Titlebar() {
     <div className='app-drag absolute top-0 z-50 flex h-8 w-screen items-center justify-between md:relative'>
       <div className='flex items-center gap-2 px-2'>
         <Logo />
-        <div className='text-sm text-muted-foreground'>Void</div>
+        <div className='text-muted-foreground'>Void</div>
       </div>
 
       <div className='app-no-drag flex h-full text-muted-foreground'>
