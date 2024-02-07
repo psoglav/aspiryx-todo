@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'node:path'
-import { getBounds, saveBounds } from './settings'
+import windowStateKeeper from 'electron-window-state';
 
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.VITE_PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
@@ -11,10 +11,19 @@ let win: BrowserWindow | null
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800
+  });
+
   win = new BrowserWindow({
     show: false,
     minWidth: 320,
     minHeight: 480,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -28,16 +37,7 @@ function createWindow() {
     win.loadFile(path.join(process.env.DIST!, 'index.html'))
   }
 
-  const bounds = getBounds()
-
-  if (bounds) {
-    win?.setBounds({
-      x: bounds[0],
-      y: bounds[1],
-      width: bounds[2],
-      height: bounds[3],
-    })
-  }
+  mainWindowState.manage(win);
 
   win.once('ready-to-show', () => {
     win?.show();
@@ -64,10 +64,6 @@ app
     ipcMain.on("close-app", () => {
       win?.close();
     });
-
-    win?.addListener('resized', () => {
-      saveBounds(win?.getBounds())
-    })
 
     app.on("activate", () => {
       // On macOS it's common to re-create a window in the app when the
