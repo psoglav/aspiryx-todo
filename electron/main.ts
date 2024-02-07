@@ -12,6 +12,7 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
   win = new BrowserWindow({
+    show: false,
     minWidth: 320,
     minHeight: 480,
     webPreferences: {
@@ -37,6 +38,10 @@ function createWindow() {
       height: bounds[3],
     })
   }
+
+  win.once('ready-to-show', () => {
+    win?.show();
+  });
 }
 
 app
