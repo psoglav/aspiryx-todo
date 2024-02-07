@@ -56,24 +56,21 @@ export function Collapsible({ title, subtitle, titleSize = 'md', children, defau
         </Button>
       </motion.div>
       <div className="overflow-hidden">
-        <AnimatePresence mode='wait'>
-          {!collapsed && (
-            <motion.div
-              key={props.id + 'wrapper'}
-              layoutRoot
-              initial={{ opacity: 0, translateY: '-50%' }}
-              animate={{ opacity: 1, translateY: '0%' }}
-              transition={{
-                opacity: { duration: .35, ease: 'circInOut' },
-                duration: 0.3,
-                type: 'spring'
-              }}
-              exit={{ opacity: 0, translateY: '-50%' }}
-            >
-              {children}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {!collapsed && (
+          <motion.div
+            key={props.id + 'wrapper'}
+            initial={{ opacity: 0, y: '-50%' }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              opacity: { duration: .35, ease: 'circInOut' },
+              duration: 0.3,
+              type: 'spring'
+            }}
+            exit={{ opacity: 0, y: '-50%' }}
+          >
+            {children}
+          </motion.div>
+        )}
       </div>
     </div>
   )
