@@ -19,6 +19,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
+    ...(!app.isPackaged ? { icon: path.join(__dirname, '../electron/resources/icon.png') } : {}),
   })
 
   if (VITE_DEV_SERVER_URL) {
