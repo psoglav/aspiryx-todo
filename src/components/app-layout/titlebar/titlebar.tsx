@@ -11,7 +11,7 @@ type TitlebarButtonProps = {
 
 const TitlebarButton = ({ event, children, className }: TitlebarButtonProps) => (
   <div
-    className={cn('titlebar-button grid h-full w-11 place-items-center hover:bg-zinc-900 active:bg-zinc-800', className)}
+    className={cn('titlebar-button grid h-full w-11 place-items-center hover:bg-foreground/10 active:bg-foreground/15 transition-colors', className)}
     onClick={() => window.app?.emit(event)}
   >
     {children}
