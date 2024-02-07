@@ -15,5 +15,8 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install dependencies
+        run: npm i
+
       - name: Type-checking
         run: npm run typecheck
