@@ -1,11 +1,6 @@
 name: Build/release
 
 on:
-  workflow_run:
-    workflows: ["Run Tests"]
-    branches: [main]
-    types:
-      - completed
   push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
