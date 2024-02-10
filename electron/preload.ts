@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('app', {
-  emit(event: AppEvent, args: unknown[]) {
+  emit(event: AppEvent, args?: unknown[]) {
     ipcRenderer.send(event, args);
   },
   ipcRenderer: withPrototype(ipcRenderer),

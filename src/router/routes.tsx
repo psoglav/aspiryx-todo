@@ -21,5 +21,5 @@ export default [
     path: '/settings',
     element: <Home />,
     errorElement: <ErrorPage />,
-  }
+  },
 ]
