@@ -19,6 +19,7 @@ const TitlebarButton = ({ event, children, className }: TitlebarButtonProps) => 
 );
 
 export default function Titlebar() {
+  if (!window.isElectronApp) return null;
   return (
     <div className='app-drag absolute top-0 z-50 flex h-8 w-screen items-center justify-between md:relative'>
       <div className='flex items-center gap-2 px-2'>

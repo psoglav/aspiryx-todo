@@ -104,17 +104,3 @@
     user-select: none;
   }
 }
-
-#bg-noise {
-  position: fixed;
-  z-index: 999;
-  pointer-events: none;
-  touch-action: none;
-  mix-blend-mode: exclusion;
-  background-image: url('/noise.png');
-  background-repeat: repeat;
-  opacity: 0.7;
-  width: 100vw;
-  height: 100vh;
-  inset: 0;
-}
