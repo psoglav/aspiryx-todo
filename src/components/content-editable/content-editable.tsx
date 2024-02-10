@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useHotkeys } from 'react-hotkeys-hook';
 import './index.css'
 
 function placeCaretAtEnd(el: HTMLElement) {
@@ -57,6 +58,11 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
     }
   }, [value])
 
+  useHotkeys(['escape', 'enter'], (e) => {
+    if (e.code === 'Enter' && props.onChange) e.preventDefault()
+    innerRef.current?.blur()
+  }, { enabled: isEditing,enableOnContentEditable: true })
+
   const emitChange: React.FormEventHandler<HTMLSpanElement> = (e) => {
     const target = e.target as HTMLElement 
     const inputText = target?.innerText?.trim()
@@ -83,13 +89,6 @@ export const ContentEditable = forwardRef<HTMLSpanElement, Props>(({ value = '',
   }
 
   const onKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (e) => {
-    const target = e.target as HTMLElement 
-    if (e.key === 'Enter' && props.onChange) {
-      e.preventDefault()
-      target.blur()
-    } else if (e.key === 'Escape') {
-      target.blur()
-    }
     if (props.onKeyDown) props.onKeyDown(e)
   }
 

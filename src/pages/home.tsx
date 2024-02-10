@@ -13,7 +13,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { setActiveTask } from "@/store/main";
 import { ListView } from "@/views/ListView";
 import { TaskDetailView } from "@/views/TaskDetailView";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { mockDemoData } from "@/mock/demo";
 import { saveItem } from "@/helpers/localStorage";
 
@@ -22,6 +22,8 @@ export default function Home() {
   const [renderRightSidebar, setRenderRightSidebar] = useState(false)
   const activeTaskId = useSelector((state: RootState) => state.main.activeTaskId)
   const [searchParams] = useSearchParams();
+  const { listId } = useParams()
+  const navigate = useNavigate()
 
   if (searchParams.get('demo')) {
     saveItem('tasks', mockDemoData.tasks)
@@ -36,11 +38,22 @@ export default function Home() {
     window.addEventListener('resize', () => {
       setRenderRightSidebar(window.innerWidth > 800)
     })
+
+    const savedListId = localStorage.getItem('last-opened-list')
+
+    if (savedListId) {
+      navigate(`/list/${savedListId}`)
+    }
   }, [])
 
   useLayoutEffect(() => {
     setRenderRightSidebar(Boolean(activeTaskId))
   }, [activeTaskId])
+
+  useEffect(() => {
+    if (listId) localStorage.setItem('last-opened-list', listId)
+    else localStorage.removeItem('last-opened-list')
+  }, [listId])
 
   const dispatch = useDispatch()
   const editSheetOpened = useSelector((state: RootState) => state.main.editSheetOpened)

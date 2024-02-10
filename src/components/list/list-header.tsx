@@ -23,6 +23,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
 import { useEffect, useRef, useState } from "react"
 import clsx from "clsx"
+import { useHotkeys } from "react-hotkeys-hook"
 
 interface Props {
   onSearch?: (query: string) => void
@@ -61,18 +62,15 @@ export const ListHeader = ({ onSearch }: Props) => {
     }
   }, [search, onSearch])
 
-  useEffect(() => {
-    window.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.code === 'KeyK' && event.ctrlKey) {
-        event.preventDefault()
-        event.stopPropagation()
-        searchRef.current?.focus()
-      }
-      if (event.code === 'Escape') {
-        searchRef.current?.blur()
-      }
-    })
-  }, [])
+  useHotkeys('ctrl+k', (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    searchRef.current?.focus()
+  }, { enableOnContentEditable: true, enableOnFormTags: true })
+
+  useHotkeys('escape', () => {
+    searchRef.current?.blur()
+  }, { enableOnContentEditable: true, enableOnFormTags: true })
 
   return (
     <div className="flex items-center justify-between gap-4 p-4 pt-8 md:px-6 lg:px-16">

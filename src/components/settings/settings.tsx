@@ -1,5 +1,6 @@
-import { PropsWithChildren, useContext, useEffect } from "react"
+import { PropsWithChildren, useContext } from "react"
 import { AnimatePresence, motion  } from "framer-motion"
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Icon } from "@iconify/react"
 import { Button } from "@/components/ui/button"
 import { 
@@ -46,12 +47,8 @@ export const Settings = () => {
     setOpen(true)
   }
 
-  useEffect(() => {
-    window.addEventListener('keydown', (e) => {
-      if (e.code === 'Escape') handleClose()
-      if (e.code === 'Comma' && e.ctrlKey) handleOpen()
-    })
-  }, [])
+  useHotkeys('mod+comma', handleOpen, { enableOnContentEditable: true, enableOnFormTags: true })
+  useHotkeys('escape', handleClose)
 
   return (
     <AnimatePresence>
