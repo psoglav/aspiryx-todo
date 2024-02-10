@@ -10,8 +10,10 @@ import { store } from '@/store/index.ts'
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import { SettingsProvider } from '@/components/settings';
 
-injectWebAnalytics();
-injectSpeedInsights()
+if (!window.isElectronApp) {
+  injectWebAnalytics();
+  injectSpeedInsights()
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
