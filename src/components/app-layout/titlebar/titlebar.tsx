@@ -26,7 +26,7 @@ export default function Titlebar() {
         <div className='text-muted-foreground'>Void</div>
       </div>
 
-      <div className='app-no-drag flex h-full text-muted-foreground'>
+      <div className='app-no-drag flex h-full text-lg text-muted-foreground'>
         <TitlebarButton event="minimize-app">
           <Icon icon="material-symbols:chrome-minimize" />
         </TitlebarButton>
